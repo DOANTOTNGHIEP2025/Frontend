@@ -10,6 +10,7 @@ import LoadingAnimation from '../../components/LoadingAnimation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import InsuranceCheck from '../../components/InsuranceCheck';
 
 const Appointment = () => {
     const navigate = useNavigate();
@@ -45,19 +46,25 @@ const Appointment = () => {
         ,
         getAccountStatus
         ] = useAccount();
-    const [appointmentLoading, , addAppointment, getAllAppointmentByUserID] = useAppointment();
+    const [appointmentLoading, , addAppointment, getAllAppointmentByUserID, , , addInsurance] = useAppointment();
     const [doctorActiveHour, setDoctorActiveHour] = useState([]);
     const [appointmentDate, setAppointmentDate] = useState('');
     const [appointmentDay, setAppointmentDay] = useState('');
-    const [appointmentTimeStart, setAppointmentTimeStart] = useState('');
-    const [appointmentTimeEnd, setAppointmentTimeEnd] = useState('');
+    const [appointmentTimeStart, setAppointmentTimeStart] = useState('');    const [appointmentTimeEnd, setAppointmentTimeEnd] = useState('');
     const [selectedDoctorID, setSelectedDoctorID] = useState('');
     const [userID, setUserID] = useState('');
     const [appointmentInfo, setAppointmentInfo] = useState({});
     const {sharedData, setSharedData} = useAppContext();
     const [userInfo, setUserInfo] = useState({});
     const [hasInsurance, setHasInsurance] = useState(false);
-    let intervalId;    useEffect(() => {
+    let intervalId;    
+    
+    // Handle insurance check result
+    const handleInsuranceCheck = (hasInsuranceData) => {
+        setHasInsurance(hasInsuranceData);
+    };
+    
+    useEffect(() => {
         const fetchAccount = async () => {
             let item = localStorage.getItem('isLoginSuccess');
             
@@ -66,16 +73,6 @@ const Appointment = () => {
                 const AccountInfo = await getAccountByEmail(obj?.email);
                 setUserID(AccountInfo?._id); 
                 setUserInfo(AccountInfo);
-                
-                // Check if user has insurance information
-                const userAppointments = await getAllAppointmentByUserID(AccountInfo?._id);
-                if (userAppointments && userAppointments.length > 0) {
-                    // Find appointment with insurance info
-                    const appointmentWithInsurance = userAppointments.find(app => app.insurance && app.insurance.length > 0);
-                    setHasInsurance(!!appointmentWithInsurance);
-                } else {
-                    setHasInsurance(false);
-                }
             }
         };
         const fetchSharedData = () => {
@@ -186,6 +183,22 @@ const Appointment = () => {
                 
                 const appointment = await addAppointment(userID, selectedDoctorID, appointmentDay, appointmentTimeStart, appointmentTimeEnd, healthIssues, typeService);
                 if (appointment && typeof appointment === 'object') {
+                    // Add insurance information from localStorage if available
+                    const localStorageInsurance = localStorage.getItem('userInsurance');
+                    if (localStorageInsurance && appointment?._id) {
+                        try {
+                            const insuranceData = JSON.parse(localStorageInsurance);
+                            // Only add if there's no insurance already in the appointment
+                            if (!appointment.insurance || appointment.insurance.length === 0) {
+                                for (const insurance of insuranceData) {
+                                    await addInsurance(appointment._id, insurance.name, insurance.number, insurance.location, insurance.exp_date);
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Failed to add insurance to appointment:', error);
+                        }
+                    }
+                    
                     setAppointmentInfo(appointment);
                     if (sharedData) setSharedData(null);
                     alert("Thêm cuộc hẹn thành công!");
@@ -198,19 +211,20 @@ const Appointment = () => {
                     alert("Có lỗi xảy ra, vui lòng thử lại sau!");
                 }
             }
-            else {
-                alert("Bạn cần đăng nhập để đặt lịch khám!");
+            else {                alert("Bạn cần đăng nhập để đặt lịch khám!");
             }
         }
      }
-
-      if (loadingAccount || specialityLoading || regionLoading || appointmentLoading)
+     
+     if (loadingAccount || specialityLoading || regionLoading || appointmentLoading)
          return (
              <LoadingAnimation></LoadingAnimation>
          )
 
     return (
         <form>
+            {/* This invisible component checks insurance status */}
+            {userID && <InsuranceCheck userId={userID} onInsuranceCheck={handleInsuranceCheck} />}
             <ALayout>
                 <ASpace/>
                 <AContainer>

@@ -19,16 +19,33 @@ const InsuranceInfo = ({ userInfo }) => {
 
   useEffect(() => {
     const fetchInsurance = async () => {
-      // Fetch user's appointments to get insurance info
+      // First, check localStorage for insurance data
+      const localStorageInsurance = localStorage.getItem('userInsurance');
+      
+      if (localStorageInsurance) {
+        try {
+          const parsedInsurance = JSON.parse(localStorageInsurance);
+          if (Array.isArray(parsedInsurance) && parsedInsurance.length > 0) {
+            setInsuranceList(parsedInsurance);
+            return;
+          }
+        } catch (error) {
+          console.error('Error parsing insurance from localStorage:', error);
+        }
+      }
+      
+      // If no valid data in localStorage, fetch from appointments
       if (userInfo?._id) {
         const appointments = await getAllAppointmentByUserID(userInfo?._id);
         if (appointments && appointments.length > 0) {
           // Get the first appointment with insurance info
-          // In a real app, you might want to combine insurance info from all appointments
           const appointment = appointments.find(app => app.insurance && app.insurance.length > 0);
           if (appointment) {
             setAppointmentInfo(appointment);
             setInsuranceList(appointment.insurance || []);
+            
+            // Also store in localStorage for future use
+            localStorage.setItem('userInsurance', JSON.stringify(appointment.insurance));
           }
         }
       }
@@ -57,10 +74,50 @@ const InsuranceInfo = ({ userInfo }) => {
     if (!isNaN(date)) {
       setExpiredDate(toDateInputFormat(e.target.value));
     }
-  };  const handleAddInsurance = async () => {
+  };
+
+  const handleAddInsurance = async () => {
     if (!insuranceName || !insuranceID || !location || !expiredDate) {
       alert("Bạn chưa nhập đủ thông tin bảo hiểm");
       return;
+    }
+
+    // Create the insurance object
+    const newInsurance = {
+      _id: editing ? selectedInsuranceId : Date.now().toString(),
+      name: insuranceName,
+      number: insuranceID,
+      location: location,
+      exp_date: expiredDate
+    };
+
+    // Update localStorage
+    let currentInsurance = [];
+    try {
+      const localStorageInsurance = localStorage.getItem('userInsurance');
+      if (localStorageInsurance) {
+        currentInsurance = JSON.parse(localStorageInsurance);
+        
+        if (editing) {
+          // Replace the edited insurance
+          const index = currentInsurance.findIndex(ins => ins._id === selectedInsuranceId);
+          if (index !== -1) {
+            currentInsurance[index] = newInsurance;
+          } else {
+            currentInsurance.push(newInsurance);
+          }
+        } else {
+          // Add new insurance
+          currentInsurance.push(newInsurance);
+        }
+      } else {
+        currentInsurance = [newInsurance];
+      }
+      
+      localStorage.setItem('userInsurance', JSON.stringify(currentInsurance));
+      setInsuranceList(currentInsurance);
+    } catch (error) {
+      console.error('Error updating insurance in localStorage:', error);
     }
 
     if (!appointmentInfo) {
@@ -82,21 +139,8 @@ const InsuranceInfo = ({ userInfo }) => {
             setAppointmentInfo(updatedAppointment);
           }
         } else {
-          // If user doesn't have any appointments, we can inform them that their insurance
-          // info has been saved and will be applied to future appointments
+          // If user doesn't have any appointments, we'll just keep the insurance in localStorage
           alert("Thông tin bảo hiểm của bạn đã được lưu và sẽ được sử dụng cho các lần đặt lịch khám sau này.");
-          
-          // We'll just create a dummy appointment object to show the insurance
-          const dummyInsurance = {
-            _id: Date.now().toString(),
-            name: insuranceName,
-            number: insuranceID,
-            location: location,
-            exp_date: expiredDate
-          };
-          
-          setInsuranceList([dummyInsurance]);
-          return;
         }
       } catch (error) {
         alert("Có lỗi xảy ra khi thêm thông tin bảo hiểm!");
