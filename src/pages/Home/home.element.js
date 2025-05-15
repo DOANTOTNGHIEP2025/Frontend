@@ -4,10 +4,11 @@ import { colors, shadows, borderRadius, spacing, transitions, typography } from 
 
 export const BodyPic = styled.div`
     width: 100%; 
-    height: 60vh;
+    height: 650px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    margin-top: -1px; /* Loại bỏ khoảng trắng giữa navbar và hero */
     
     &::after {
         content: '';
@@ -15,32 +16,67 @@ export const BodyPic = styled.div`
         bottom: 0;
         left: 0;
         right: 0;
-        height: 120px;
+        height: 100px;
         background: linear-gradient(to top, ${colors.background}, rgba(232, 245, 245, 0.5), transparent);
         z-index: 1;
     }
-    
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 80px;
-        background: linear-gradient(to bottom, rgba(12, 80, 124, 0.4), transparent);
-        z-index: 1;
-    }
-    
-    .pic {
+      .pic {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform ${transitions.slow};
         filter: saturate(1.1);
+        display: block;
         
         &:hover {
             transform: scale(1.05);
         }
+    }
+`;
+
+export const HeroButtonsContainer = styled.div`
+    position: absolute;
+    bottom: 250px;  /* Adjusted from 120px to 250px to move buttons higher */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap:70px;
+    z-index: 2;
+`;
+
+export const HeroButton = styled.button`
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    
+    &:first-child {
+        background: linear-gradient(to right, #0C507C, #00A6A9);
+        color: white;
+        border: none;
+    }
+    
+    &:last-child {
+        background: rgba(255, 255, 255, 0.9);
+        color: #0C507C;
+        border: 2px solid #0C507C;
+    }
+    
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    }
+      &:first-child:hover {
+        background: linear-gradient(to right, #0A4569, #009598);
+    }
+    
+    &:last-child:hover {
+        background: white;
+        border-width: 3px;
     }
 `;
 

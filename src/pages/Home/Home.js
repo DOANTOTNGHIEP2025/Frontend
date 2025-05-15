@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import HomePic from "../../assets/assets_fe/home.webp"
 import {
     BodyPic,
+    HeroButtonsContainer,
+    HeroButton,
     Info,
     InfoContainer,
     InfoItem,
@@ -110,9 +112,12 @@ const Home = () => {
     )
 
     return (
-        <>
-            <BodyPic>
+        <>            <BodyPic>
                 <img src={HomePic} className="pic" alt="picture"/>
+                <HeroButtonsContainer>
+                    <HeroButton primary onClick={() => navigate('/appointment')}>Đặt lịch khám</HeroButton>
+                    <HeroButton onClick={() => navigate('/doctors')}>Xem bác sĩ</HeroButton>
+                </HeroButtonsContainer>
             </BodyPic>
             <Info>
                 <InfoContainer>
