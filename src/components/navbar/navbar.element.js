@@ -1,27 +1,35 @@
 import styled from 'styled-components';
 import { FaMagento } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { Container } from '../../globalStyles';
+import { Container, colors, shadows, borderRadius, spacing, transitions } from '../../globalStyles';
 
 export const Nav = styled.nav`
-  background: #00A6A9;
-  height: 130px;
+  background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary});
+  box-shadow: ${shadows.medium};
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 1002;
+  transition: all ${transitions.medium};
+  
+  &.scrolled {
+    height: 70px;
+    box-shadow: ${shadows.large};
+  }
 `;
 
 export const NavbarContainer = styled(Container)`
   display: flex;
   justify-content: space-between;
-  height: 80px;
-
+  align-items: center;
+  height: 100%;
+  
   ${Container}
 `;
 
@@ -29,30 +37,35 @@ export const MobileIcon = styled.div`
   display: none;
 
   @media screen and (max-width: 960px) {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 0;
+    top: 50%;
     right: 0;
-    transform: translate(-100%, 60%);
-    font-size: 1.8rem;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
     cursor: pointer;
+    color: ${colors.primary};
+    transition: color ${transitions.fast};
+    
+    &:hover {
+      color: ${colors.primaryDark};
+    }
   }
 `;
 
 export const NavLogo = styled.div`
-
-    justify-self: flex-start;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 200px;
-    height: 50px;
-    margin-top: 20px;
-
-    .logo-image {
-        width: 200px;
-        height: 50px;
-      object-fit: cover;
+  justify-self: flex-start;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 180px;
+  height: 45px;
+  transition: all ${transitions.medium};    .logo-image {
+        width: 180px;
+        height: 45px;
+        object-fit: contain;
     }
 `;
 
@@ -61,171 +74,222 @@ export const NavMenu = styled.ul`
   align-items: center;
   list-style: none;
   text-align: center;
-  justify-content: space-between;
+  gap: ${spacing.md};
   position: relative;
   z-index: 5000;
-  
-
-  .Button-container {
-  background-color: #f0f1f2;
-  position: absolute;
-  top: 110%;
-  right: 0;
-  width: 200px;
-  display: none; /* Ẩn mặc định */
-  flex-direction: column;
-  justify-content: space-around;
-  align-content: space-between;
-  align-items: center;
-  height: 120px;
-  z-index: 9999;
-
-  &::after{
-    content: '';
-    position: absolute;
-    top: -10px;
-    right: -5px;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 10px;
-    background-color: transparent;
-    border-radius: 5px;
-  }
-}
-
-.profile_image:hover + .Button-container,
-.Button-container:hover {
-  display: flex;
-}
-
-.user-email{
-   font-size: 1.4rem;
-   font-weight: 700;
-   color: #fff;
-   margin-right: 10px;
-   margin-top: 25px;
-   z-index: 9999;
-}
-
-.profile_image {
-  width: 40px;
-  height: 40px;
-  margin-top: 25px;
-  object-fit: cover;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.profile-buttons {
-  width: 100%;
-  height: 40px;
-  border: none;
-  background-color: azure;
-  text-align: left;
-  display: block;
-  font-size: 1.4rem;
-  font-weight: 500;
-  padding-left: 10px;
-  z-index: 9999;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #b4b4b4;
-    color: #fff;
-  }
-}
-
-
-.profile-options button {
-  padding: 10px 20px;
-  background-color: #00A6A9;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  z-index: 1001;
-}
-
-.profile-options button:hover {
-  background-color: #008080;
-}
-
-  
+  margin: 0;
+  padding: 0;
   
   @media screen and (max-width: 960px) {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     width: 100%;
-    height: calc(100vh - 130px);
-    position: fixed;
-    top: 130px;
-    left: ${({ click }) => (click ? '-10%' : '-100%')};
+    height: calc(100vh - 80px);
+    position: absolute;
+    top: 80px;
+    left: ${({click}) => (click ? 0 : '-100%')};
     opacity: 1;
     transition: all 0.5s ease;
-    background: azure;
-    justify-content: space-evenly;
+    background-color: ${colors.white};
+    box-shadow: ${shadows.large};
+    padding: ${spacing.lg} 0;
   }
+
+  .Button-container {
+    background-color: ${colors.white};
+    position: absolute;
+    top: 110%;
+    right: 0;
+    width: 220px;
+    display: none; /* Hide by default */
+    flex-direction: column;
+    gap: ${spacing.sm};
+    padding: ${spacing.md};
+    border-radius: ${borderRadius.medium};
+    box-shadow: ${shadows.large};
+    z-index: 9999;
+    border: 1px solid ${colors.lightGrey};
+    &::after{
+      content: '';
+      position: absolute;
+      top: -8px;
+      right: 20px;
+      width: 16px;
+      height: 16px;
+      background-color: ${colors.white};
+      transform: rotate(45deg);
+      border-left: 1px solid ${colors.lightGrey};
+      border-top: 1px solid ${colors.lightGrey};
+    }
+  }
+
+  .profile_image:hover + .Button-container,
+  .Button-container:hover {
+    display: flex;
+  }
+
+  .user-email{
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: ${colors.black};
+    margin-right: ${spacing.sm};
+    z-index: 9999;
+  }
+
+  .profile_image {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1001;
+    border: 2px solid ${colors.primary};
+    transition: all ${transitions.fast};
+    
+    &:hover {
+      border-color: ${colors.primaryDark};
+      transform: scale(1.05);
+    }
+  }
+
+.profile-buttons {
+  width: 100%;
+  padding: ${spacing.sm} ${spacing.md};
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: ${borderRadius.small};
+  cursor: pointer;
+  transition: all ${transitions.fast};
+  color: ${colors.black};
+
+  svg {
+    margin-right: ${spacing.sm};
+    font-size: 1rem;
+  }
+
+  &:hover {
+    background-color: ${colors.primaryLight};
+    color: ${colors.primary};
+  }
+}
+
+.profile-options button {
+  padding: ${spacing.sm} ${spacing.md};
+  background-color: ${colors.primary};
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: ${borderRadius.medium};
+  transition: all ${transitions.medium};
+  font-weight: 500;
+  box-shadow: ${shadows.small};
+}
+
+.profile-options button:hover {
+  background-color: ${colors.primaryDark};
+  box-shadow: ${shadows.medium};
+  transform: translateY(-2px);
+}
 `;
 
 export const NavItem = styled.li`
-  //height: 80px;
-  //border-bottom: 2px solid transparent;
   font-size: 15px;
-  display: inline-block;
+  display: flex;
+  align-items: center;
   position: relative;
+  padding: ${spacing.sm} ${spacing.md};
+  transition: all ${transitions.medium};
   
   &::after {
     content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 2px;
-    background: #fff;
-    display: block;
-    margin: auto;
-    transition: width 0.5s;
+    background: ${colors.primary};
+    transition: width ${transitions.medium};
   }
 
-  &:hover::after{
-    width: 100%;
+  &:hover::after, &.active::after {
+    width: 70%;
+  }
+  
+  &:hover {
+    color: ${colors.primary};
+  }
+  
+  &.active {
+    color: ${colors.primary};
+    font-weight: 500;
   }
 
   @media screen and (max-width: 960px) {
     width: 100%;
-
-    &:hover {
-      border: none;
+    padding: ${spacing.md};
+    border-bottom: 1px solid ${colors.lightGrey};
+    
+    &::after {
+      display: none;
+    }
+    
+    &:hover, &.active {
+      background-color: ${colors.primaryLight};
     }
   }
 `;
 
 export const NavItemBtn = styled.li`
+  display: flex;
+  align-items: center;
+  margin-left: ${spacing.md};
+  
   @media screen and (max-width: 960px) {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 120px;
+    padding: ${spacing.md};
+    margin-left: 0;
+    border-top: 1px solid ${colors.lightGrey};
   }
 `;
 
 export const NavLinks = styled.p`
-  color: #fff;
+  color: ${colors.black};
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0.5rem 1rem;
   cursor: pointer;
-  //height: 100%;
+  font-weight: 500;
+  transition: color ${transitions.fast};
+  
+  svg {
+    margin-right: ${spacing.xs};
+  }
+
+  &:hover {
+    color: ${colors.primary};
+  }
 
   @media screen and (max-width: 960px) {
     text-align: center;
-    padding: 2rem;
     width: 100%;
-    display: table;
-
-    &:hover {
-      color: #fff;
-      transition: all 0.3s ease;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    
+    svg {
+      margin-right: ${spacing.sm};
+      font-size: 1.2rem;
     }
   }
 `;
@@ -235,12 +299,24 @@ export const NavBtnLink = styled(Link)`
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  padding: 8px 16px;
-  height: 100%;
-  width: 100%;
-  border: none;
-  outline: none;
- 
+  padding: ${spacing.sm} ${spacing.md};
+  font-weight: 500;
+  transition: all ${transitions.medium};
+  color: ${colors.white};
+  background-color: ${colors.primary};
+  border-radius: ${borderRadius.medium};
+  box-shadow: ${shadows.small};
+  
+  &:hover {
+    background-color: ${colors.primaryDark};
+    transform: translateY(-2px);
+    box-shadow: ${shadows.medium};
+    color: ${colors.white};
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 export const NavBtnLink2 = styled.div`
@@ -248,40 +324,79 @@ export const NavBtnLink2 = styled.div`
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  margin-top: 10px;
-  padding: 8px 16px;
-  height: 100%;
-  width: 100%;
-  border: none;
-  outline: none;
- 
+  padding: ${spacing.sm} ${spacing.md};
+  font-weight: 500;
+  transition: all ${transitions.medium};
+  background-color: ${colors.white};
+  color: ${colors.primary};
+  border: 1px solid ${colors.primary};
+  border-radius: ${borderRadius.medium};
+  margin-left: ${spacing.sm};
+  
+  &:hover {
+    background-color: ${colors.primaryLight};
+    transform: translateY(-2px);
+    box-shadow: ${shadows.small};
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 `;
+
 export const GroupButtonLink = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  gap: ${spacing.sm};
+  
+  @media screen and (max-width: 960px) {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: ${spacing.md};
+  }
 `
 
 export const NavLinks2 = styled(Link)`
-    color: #005A5C;
+    color: ${colors.white};
     display: flex;
     align-items: center;
     text-decoration: none;
     padding: 0.5rem 1rem;
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
     z-index: 1002;
+    position: relative;
+    transition: all ${transitions.medium};
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 3px;
+        background: ${colors.white};
+        transition: width ${transitions.medium};
+        border-radius: ${borderRadius.full};
+    }
 
-    .active {
-    background-color: #00A6A9;
-    color: white;
-    transition: all 0.3s ease;
+    &.active {
+        color: ${colors.white};
+        
+        &::after {
+            width: 60%;
+        }
     }
 
     &:hover {
-        color: #fff;
-        transition: all 0.3s ease;
-        background-color: #00A6A9;
+        color: ${colors.white};
+        
+        &::after {
+            width: 60%;
+        }
     }
 
     @media screen and (max-width: 960px) {
@@ -291,7 +406,7 @@ export const NavLinks2 = styled(Link)`
         display: table;
 
         &:hover {
-            color: #fff;
+            color: ${colors.white};
             transition: all 0.3s ease;
         }
     }
@@ -308,7 +423,7 @@ export const NavbarContainer2 = styled(Container)`
 `;
 
 export const Nav2 = styled.nav`
-  background: #fff;
+  background: linear-gradient(135deg, ${colors.secondary}, ${colors.primary});
   height: 50px;
   display: flex;
   justify-content: center;
@@ -316,10 +431,10 @@ export const Nav2 = styled.nav`
   font-size: 1.2rem;
   position: fixed;
   width: 100%;
-  top: 130px;
+  top: 80px;
   left: 0;
   z-index: 1000;
-  box-shadow: 0 0px 10px rgb(188, 188, 188); /* Hiệu ứng đổ bóng */
+  box-shadow: ${shadows.medium};
 `;
 
 export const NavItem2 = styled.li`

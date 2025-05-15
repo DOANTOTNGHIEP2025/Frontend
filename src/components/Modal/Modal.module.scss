@@ -3,10 +3,26 @@ body.active-modal {
 }
 
 .btn-modal {
-    padding: 10px 20px;
-    display: block;
+    padding: 12px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin: 100px auto 0;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #1A73E8;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+        background-color: #0F4C9B;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 }
 
 .modal, .overlay {
@@ -21,78 +37,136 @@ body.active-modal {
 }
 
 .overlay {
-    background: rgba(49,49,49,0.8);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.2s ease-in-out;
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
 }
+
 .modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    line-height: 1.4;
-    padding: 14px 28px;
-    border-radius: 3px;
+    line-height: 1.5;
+    padding: 24px;
     max-width: 600px;
     min-width: 300px;
+    width: 90%;
     display: flex;
-    justify-content: center;
-    background-image: linear-gradient(180deg, #00A6A9, #0c507c);
-    border-radius: 20px;
+    flex-direction: column;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
     z-index: 2001;
+    animation: slideIn 0.3s ease-out;
+    
+    @keyframes slideIn {
+        from { 
+            transform: translate(-50%, -45%);
+            opacity: 0;
+        }
+        to { 
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+    }
 }
 
 .close-modal {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 7px;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    color: #616161;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: #212121;
+        transform: rotate(90deg);
+    }
 }
 
 .field-container{
     width: 100%;
-    min-height: 80px;
-    max-height: 200px;
+    margin-bottom: 16px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .field-name{
-    font-size: 1.4rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #fff;
+    color: #212121;
+    margin-bottom: 8px;
 }
 
 .field-input-container{
     width: 100%;
-    height: 36px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    background-color: aqua;
     position: relative;
-
+    margin-bottom: 4px;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background-color: #FFFFFF;
+    
+    &:focus-within {
+        border-color: #1A73E8;
+        box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+    }
 }
 
 .input-icon{
-    font-size: 1.4rem;
     position: absolute;
-    top: 12px;
-    right: 2%;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #9E9E9E;
     cursor: pointer;
+    transition: color 0.2s ease;
+    
     &:hover{
-        color:rgb(151, 152, 153);
+        color: #1A73E8;
     }
 }
 
 .field-input{
     width: 100%;
-    height: 36px;
-    border-radius: 10px;
-    border: 0px;
-    padding-right: 30px;
+    height: 44px;
+    border-radius: 8px;
+    border: none;
+    padding: 0 16px;
+    font-size: 1rem;
+    background-color: transparent;
+    
+    &::placeholder {
+        color: #9E9E9E;
+    }
+    
     &:focus {
-        border: none;
         outline: none;
     }
+}
+
+.error-message {
+    color: #F44336;
+    font-size: 0.8rem;
+    margin-top: 4px;
 }
 
 .modal-field-container{

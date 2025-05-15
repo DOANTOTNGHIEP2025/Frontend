@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Container} from "../../globalStyles";
+import {Container, colors, spacing, shadows, transitions, borderRadius} from "../../globalStyles";
 
 export const SpecialitiesLayout = styled.div`
     overflow: visible;
@@ -39,35 +39,64 @@ export const SpecialitiesHeader = styled.p`
     padding-top: 20px;
 `
 export const HeaderUnderline = styled.div`
-    border-top: 4px solid #5D5D5D;
+    border-top: 4px solid ${colors.secondary};
     width: 100%;
     margin-top: 5px;
+    position: relative;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: 0;
+        height: 4px;
+        width: 50px;
+        background: ${colors.primary};
+        border-radius: 0 4px 4px 0;
+    }
 `
+
 export const SearchBar = styled.div`
     display: flex;
     justify-content: center;
     position: relative;
+    margin: ${spacing.md} 0;
     
-    //::placeholder{
-    //    text-indent: 35px;  // move placehoder
-    //}
-
     input {
-        height: 40px;
+        height: 48px;
         width: 40%;
-        color: black;
+        color: ${colors.black};
         border-radius: 50px;
         font-size: 15px;
-        border: 2px solid #0B5E87;
-        padding-left: 40px;
+        border: 2px solid ${colors.primary};
+        padding-left: 48px;
         box-sizing: border-box;
+        box-shadow: ${shadows.small};
+        transition: all ${transitions.medium};
+        
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 211, 214, 0.3);
+            border-color: ${colors.secondary};
+            width: 42%;
+        }
+        
+        &::placeholder {
+            color: ${colors.mediumGrey};
+        }
     }
+    
     img {
         position: absolute;
         width: 20px;
         height: 20px;
         left: 31%;
-        top:10px
+        top: 14px;
+        transition: all ${transitions.medium};
+    }
+    
+    &:hover img {
+        transform: scale(1.1);
     }
 `
 
@@ -110,33 +139,63 @@ export const SpecialitiesContent = styled.div`
             transform: scale(1.2);
         }
 
-    }
-    .image-wrapper{
+    }    .image-wrapper{
         margin-top: 20px;
         width: 120px; 
         height: 120px; 
         border-radius: 50%; 
-        border: 5px solid #2197E3;
+        border: 5px solid ${colors.secondary};
         background-color: #fff;
         display: flex;
         align-items: center;
         overflow: hidden;
         justify-content: center;
-        transition: all ease 0.8s;
+        transition: all ${transitions.medium};
+        box-shadow: ${shadows.medium};
+        position: relative;
+        
         &:hover{
             transform: scale(1.2);
+            border-color: ${colors.primary};
+            box-shadow: 0 0 15px ${colors.secondary};
+        }
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            opacity: 0;
+            transition: all ${transitions.medium};
+        }
+        
+        &:hover::after {
+            border-color: ${colors.white};
+            opacity: 0.5;
         }
     }
+    
     .name-style{
         text-transform: uppercase;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
         text-align: center;
         margin-top: 20px;
         margin-left: 5px;
         margin-right: 5px;
-        color: white;
+        color: ${colors.white};
         cursor: pointer;
+        letter-spacing: 0.5px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        transition: all ${transitions.fast};
+        
+        &:hover {
+            transform: scale(1.05);
+        }
     }
 
     @media (max-width: 740px) {
@@ -152,14 +211,47 @@ export const PaginationContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px; 
+    height: 60px;
+    margin: ${spacing.lg} 0;
 `;
 
 
 export const PaginationButton = styled.button`
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #0B5E87; 
+    padding: 0.4rem 0.8rem;
+    border: 2px solid ${colors.primary}; 
     background-color: transparent;
+    color: ${colors.primary};
+    font-weight: 500;
+    transition: all ${transitions.fast};
+    border-radius: 8px;
+    margin: 0 5px;
+    box-shadow: ${shadows.small};
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: linear-gradient(90deg, ${colors.secondary}, ${colors.primary});
+        transition: all ${transitions.medium};
+        z-index: -1;
+    }
+    
+    &:hover {
+        color: white;
+        border-color: ${colors.secondary};
+        transform: translateY(-2px);
+        box-shadow: ${shadows.medium};
+        
+        &:before {
+            width: 100%;
+        }
+    }
     width: 90px;
     border-radius: 5px;
     text-transform: uppercase;

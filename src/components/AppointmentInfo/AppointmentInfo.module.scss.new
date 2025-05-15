@@ -1,7 +1,7 @@
 .wrapper{
     width: 350px;
     overflow: visible;
-    background-color: #0C507C;
+    background-color: ${colors.primary};
     margin-top: 20px;
     text-decoration: none;
     border-radius: 12px;
@@ -16,18 +16,31 @@
 
 .appointment-title-wrapper{
     width: 100%;
-    background: linear-gradient(135deg, #0C507C, #083b5c);
+    background: linear-gradient(135deg, ${colors.primary}, ${colors.primaryDark});
     height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
+        pointer-events: none;
+    }
 }
 
 .appointment-info-wrapper{
     width: 100%;
-    background: linear-gradient(to bottom, #00D3D6, #0C507C);
+    background: linear-gradient(to bottom, ${colors.secondary}, ${colors.primary});
     height: 360px;
     display: flex;
     flex-direction: column;
@@ -41,6 +54,12 @@
     height: 50px;
     display: flex;
     align-items: center;
+    padding: 0 10px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
 }
 
 .title{
@@ -69,17 +88,22 @@
     &:hover {
         transform: scale(1.03);
     }
-    object-fit: contain;
 }
 
 .speciality-image{
     width: 100px;
     height: 100px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
 }
 
 .speciality-name{
     font-size: 1.8rem;
-    color: #3FA3E4;
+    color: ${colors.primary};
     font-weight: 500;
     line-height: 2rem;
     width: 140px;
@@ -99,13 +123,20 @@
     font-weight: 500;
     color: #fff;
     margin-left: 10px;
+    display: flex;
+    align-items: center;
+
+    svg {
+        margin-right: 8px;
+    }
 }
 
 .appointment-field{
     font-size: 1.4rem;
-    font-weight: 500;
+    font-weight: 700;
     color: #fff;
     margin-left: 10px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .cancel-button{
@@ -115,8 +146,11 @@
     background-color: transparent;
     text-align: center;
     cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
     &:hover{
-        background-color: #075a92;
+        background-color: rgba(255, 255, 255, 0.2);
     }
 }
 

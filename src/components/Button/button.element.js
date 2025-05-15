@@ -1,155 +1,208 @@
 import styled from 'styled-components';
+import { colors, shadows, borderRadius, spacing, transitions } from '../../globalStyles';
 
 export const Wrapper = styled.button`
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 100px;
-    padding: 9px 16px;
-    border-radius: 4px;
-    font-size: 1.6rem;
-    font-weight: 700;
-    font-family: var(--font-family);
+    padding: 12px 20px;
+    border-radius: ${borderRadius.medium};
+    font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
-    background-color: var(--white);
-    border: 1px solid transparent;
+    background-color: ${colors.white};
+    border: 1px solid ${colors.lightGrey};
     user-select: none;
-
+    transition: all ${transitions.medium};
+    color: ${colors.black};
+    box-shadow: ${shadows.small};
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: ${shadows.medium};
+        border-color: ${colors.primary};
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+    
     &.disabled {
         pointer-events: none;
         opacity: 0.5;
+        background-color: ${colors.lightGrey};
+        color: ${colors.mediumGrey};
+        box-shadow: none;
     }
 `;
 
 export const Icon = styled.span`
-    display: inline-block;
-    width: 24px;
-    text-align: center;
-
-    & + .title,
-    .title + & {
-        margin-left: 1px;
-    }
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: ${props => props.iconOnly ? '0' : spacing.xs};
+    font-size: 1.1em;
 `;
 
 export const GradientOne = styled(Wrapper)`
-    background-image: linear-gradient(45deg, #00fbff, #0c507c);
-    color: #fff;
-    border-radius: 10px;
-    border: 0;
+    background: linear-gradient(45deg, ${colors.secondary}, ${colors.primary});
+    color: ${colors.white};
+    border: none;
     font-weight: 500;
-    font-size: 1.4rem;
+    
+    &:hover {
+        background: linear-gradient(45deg, ${colors.secondaryLight}, ${colors.primaryLight});
+        color: ${colors.primary};
+    }
 `;
 
 export const GradientTwo = styled(Wrapper)`
-    background-image: linear-gradient(45deg, #a80076, #0c507c);
-    color: #fff;
-    border-radius: 10px;
-    border: 0;
+    background: linear-gradient(45deg, #FF6E7F, ${colors.primary});
+    color: ${colors.white};
+    border: none;
     font-weight: 500;
-    font-size: 1.4rem;
+    
+    &:hover {
+        background: linear-gradient(45deg, #FF8E9F, ${colors.primaryLight});
+        color: ${colors.white};
+    }
 `;
 
 export const Submit = styled(Wrapper)`
-    background-color: #00d3d6;
-    color: #fff;
-    border-radius: 10px;
+    background-color: ${colors.primary};
+    color: ${colors.white};
     font-weight: 500;
-    font-size: 1.6rem;
-    border: 0;
+    border: none;
+    box-shadow: ${shadows.small};
 
     &:hover {
-        background-color: #2197E3;
+        background-color: ${colors.primaryDark};
+        color: ${colors.white};
     }
 `;
 
 export const SubmitTwo = styled(Wrapper)`
-    background-color: #609799;
-    color: #fff;
-    border-radius: 10px;
+    background-color: ${colors.secondary};
+    color: ${colors.white};
     font-weight: 500;
-    font-size: 1.6rem;
-    border: 0;
+    border: none;
+    box-shadow: ${shadows.small};
 
     &:hover {
-        background-color:rgb(15, 167, 172);
+        background-color: ${colors.secondaryLight};
+        color: ${colors.primaryDark};
     }
 `;
 
 export const SubmitThree = styled(Wrapper)`
-    background-color: #00d3d6;
-    color: #fff;
-    border-radius: 10px;
+    background-color: ${colors.accent};
+    color: ${colors.white};
+    border: none;
     font-weight: 500;
-    font-size: 1.6rem;
-    border: 0;
     width: 80px;
     height: 40px;
+    padding: ${spacing.xs} ${spacing.md};
+    
+    &:hover {
+        background-color: #FF8F00;
+        color: ${colors.white};
+    }
 `;
 
 export const Rounded = styled(Wrapper)`
-    border-radius: 999px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    background-color:#00D3D6;
-    color: #fff;
+    border-radius: ${borderRadius.pill};
+    box-shadow: ${shadows.small};
+    background-color: ${colors.primary};
+    color: ${colors.white};
 
     &:hover {
-        background-color: #2197E3;
+        background-color: ${colors.primaryDark};
+        color: ${colors.white};
     }
 
     &:disabled {
-        cursor: default;
-        background-color:rgba(84, 205, 207, 0.74);
+        cursor: not-allowed;
+        background-color: ${colors.lightGrey};
+        color: ${colors.mediumGrey};
     }
 `;
 
 export const Circle = styled(Wrapper)`
-    border-radius: 999px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    width: 20px;
-    height: 20px;
-    padding: 9px;
-    background-color:#00D3D6;
-    color: #fff;
+    border-radius: 50%;
+    box-shadow: ${shadows.small};
+    width: 40px;
+    height: 40px;
+    min-width: unset;
+    padding: 0;
+    background-color: ${colors.primary};
+    color: ${colors.white};
 
     &:hover {
-        background-color: #2197E3;
+        background-color: ${colors.primaryDark};
+        color: ${colors.white};
     }
 `;
 
 export const Primary = styled(Wrapper)`
-    color: var(--white);
-    background-color: #00D3D6;
-    border-radius: 10px;
+    color: ${colors.white};
+    background-color: ${colors.primary};
+    border: none;
 
     &:hover {
-        background-color: #2197E3;
+        background-color: ${colors.primaryDark};
+        color: ${colors.white};
     }
 
     &:disabled {
-        cursor: default;
-        background-color:rgba(84, 205, 207, 0.74);
+        cursor: not-allowed;
+        background-color: ${colors.lightGrey};
+        color: ${colors.mediumGrey};
+        
         &:hover {
-            background-color:rgba(84, 205, 207, 0.74);
+            background-color: ${colors.lightGrey};
+            transform: none;
+            box-shadow: ${shadows.small};
         }
     }
 `;
 
 export const Outline = styled(Wrapper)`
-    color: var(--primary);
-    border-color: currentColor;
+    color: ${colors.primary};
+    background-color: transparent;
+    border: 2px solid ${colors.primary};
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 100%;
+        bottom: 0;
+        background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary});
+        z-index: -1;
+        transition: right ${transitions.medium};
+    }
 
     &:hover {
-        background-color: rgba(254, 44, 85, 0.06);
+        color: ${colors.white};
+        
+        &::before {
+            right: 0;
+        }
     }
 `;
 
 export const Text = styled(Wrapper)`
-    color: var(--white);
+    color: ${colors.primary};
     background-color: transparent;
+    border: none;
+    box-shadow: none;
     font-weight: 500;
-    font-size: 1.4rem;
-    padding: 9px 2px;
+    padding: ${spacing.xs} ${spacing.sm};
 
     &:hover {
         text-decoration: underline;
@@ -157,13 +210,19 @@ export const Text = styled(Wrapper)`
 `;
 
 export const Nav = styled(Wrapper)`
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1.6rem;
-    color: #005a5c;
-    padding: 9px 2px;
+    color: ${colors.primary};
+    padding: 9px 15px;
+    border-radius: ${borderRadius.pill};
+    transition: all ${transitions.medium};
+    box-shadow: none;
+    border: 2px solid transparent;
 
     &:hover {
-        background: #eee;
+        background: ${colors.primaryLight};
+        color: ${colors.primaryDark};
+        border-color: ${colors.secondary};
     }
 `;
 

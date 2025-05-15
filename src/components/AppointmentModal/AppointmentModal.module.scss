@@ -1,6 +1,6 @@
 body.active-modal {
     overflow-y: hidden;
-    background: #007bff !important;
+    background: #E8F5F5 !important;
 }
 
 .btn-modal {
@@ -8,6 +8,17 @@ body.active-modal {
     display: block;
     margin: 100px auto 0;
     font-size: 18px;
+    background: linear-gradient(135deg, #0C507C, #00D3D6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 211, 214, 0.3);
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 211, 214, 0.4);
+    }
 }
 
 .modal, .overlay {
@@ -22,18 +33,19 @@ body.active-modal {
 }
 
 .overlay {
-    background: rgba(49,49,49,0.8);
+    background: rgba(12, 80, 124, 0.7);
+    backdrop-filter: blur(4px);
 }
+
 .modal-content {
-    color: #00A6A9 !important;
+    color: #00D3D6 !important;
     font-size: 1.2rem !important;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     line-height: 1.4;
-    padding: 14px 28px;
-    border-radius: 3px;
+    padding: 20px 30px;
     max-width: 600px;
     min-width: 300px;
     height: 600px;
@@ -41,21 +53,69 @@ body.active-modal {
     flex-direction: column;
     justify-content: space-between;
     align-content: space-evenly;
-    background-image: linear-gradient(180deg, #00A6A9, #0c507c);
+    background: linear-gradient(135deg, #00D3D6, #0C507C);
     border-radius: 20px;
     z-index: 2001;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: modalFadeIn 0.3s ease;
+    
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -48%);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
 }
 
 .title{
     color: #fff !important;
-    font-size: 2rem !important;
+    font-size: 2.2rem !important;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: white;
+        border-radius: 3px;
+    }
 }
 
 .close-modal {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 5px 7px;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.4);
+        transform: rotate(90deg);
+    }
 }
 
 .field-container{
@@ -64,15 +124,24 @@ body.active-modal {
     max-height: 200px;
     display: flex;
     align-items: center;
-
     justify-content: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 }
 
 .field-name{
     font-size: 1.6rem;
-    font-weight: 500;
+    font-weight: 600;
     width: 50px;
     color: #fff;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .field-input{
@@ -95,20 +164,41 @@ body.active-modal {
     justify-content: space-around;
     align-items: center;
     align-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .highlighted-day {
-    background: #ffcc00 !important;
+    background: #00D3D6 !important;
     color: white !important;
     font-weight: bold;
     font-size: 1.4rem;
     margin: 5px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+    
     &:hover{
-        background: #ffa600 !important;
+        background: #0C507C !important;
+        transform: scale(1.1);
+    }
+    
+    &::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        z-index: 1;
     }
 }
   
-
 .calendar-container {
     margin: 20px 0;
     width: 100%;
@@ -116,6 +206,9 @@ body.active-modal {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
 }
 
 .modal-button{

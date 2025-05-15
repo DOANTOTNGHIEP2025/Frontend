@@ -1,115 +1,130 @@
 import styled from "styled-components";
+import { colors, shadows, borderRadius, spacing, transitions } from '../../globalStyles';
 
 export const RelatedContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #1a1a1a; 
-    margin:0;
-    
+    color: ${colors.black};
+    margin: 0;
 `
 
 export const RelateDisplay = styled.div`
     width: 100%;
-    //display: grid;
-    //grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     margin: 0;
     display: flex;
-    justify-content: space-around;
-    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: ${spacing.lg};
     
     @media (min-width: 640px) {
-
-        padding-left: 0;
-        padding-right: 0;
-
+        padding: ${spacing.md} 0;
     }
-
-
 `
-export const RelatedCard = styled.div`
 
-    border-radius: 10px; 
+export const RelatedCard = styled.div`
+    border-radius: ${borderRadius.large};
     cursor: pointer;
-    transition: all 0.5s ease-in-out;
-    height: auto;
+    transition: all ${transitions.medium};
+    height: 100%;
     width: 250px;
     position: relative;
-
-    @property --angle{
+    background-color: ${colors.white};
+    box-shadow: ${shadows.small};
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid ${colors.lightGrey};
+    
+    @property --angle {
         syntax: "<angle>";
         initial-value: 0deg;
         inherits: false;
     }
-
-    &:hover::before {
-            display: block; 
-        }
-
-        &:hover::before {
-            animation: 3s spin linear infinite;
-        }
-     
-        &:hover::after {
-            animation: 3s spin linear infinite;
-        }
     
-    &::after{
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background-image: conic-gradient(from var(--angle),  #0C507C, #00FBFF , #0C507C);
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        z-index: -1;
-        padding: 3px;
-        border-radius: 0.75rem; 
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: ${shadows.large};
+        border-color: ${colors.secondary};
+        
+        &::before {
+            display: block;
+            animation: 3s spin linear infinite;
+        }
+        
+        .img-custom {
+            transform: scale(1.05);
+        }
     }
-
-    &::before{
+    
+    &::before {
         content: '';
         position: absolute;
         height: 100%;
         width: 100%;
-        background-image: conic-gradient(from var(--angle),  #0C507C, #00FBFF , #0C507C);
+        background-image: conic-gradient(from var(--angle), ${colors.primary}, ${colors.secondary}, ${colors.primary});
         top: 50%;
         left: 50%;
         translate: -50% -50%;
         z-index: -1;
         padding: 3px;
-        border-radius: 0.75rem; 
+        border-radius: ${borderRadius.large}; 
         display: none;
         filter: blur(1.5rem);
         opacity: 0.5;
     }
-
-    @keyframes spin{
-       from{
-        --angle: 0deg;
+    
+    @keyframes spin {
+       from {
+         --angle: 0deg;
        }
-       to{
-        --angle: 360deg;
+       to {
+         --angle: 360deg;
        }
     }
   
-    .info-custom{
-        padding: 16px;
-        background-color: #fff;
-        border-bottom-left-radius: 0.75rem;
-        border-bottom-right-radius: 0.75rem;
+    .info-custom {
+        padding: ${spacing.md};
+        background: linear-gradient(to bottom, ${colors.white}, ${colors.background});
+        border-bottom-left-radius: ${borderRadius.large};
+        border-bottom-right-radius: ${borderRadius.large};
+        display: flex;
+        flex-direction: column;
+        gap: ${spacing.xs};
+        border-top: 2px solid ${colors.secondary};
     }
 
     .name-doc {
-        color: #111827; 
-        font-size: 1.8rem; /* Small text size */
+        color: ${colors.primary}; 
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: ${spacing.xs};
+        transition: color ${transitions.fast};
+        
+        &:hover {
+            color: ${colors.secondary};
+        }
     }
         
     .speciality-doc {
-        color: #4b5563;
-        font-size: 1.6rem; /* Small text size */
+        color: ${colors.darkGrey};
+        font-size: 1.6rem;
+        font-weight: 500;
+        position: relative;
+        padding-left: ${spacing.md};
+        
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background-color: ${colors.secondary};
+            border-radius: 50%;
+        }
     }
         
 `
@@ -117,14 +132,27 @@ export const RelatedCard = styled.div`
 export const ImageContainer = styled.div`
     width: 100%;
     height: 340px;
-
+    position: relative;
+    overflow: hidden;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: linear-gradient(to top, rgba(12, 80, 124, 0.5), transparent);
+        z-index: 1;
+    }
 
     .img-custom {
-        border-top-left-radius: 0.75rem;
-        border-top-right-radius: 0.75rem;
-        background-color: #f0f9ff;
+        border-top-left-radius: ${borderRadius.large};
+        border-top-right-radius: ${borderRadius.large};
+        background-color: ${colors.primaryLight};
         object-fit: cover;
         height: 340px;
         width: 100%;
+        transition: transform ${transitions.medium};
     }
 `

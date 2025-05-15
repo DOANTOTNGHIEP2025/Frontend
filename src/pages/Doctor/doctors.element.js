@@ -1,40 +1,60 @@
 import styled from "styled-components";
 import {Container} from "../../globalStyles";
+import { colors, shadows, borderRadius, spacing, transitions, typography } from '../../globalStyles';
 
 export const DoctorsLayout = styled(Container)`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    gap: ${spacing.xl};
+    margin: ${spacing.xl} auto;
+    max-width: 1200px;
+    padding: 0 ${spacing.md};
+    
     @media (min-width: 640px) {
         flex-direction: row;
     }
 `
+
 export const DoctorsLeft = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    font-size: 1.4rem; 
-    padding-left: 12px;
-    color: #4B5563;
+    gap: ${spacing.md};
+    font-size: ${typography.sm};
+    padding: ${spacing.md};
+    color: ${colors.darkGrey};
+    background: ${colors.white};
+    border-radius: ${borderRadius.medium};
+    box-shadow: ${shadows.small};
+    height: fit-content;
+    border: 1px solid ${colors.lightGrey};
 
     ${({showFilter}) => (showFilter ? 'display: flex;' : 'display: none;')};
 
     .speciality-button {
-        width: 200px;
-        padding: 0.375rem 4rem 0.375rem 0.75rem;
-        border: 1px solid #D1D5DB;
-        border-radius: 0.375rem;
-        transition: all 0.2s ease;
+        width: 220px;
+        padding: ${spacing.sm} ${spacing.md};
+        border: 1px solid ${colors.lightGrey};
+        border-radius: ${borderRadius.small};
+        transition: all ${transitions.fast};
         cursor: pointer;
         color: inherit;
+        background: ${colors.white};
+        font-size: ${typography.sm};
+        text-align: left;
+        position: relative;
+        
+        &:hover {
+            border-color: ${colors.primary};
+            color: ${colors.primary};
+        }
     }
 
     .speciality-button.selected {
-        background-color: #E0E7FF;
-        color: black;
+        background: linear-gradient(to right, ${colors.primaryLight}, ${colors.secondaryLight});
+        color: ${colors.black};
+        font-weight: 500;
+        border-color: ${colors.primary};
     }
 
     @media (min-width: 640px) {
@@ -43,112 +63,107 @@ export const DoctorsLeft = styled.div`
 `
 export const ImageContainer = styled.div` 
     width: 100%;
-    height: 300px;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+        z-index: 1;
+    }
 
     .image-background {
-        border-top-left-radius: 0.75rem;
-        border-top-right-radius: 0.75rem;
+        border-radius: ${borderRadius.medium} ${borderRadius.medium} 0 0;
         width: 100%;
         height: 100%;
         display: block;
         object-fit: cover;
+        transition: transform ${transitions.medium};
+        
+        &:hover {
+            transform: scale(1.05);
+        }
     }
 `
+
 export const DoctorsRight = styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    row-gap: 24px;
-
-    @property --angle{
-        syntax: "<angle>";
-        initial-value: 0deg;
-        inherits: false;
-    }
-
-    .card {
-        border-radius: 0.75rem; 
-        cursor: pointer;
-        transition: all 0.5s ease; 
-        position: relative;
-        background-color: #fff;
-
-        &:hover::before {
-            display: block; 
-        }
-
-        &:hover::before {
-            animation: 3s spin linear infinite;
-        }
-     
-        &:hover::after {
-            animation: 3s spin linear infinite;
-        }
-    }
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: ${spacing.lg};
+    row-gap: ${spacing.xl};
     
-    .card::after{
-        content: '';
-        position: absolute;
+    .card {
+        border-radius: ${borderRadius.medium}; 
+        cursor: pointer;
+        transition: all ${transitions.medium}; 
+        position: relative;
+        background-color: ${colors.white};
+        border: 1px solid ${colors.lightGrey};
+        box-shadow: ${shadows.small};
+        overflow: hidden;
         height: 100%;
-        width: 100%;
-        background-image: conic-gradient(from var(--angle),  #0C507C, #00FBFF , #0C507C);
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        z-index: -1;
-        padding: 3px;
-        border-radius: 0.75rem; 
+        display: flex;
+        flex-direction: column;
+        
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: ${shadows.large};
+            border-color: ${colors.primary};
+        }
     }
-
-    .card::before{
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background-image: conic-gradient(from var(--angle),  #0C507C, #00FBFF , #0C507C);
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        z-index: -1;
-        padding: 3px;
-        border-radius: 0.75rem; 
-        display: none;
-        filter: blur(1.5rem);
-        opacity: 0.5;
-    }
-
-    @keyframes spin{
-       from{
-        --angle: 0deg;
-       }
-       to{
-        --angle: 360deg;
-       }
-    }
-
-    .content {
-        padding: 16px;
+    }    .content {
+        padding: ${spacing.md};
+        display: flex;
+        flex-direction: column;
+        gap: ${spacing.xs};
+        flex: 1;
     }
 
     .status {
         display: flex;
         align-items: center;
-        font-size: 1.4rem;
-        margin-bottom: 8px;
-        margin-top: 8px;
-        gap: 8px;
-        text-align: center;
+        font-size: ${typography.sm};
+        margin: ${spacing.xs} 0;
+        gap: ${spacing.sm};
+        color: ${colors.darkGrey};
     }
 
-    .speciality-icon{
-        font-size: 1.4rem;
-        color: #4B5563; 
+    .speciality-icon {
+        font-size: ${typography.sm};
+        color: ${colors.secondary};
+        margin-right: ${spacing.xs};
     }
     
-    .location-icon{
-        font-size: 1.4rem;
-        margin-left: 2px;
+    .location-icon {
+        font-size: ${typography.sm};
+        color: ${colors.secondary};
+        margin-right: ${spacing.xs};
+    }
+    
+    h3 {
+        font-size: ${typography.md};
+        font-weight: 600;
+        color: ${colors.black};
+        margin: ${spacing.xs} 0;
+        transition: ${transitions.fast};
+        
+        &:hover {
+            color: ${colors.primary};
+        }
+    }
+    
+    p {
+        font-size: ${typography.sm};
+        color: ${colors.darkGrey};
+        line-height: 1.6;
+    }
         margin-right: 2px;
         color: #4B5563; 
     }
