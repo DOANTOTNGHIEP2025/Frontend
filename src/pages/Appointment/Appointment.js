@@ -1,19 +1,19 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {AContainer, AHeader, ALayout, ALeftSide, ARightSide, ARSItem, ASpace, AUnderline} from "./appointment.element";
 import useRegion from '../../hook/useRegion';
 import useSpeciality from '../../hook/useSpeciality';
 import useAccount from '../../hook/useAccount';
 import AppointmentModal from '../../components/AppointmentModal';
 import useAppointment from '../../hook/useAppointment';
-import InsuranceModal from '../../components/InsuranceModal';
 import { useAppContext } from '../../context/AppContext';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const Appointment = () => {
+    const navigate = useNavigate();
     const [regionLoading, regionHook] = useRegion();
-    const insuranceModalRef = useRef(null);
     const [specialityLoading, specialityHook] = useSpeciality();
     const [selectedRegion, setSelectedRegion] = useState('');
     const [selectedSpeciality, setSelectedSpeciality] = useState('');
@@ -45,7 +45,7 @@ const Appointment = () => {
         ,
         getAccountStatus
         ] = useAccount();
-    const [appointmentLoading, , addAppointment] = useAppointment();
+    const [appointmentLoading, , addAppointment, getAllAppointmentByUserID] = useAppointment();
     const [doctorActiveHour, setDoctorActiveHour] = useState([]);
     const [appointmentDate, setAppointmentDate] = useState('');
     const [appointmentDay, setAppointmentDay] = useState('');
@@ -56,9 +56,8 @@ const Appointment = () => {
     const [appointmentInfo, setAppointmentInfo] = useState({});
     const {sharedData, setSharedData} = useAppContext();
     const [userInfo, setUserInfo] = useState({});
-    let intervalId;
-
-    useEffect(() => {
+    const [hasInsurance, setHasInsurance] = useState(false);
+    let intervalId;    useEffect(() => {
         const fetchAccount = async () => {
             let item = localStorage.getItem('isLoginSuccess');
             
@@ -67,6 +66,16 @@ const Appointment = () => {
                 const AccountInfo = await getAccountByEmail(obj?.email);
                 setUserID(AccountInfo?._id); 
                 setUserInfo(AccountInfo);
+                
+                // Check if user has insurance information
+                const userAppointments = await getAllAppointmentByUserID(AccountInfo?._id);
+                if (userAppointments && userAppointments.length > 0) {
+                    // Find appointment with insurance info
+                    const appointmentWithInsurance = userAppointments.find(app => app.insurance && app.insurance.length > 0);
+                    setHasInsurance(!!appointmentWithInsurance);
+                } else {
+                    setHasInsurance(false);
+                }
             }
         };
         const fetchSharedData = () => {
@@ -151,14 +160,13 @@ const Appointment = () => {
 
           setAppointmentTimeStart(startTime); 
           setAppointmentTimeEnd(endTime);
-      };
-
-     const handleSubmitAppointment = async() => {
+      };     const handleSubmitAppointment = async() => {
         if (!healthIssues || !selectedDoctor || !appointmentDate)
         {
             alert("Bạn chưa chọn đủ trường!");
             return;
         }
+        
         let item = localStorage.getItem('isLoginSuccess');
             
         if (userInfo?.__t){
@@ -167,13 +175,21 @@ const Appointment = () => {
         }
         else{
             if (item) {
+                // Check if user has insurance information
+                if (!hasInsurance) {
+                    const goToProfile = window.confirm("Bạn cần nhập thông tin bảo hiểm y tế trước khi đặt lịch khám. Bạn có muốn chuyển đến trang Hồ sơ để nhập thông tin không?");
+                    if (goToProfile) {
+                        navigate('/profile');
+                    }
+                    return;
+                }
+                
                 const appointment = await addAppointment(userID, selectedDoctorID, appointmentDay, appointmentTimeStart, appointmentTimeEnd, healthIssues, typeService);
                 if (appointment && typeof appointment === 'object') {
                     setAppointmentInfo(appointment);
                     if (sharedData) setSharedData(null);
-                    if (insuranceModalRef.current) {
-                    insuranceModalRef.current.openModal(); 
-                  }
+                    alert("Thêm cuộc hẹn thành công!");
+                    window.location.reload();
                 }
                 else if (appointment && typeof appointment !== 'object'){
                     alert(appointment);
@@ -181,13 +197,11 @@ const Appointment = () => {
                 else {
                     alert("Có lỗi xảy ra, vui lòng thử lại sau!");
                 }
-                
             }
             else {
                 alert("Bạn cần đăng nhập để đặt lịch khám!");
             }
         }
-
      }
 
       if (loadingAccount || specialityLoading || regionLoading || appointmentLoading)
@@ -276,9 +290,7 @@ const Appointment = () => {
                             >
                                 <FontAwesomeIcon icon={faCalendar} className={`calendar-icon ${!selectedDoctor ? 'disabled' : ''}`} disabled={!selectedDoctor}></FontAwesomeIcon>
                             </AppointmentModal>
-                        </ARSItem>
-
-                        <ARSItem>
+                        </ARSItem>                        <ARSItem>
                             <p>Nhập vấn đề về sức khoẻ</p>
                             <textarea 
                                 rows="10" 
@@ -288,7 +300,17 @@ const Appointment = () => {
                                 disabled={!appointmentDate}
                             ></textarea>
                         </ARSItem>
-
+                        
+                        {!hasInsurance && userID && (
+                            <ARSItem>
+                                <div style={{ padding: '10px', backgroundColor: '#ffe9e9', borderRadius: '5px', marginBottom: '15px', borderLeft: '4px solid #f44336' }}>
+                                    <p style={{ color: '#d32f2f', fontWeight: 'bold' }}>Lưu ý:</p>
+                                    <p>Bạn cần nhập thông tin bảo hiểm y tế trước khi đặt lịch khám.</p>
+                                    <p>Vui lòng vào trang Hồ sơ để thêm thông tin bảo hiểm.</p>
+                                </div>
+                            </ARSItem>
+                        )}
+                        
                         <ARSItem>
                             <button 
                                 type = "button"
@@ -298,11 +320,6 @@ const Appointment = () => {
                                 TIẾP THEO
                             </button>
                         </ARSItem>
-                        {appointmentInfo && (
-                            <ARSItem className="hidden">
-                            <InsuranceModal ref={insuranceModalRef} data={appointmentInfo}>BHYT</InsuranceModal>
-                            </ARSItem>
-                        )}
                         
                     </ARightSide>
 

@@ -19,6 +19,7 @@ import Image from '../../components/Image';
 import ArticleListModal from '../../components/ArticleListModal';
 import useArticles from '../../hook/useArticles';
 import { assets } from '../../assets/assets_fe/assets';
+import InsuranceInfo from '../../components/InsuranceInfo';
 
 
 const cx = classNames.bind(styles);
@@ -444,14 +445,21 @@ function Profile() {
                                     onChange={handleBirthdayChange}
                                 />
 
-                            </div>
-                            <div className={cx('field-container')}>
+                            </div>                            <div className={cx('field-container')}>
                                 <div className={cx('field-name')}>
                                      <span>Bệnh nền</span>
                                 </div>
                                 <textarea className={cx('field-textarea')} value={underlyingCondition} onChange={(e)=>{setUnderlyingCondition(e.target.value)}} ></textarea>
                             </div>
                      </div>
+                     
+                     {/* Insurance Information Section */}
+                     {!isDoctor && (
+                        <div className={cx('insurance-info-section')}>
+                            <InsuranceInfo userInfo={userInfo} />
+                        </div>
+                     )}
+                     
                      <div className={cx('doctor-info-container')}>
                             <div className={cx('info-title-container')}>
                                 <div className={cx('info-title')}>
