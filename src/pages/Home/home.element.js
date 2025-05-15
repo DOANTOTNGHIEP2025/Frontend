@@ -4,11 +4,14 @@ import { colors, shadows, borderRadius, spacing, transitions, typography } from 
 
 export const BodyPic = styled.div`
     width: 100%; 
-    height: 650px;
+    height: 100vh; /* Full viewport height */
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    margin-top: -1px; /* Loại bỏ khoảng trắng giữa navbar và hero */
+    margin: 0; /* Ensure no margin */
+    padding: 0; /* Ensure no padding */
+    box-sizing: border-box; /* Ensures padding is included in the height calculation */
+    margin-top: -90px; /* Offset the navbar height to ensure image starts from the top of the page */
     
     &::after {
         content: '';
@@ -19,11 +22,16 @@ export const BodyPic = styled.div`
         height: 100px;
         background: linear-gradient(to top, ${colors.background}, rgba(232, 245, 245, 0.5), transparent);
         z-index: 1;
-    }
-      .pic {
+    }      .pic {
         width: 100%;
-        height: 100%;
+        height: 100vh; /* Full viewport height */
         object-fit: cover;
+        object-position: top center; /* Changed from center to top center to show the doctor's face */
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
         transition: transform ${transitions.slow};
         filter: saturate(1.1);
         display: block;
@@ -36,7 +44,7 @@ export const BodyPic = styled.div`
 
 export const HeroButtonsContainer = styled.div`
     position: absolute;
-    bottom: 250px;  /* Adjusted from 120px to 250px to move buttons higher */
+    bottom: 30%;  /* Changed to percentage-based positioning for better responsiveness */
     left: 50%;
     transform: translateX(-50%);
     display: flex;

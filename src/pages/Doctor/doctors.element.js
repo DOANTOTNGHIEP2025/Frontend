@@ -84,6 +84,7 @@ export const ImageContainer = styled.div`
         height: 100%;
         display: block;
         object-fit: cover;
+        object-position: top center; /* Focus on the top part of the image (face) */
         transition: transform ${transitions.medium};
     }
 `

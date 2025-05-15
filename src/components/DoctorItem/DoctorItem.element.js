@@ -144,13 +144,12 @@ export const ImageContainer = styled.div`
         height: 50px;
         background: linear-gradient(to top, rgba(12, 80, 124, 0.5), transparent);
         z-index: 1;
-    }
-
-    .img-custom {
+    }    .img-custom {
         border-top-left-radius: ${borderRadius.large};
         border-top-right-radius: ${borderRadius.large};
         background-color: ${colors.primaryLight};
         object-fit: cover;
+        object-position: top center; /* Focus on the top part of the image (face) */
         height: 340px;
         width: 100%;
         transition: transform ${transitions.medium};

@@ -213,12 +213,11 @@ export const ImageContainer = styled.div`
         align-items: center;
         justify-content: center;
         padding: 5px;
-    }
-
-    .img-custom {
+    }    .img-custom {
         border-radius: 50%;
         background-color:#fff;
         object-fit: cover;
+        object-position: top center; /* Focus on the top part of the image (face) */
         height: 150px;
         width: 150px;
     }

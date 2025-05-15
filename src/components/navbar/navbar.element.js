@@ -17,6 +17,8 @@ export const Nav = styled.nav`
   left: 0;
   z-index: 1002;
   transition: all ${transitions.medium};
+  margin-bottom: 0;
+  padding-bottom: 0;
   
   &.scrolled {
     height: 70px;

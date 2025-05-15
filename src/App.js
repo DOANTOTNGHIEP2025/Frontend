@@ -162,12 +162,10 @@ function App() {
             clearInterval(intervalId.current);
             clearInterval(interval);
         };
-    }, [isLogined]);
-
-    return (
+    }, [isLogined]);    return (
         <div >
             {!isLoginPage && <Navbar/>}
-            {!isLoginPage && (
+            {!isLoginPage && location.pathname !== '/' && (
                 <div style={{width: "100%", height: "180px"}}></div>
             )}
             <GolobalStyles/>

@@ -29,5 +29,8 @@ body {
     font-family: 'Montserrat', serif;
     font-size: 1.6 rem;
     line-height: 1.5;
+    margin: 0; /* Ensure no default margin */
+    padding: 0; /* Ensure no default padding */
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
     margin: 0px;
 }

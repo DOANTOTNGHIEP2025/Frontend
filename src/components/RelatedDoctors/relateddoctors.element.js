@@ -122,12 +122,13 @@ export const RelatedCard = styled.div`
 export const ImageContainer = styled.div`
     width: 100%;
     height: 340px;
-
+    overflow: hidden;
 
     .img-custom {
         background-color: #f0f9ff;
         width: 100%;
         object-fit: cover;
+        object-position: top center; /* Focus on the top part of the image (face) */
         height: 340px;
         border-top-left-radius: 0.75rem;
         border-top-right-radius: 0.75rem;

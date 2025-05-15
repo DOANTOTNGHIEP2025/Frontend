@@ -22,12 +22,13 @@ export const DocInfoHeader = styled.p`
 `
 
 export const DocInfoLeft = styled.div`
-
     width: 250px;
     .image-background {
         width: 250px;
         height: 300px;
         border-radius: 0.5rem;
+        object-fit: cover;
+        object-position: top center; /* Focus on the top part of the image (face) */
     }
 
     @media (max-width: 750px) {
@@ -36,9 +37,10 @@ export const DocInfoLeft = styled.div`
             width: 100px;
             height: 150px;
             border-radius: 0.5rem;
+            object-fit: cover;
+            object-position: top center; /* Focus on the top part of the image (face) */
         }
     }
-
 `
 export const DocInfoRight = styled.div`
     flex: 1;
