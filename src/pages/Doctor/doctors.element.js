@@ -150,6 +150,12 @@ export const DoctorsRight = styled.div`
             }
         }
         
+        &:focus, &:active {
+            outline: none;
+            box-shadow: 0 0 0 3px ${colors.secondary}33, 0 15px 30px rgba(0, 211, 214, 0.15);
+            border-color: ${colors.secondary};
+        }
+        
         &::before {
             content: '';
             position: absolute;
@@ -323,8 +329,8 @@ export const DoctorsRight = styled.div`
         font-weight: 500;
     }
 
-
-
-
-
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+        gap: ${spacing.md};
+    }
 `
