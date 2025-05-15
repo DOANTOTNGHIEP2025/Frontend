@@ -73,22 +73,18 @@ export const ImageContainer = styled.div`
         bottom: 0;
         left: 0;
         right: 0;
-        height: 50px;
-        background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+        height: 70px;
+        background: linear-gradient(to top, rgba(12, 80, 124, 0.6), transparent);
         z-index: 1;
     }
 
     .image-background {
-        border-radius: ${borderRadius.medium} ${borderRadius.medium} 0 0;
+        border-radius: ${borderRadius.large} ${borderRadius.large} 0 0;
         width: 100%;
         height: 100%;
         display: block;
         object-fit: cover;
         transition: transform ${transitions.medium};
-        
-        &:hover {
-            transform: scale(1.05);
-        }
     }
 `
 
@@ -98,9 +94,25 @@ export const DoctorsRight = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: ${spacing.lg};
     row-gap: ${spacing.xl};
+    perspective: 1000px;
+    
+    @keyframes spin {
+        from {
+            --angle: 0deg;
+        }
+        to {
+            --angle: 360deg;
+        }
+    }
+    
+    @property --angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
+    }
     
     .card {
-        border-radius: ${borderRadius.medium}; 
+        border-radius: ${borderRadius.large}; 
         cursor: pointer;
         transition: all ${transitions.medium}; 
         position: relative;
@@ -111,40 +123,129 @@ export const DoctorsRight = styled.div`
         height: 100%;
         display: flex;
         flex-direction: column;
+        transform-origin: center bottom;
+        
+        @property --angle {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: false;
+        }
         
         &:hover {
-            transform: translateY(-8px);
-            box-shadow: ${shadows.large};
-            border-color: ${colors.primary};
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 211, 214, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: ${colors.secondary};
+            
+            &::before {
+                display: block;
+                animation: 3s spin linear infinite;
+            }
+            
+            .image-background {
+                transform: scale(1.05);
+            }
+            
+            .content {
+                background: linear-gradient(to bottom, ${colors.white}, ${colors.primaryLight}20);
+            }
+        }
+        
+        &::before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-image: conic-gradient(from var(--angle), ${colors.primary}, ${colors.secondary}, ${colors.primary});
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            z-index: -1;
+            padding: 3px;
+            border-radius: ${borderRadius.large}; 
+            display: none;
+            filter: blur(1.5rem);
+            opacity: 0.5;
+        }
+        
+        @keyframes spin {
+            from {
+                --angle: 0deg;
+            }
+            to {
+                --angle: 360deg;
+            }
         }
     }
-    }    .content {
+      .content {
         padding: ${spacing.md};
         display: flex;
         flex-direction: column;
         gap: ${spacing.xs};
         flex: 1;
-    }
-
-    .status {
+        background: linear-gradient(to bottom, ${colors.white}, ${colors.background});
+        border-top: 2px solid ${colors.secondary};
+        position: relative;
+        transition: all ${transitions.medium};
+        
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, ${colors.secondary}, ${colors.primary});
+            transition: width ${transitions.medium};
+            opacity: 0;
+        }
+        
+        &:hover {
+            &::before {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+    }.status {
         display: flex;
         align-items: center;
         font-size: ${typography.sm};
         margin: ${spacing.xs} 0;
         gap: ${spacing.sm};
         color: ${colors.darkGrey};
+        position: relative;
+        padding-left: ${spacing.sm};
+        transition: all ${transitions.fast};
+        
+        &:hover {
+            transform: translateX(${spacing.xs});
+            color: ${colors.secondary};
+        }
+        
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: ${colors.secondary};
+            border-radius: 50%;
+        }
     }
 
     .speciality-icon {
         font-size: ${typography.sm};
         color: ${colors.secondary};
         margin-right: ${spacing.xs};
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
     }
     
     .location-icon {
         font-size: ${typography.sm};
         color: ${colors.secondary};
         margin-right: ${spacing.xs};
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
     }
     
     h3 {
@@ -173,11 +274,10 @@ export const DoctorsRight = styled.div`
         height: 0.5rem;
         background-color: #48BB78;
         border-radius: 50%;
-    }
-    .name-style {
-        color: #1F2937;         
+    }    .name-style {
+        color: ${colors.primary};         
         font-size: 1.8rem;    
-        font-weight: 500;       
+        font-weight: 600;       
         line-height: 2rem;
         height: 2rem;
         overflow: hidden;
@@ -185,9 +285,32 @@ export const DoctorsRight = styled.div`
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
+        margin-bottom: ${spacing.xs};
+        transition: color ${transitions.fast};
+        position: relative;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, ${colors.primary}, ${colors.secondary});
+            transition: width ${transitions.medium};
+        }
+        
+        &:hover {
+            color: ${colors.secondary};
+            
+            &::after {
+                width: 50%;
+            }
+        }
     }
+    
     .speciality-style {
-        color: #4B5563;        
+        color: ${colors.darkGrey};        
         font-size: 1.4rem;  
         line-height: 2rem;
         height: 2rem;
@@ -197,6 +320,7 @@ export const DoctorsRight = styled.div`
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
+        font-weight: 500;
     }
 
 
