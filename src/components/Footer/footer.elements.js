@@ -7,7 +7,7 @@ export const FooterContainer = styled.footer`
   background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary}, ${colors.primary});
   background-size: 300% 300%;
   animation: gradientShift 15s ease infinite;
-  padding: ${spacing.xxl} 0 ${spacing.xl} 0;
+  padding: ${spacing.md} 0 ${spacing.md} 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,16 +44,16 @@ export const FooterContentContainer = styled.div`
   max-width: 1200px;
   display: flex;
   justify-content: center;
-  padding: 0 ${spacing.xl};
+  padding: 0 ${spacing.lg};
 
   @media screen and (max-width: 820px) {
-    padding: 0 ${spacing.lg};
-    padding-top: ${spacing.xl};
+    padding: 0 ${spacing.md};
+    padding-top: ${spacing.md};
   }
   
   @media screen and (max-width: 576px) {
-    padding: 0 ${spacing.md};
-    padding-top: ${spacing.lg};
+    padding: 0 ${spacing.sm};
+    padding-top: ${spacing.sm};
   }
 `;
 
@@ -68,13 +68,13 @@ export const FooterContentItems = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: ${spacing.xl};
+  margin-bottom: ${spacing.md};
   text-align: left;
   width: 230px;
   box-sizing: border-box;
   color: ${colors.white};
   @media screen and (max-width: 768px) {
-    margin: 0 0 ${spacing.lg} 0;
+    margin: 0 0 ${spacing.sm} 0;
     width: calc(50% - ${spacing.md});
   }
   
@@ -84,7 +84,7 @@ export const FooterContentItems = styled.div`
 `;
 
 export const FooterContentTitle = styled.h3`
-  margin-bottom: ${spacing.md};
+  margin-bottom: ${spacing.xs};
   font-size: 1.2rem;
   font-weight: 600;
   position: relative;
@@ -106,8 +106,8 @@ export const FooterContentTitle = styled.h3`
 
 export const FooterContent = styled.p`
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: ${spacing.sm};
-  font-size: 0.9rem;
+  margin-bottom: ${spacing.xs};
+  font-size: 1rem;
   transition: color ${transitions.fast};
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@ export const FooterContent = styled.p`
   
   svg {
     margin-right: ${spacing.xs};
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
   &:hover {
@@ -127,7 +127,7 @@ export const SocialMedia = styled.section`
   max-width: 1200px;
   width: 100%;
   padding: 0 ${spacing.xl};
-  margin-top: ${spacing.lg};
+  margin-top: ${spacing.sm};
   
   @media screen and (max-width: 820px) {
     padding: 0 ${spacing.lg};
@@ -143,12 +143,12 @@ export const SocialMediaWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-top: ${spacing.lg};
+  padding-top: ${spacing.sm};
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 
   @media screen and (max-width: 820px) {
     flex-direction: column;
-    gap: ${spacing.lg};
+    gap: ${spacing.sm};
   }
 `;
 
@@ -158,7 +158,7 @@ export const MedicalLogoContainer = styled.div`
   text-decoration: none;
   display: flex;
   align-items: center;
-  width: 240px;
+  width: 180px;
   transition: transform ${transitions.medium};
   
   &:hover {
@@ -182,9 +182,9 @@ export const SocialIcons = styled.div`
 
 export const SocialIconContent = styled.a`
   color: rgba(255, 255, 255, 0.8);
-  font-size: 22px;
-  width: 40px;
-  height: 40px;
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,11 +201,11 @@ export const SocialIconContent = styled.a`
 `;
 
 export const FooterContentWraperLower = styled.div`
-  text-align: center;
+  text-align: left;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.85rem;
-  margin-top: ${spacing.lg};
+  font-size: 1.1rem;
+  margin-top: ${spacing.xs};
   width: 100%;
-  padding-top: ${spacing.md};
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0;
+  border-top: none;
 `

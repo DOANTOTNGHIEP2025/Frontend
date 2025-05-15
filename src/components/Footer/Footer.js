@@ -35,18 +35,12 @@ function Footer() {
                             P.Bồ Đề, Q. Long Biên, Tp. Hà Nội
                         </FooterContent>
 
-                    </FooterContentItems>
-                    <FooterContentItems>
+                    </FooterContentItems>                    <FooterContentItems>
                         <FooterContentTitle>Đường dây liên hệ</FooterContentTitle>
-                        <FooterContent> <IoLocationOutline/>024 3872 3872</FooterContent>
-                      <FooterContentWraperLower>
-                          <FooterContent >024 7106 6858</FooterContent>
-                      </FooterContentWraperLower>
-                        <FooterContent ><IoLocationOutline/>0287 102 6789</FooterContent>
-                      <FooterContentWraperLower>
-                          <FooterContent >093 108 6858</FooterContent>
-                      </FooterContentWraperLower>
-
+                        <FooterContent><IoLocationOutline/>024 3872 3872</FooterContent>
+                        <FooterContent>024 7106 6858</FooterContent>
+                        <FooterContent><IoLocationOutline/>0287 102 6789</FooterContent>
+                        <FooterContent>093 108 6858</FooterContent>
                     </FooterContentItems>
                     <FooterContentItems>
                         <FooterContentTitle>Đường dẫn nhanh</FooterContentTitle>
