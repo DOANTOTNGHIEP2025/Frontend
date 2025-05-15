@@ -165,18 +165,11 @@ function SpecialityInfo(){
     if (loadingAccount || specialityLoading) return (
         <LoadingAnimation></LoadingAnimation>
     )
-    
-
-     return specialityInfo && (
+        return specialityInfo && (
         <div className={cx('wrapper')}>
              <PageTitle>{specialityInfo?.name?.toUpperCase()}</PageTitle>
              
                  <div className={cx('introduction-wrapper')}>
-                    <div className={cx('rectangle')}>
-                        <div className={cx('image-container')}>
-                             <Image className={cx('speciality-image')} src={specialityInfo?.speciality_image}></Image>
-                        </div>
-                    </div>
                     <div className={cx('speciality-info')}>
                         <div className={cx('title')}>
                              <span>GIỚI THIỆU</span>

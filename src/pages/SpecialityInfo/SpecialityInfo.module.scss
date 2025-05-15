@@ -53,12 +53,10 @@
 }
 
 .speciality-info{
-    width: 60%;
+    width: 80%;
     min-height: 260px;
     overflow-y: auto;
-    margin-left: 440px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px auto;
 }
 
 .title{
@@ -155,12 +153,8 @@
 }
 
 @media only screen and (max-width: 1200px) {
-    .rectangle{
-        display: none;
-    }
     .speciality-info{
-        margin-left: 10%;
-        width: 80%;
+        width: 90%;
     }
 }
 

@@ -111,13 +111,8 @@ const Doctors = () => {
 
     const lastDoctorIndex = currentPage * docPerPage;
     const firstDoctorIndex = lastDoctorIndex - docPerPage;
-    const currentDoctors = (filterDoc || []).slice(firstDoctorIndex, lastDoctorIndex);
-
-    return (
+    const currentDoctors = (filterDoc || []).slice(firstDoctorIndex, lastDoctorIndex);    return (
         <div>
-            <div className={cx('page-image')}>
-                 <Image className={cx('doctors-image')} src={assets.DoctorsImage}></Image>
-            </div>
             <PageTitle>CHUYÊN GIA - BÁC SĨ</PageTitle>
             <div className={cx('search-section')}>
                 <div className={cx('search-section-title-wrapper')}>

@@ -93,17 +93,12 @@ const Specialities = () => {
     const paginatedData = filterSpec.slice(
         pagination.pageIndex * pagination.pageSize,
         (pagination.pageIndex + 1) * pagination.pageSize
-    );
-
-    if (specialityLoading) return (
+    );    if (specialityLoading) return (
         <LoadingAnimation></LoadingAnimation>
-    )
-
+    );
+    
     return (
         <SpecialitiesLayout>
-            <SpecialitiesImage>
-                <img src={assets.SpecialitiesImage2}></img>
-            </SpecialitiesImage>
             <SpecialitiesContainer>
                 
                 <SpecialitiesHeader>DANH SÁCH CHUYÊN KHOA
