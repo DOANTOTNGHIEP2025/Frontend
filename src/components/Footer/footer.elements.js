@@ -158,7 +158,7 @@ export const MedicalLogoContainer = styled.div`
   text-decoration: none;
   display: flex;
   align-items: center;
-  width: 180px;
+  width: 240px;
   transition: transform ${transitions.medium};
   
   &:hover {

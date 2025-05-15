@@ -6,7 +6,7 @@ import { Container, colors, shadows, borderRadius, spacing, transitions } from '
 export const Nav = styled.nav`
   background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary});
   box-shadow: ${shadows.medium};
-  height: 80px;
+  height: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,7 +44,7 @@ export const MobileIcon = styled.div`
     top: 50%;
     right: 0;
     transform: translate(-50%, -50%);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     cursor: pointer;
     color: ${colors.primary};
     transition: color ${transitions.fast};
@@ -60,11 +60,11 @@ export const NavLogo = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
-  width: 180px;
-  height: 45px;
+  width: 240px;
+  height: 60px;
   transition: all ${transitions.medium};    .logo-image {
-        width: 180px;
-        height: 45px;
+        width: 240px;
+        height: 60px;
         object-fit: contain;
     }
 `;
@@ -95,13 +95,12 @@ export const NavMenu = styled.ul`
     box-shadow: ${shadows.large};
     padding: ${spacing.lg} 0;
   }
-
   .Button-container {
     background-color: ${colors.white};
     position: absolute;
     top: 110%;
     right: 0;
-    width: 220px;
+    width: 260px;
     display: none; /* Hide by default */
     flex-direction: column;
     gap: ${spacing.sm};
@@ -130,7 +129,7 @@ export const NavMenu = styled.ul`
   }
 
   .user-email{
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: ${colors.black};
     margin-right: ${spacing.sm};
@@ -138,8 +137,8 @@ export const NavMenu = styled.ul`
   }
 
   .profile_image {
-    width: 36px;
-    height: 36px;
+    width: 48px;
+    height: 48px;
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
@@ -155,13 +154,13 @@ export const NavMenu = styled.ul`
 
 .profile-buttons {
   width: 100%;
-  padding: ${spacing.sm} ${spacing.md};
+  padding: ${spacing.md} ${spacing.lg};
   border: none;
   background-color: transparent;
   text-align: left;
   display: flex;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 500;
   border-radius: ${borderRadius.small};
   cursor: pointer;
@@ -324,14 +323,15 @@ export const NavBtnLink2 = styled.div`
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  padding: ${spacing.sm} ${spacing.md};
-  font-weight: 500;
+  padding: ${spacing.md} ${spacing.lg};
+  font-weight: 600;
   transition: all ${transitions.medium};
   background-color: ${colors.white};
   color: ${colors.primary};
   border: 1px solid ${colors.primary};
   border-radius: ${borderRadius.medium};
   margin-left: ${spacing.sm};
+  font-size: 1.1rem;
   
   &:hover {
     background-color: ${colors.primaryLight};
@@ -362,9 +362,9 @@ export const NavLinks2 = styled(Link)`
     display: flex;
     align-items: center;
     text-decoration: none;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: 500;
     z-index: 1002;
     position: relative;
@@ -424,14 +424,14 @@ export const NavbarContainer2 = styled(Container)`
 
 export const Nav2 = styled.nav`
   background: linear-gradient(135deg, ${colors.secondary}, ${colors.primary});
-  height: 50px;
+  height: 55px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   position: fixed;
   width: 100%;
-  top: 80px;
+  top: 90px;
   left: 0;
   z-index: 1000;
   box-shadow: ${shadows.medium};
@@ -439,10 +439,10 @@ export const Nav2 = styled.nav`
 
 export const NavItem2 = styled.li`
 
-  font-size: 15px;
+  font-size: 16px;
   display: inline-block;
   position: relative;
-  margin: 0 20px;
+  margin: 0 25px;
   z-index: 1001;
   
 
@@ -479,13 +479,12 @@ export const NavItem2 = styled.li`
     background-color: #00A6A9;
     color: white;
   }
-
   .search-container {
     position: relative;
     display: inline-block;
     margin: 4px 2px;
-    height: 40px;
-    width: 40px;
+    height: 48px;
+    width: 48px;
     vertical-align: bottom;
   }
 
@@ -497,10 +496,9 @@ export const NavItem2 = styled.li`
     -o-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
   }
-
   .searchbutton {
     position: absolute;
-    font-size: 22px;
+    font-size: 26px;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -536,9 +534,8 @@ export const NavItem2 = styled.li`
     color: white; /* Change placeholder text color to white */
     opacity: 1; /* Ensures the color shows fully */
   }
-
   .search:focus {
-    width: 201px; /* Bar width+1px */
+    width: 240px; /* Bar width+1px */
     padding: 0 16px 0 0;
   }
 
