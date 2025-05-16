@@ -38,7 +38,6 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border: 4px solid #ffffff;
     transition: transform 0.3s ease;
     
@@ -56,6 +55,8 @@
     top: 54%;
     background-color: #f8f9fa;
     overflow: hidden;
+    z-index: 10; /* Ensure profile image is above background but below other elements */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .user-info-container {
@@ -65,6 +66,7 @@
     display: flex;
     flex-direction: column;
     background-color: transparent;
+    position: relative;
 }
 
 .contact-info-container {
@@ -75,22 +77,38 @@
     gap: 15px;
     flex-wrap: wrap;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 15; /* Increased z-index to ensure it appears above all other elements */
+    background-color: rgba(248, 249, 250, 0.85); /* Semi-transparent background to prevent overlap issues */
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .contact-info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 5px;
+    gap: 8px;
+    max-width: 65%; /* Slightly increased width */
+    position: relative;
+    z-index: 20;
 }
 
 .user-name {
     font-size: 2.6rem;
-    line-height: 3rem;
+    line-height: 3.2rem;
     font-weight: 600;
     margin: 0;
     color: #333;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 20;
+    max-width: 100%;
+    overflow: visible;
+    word-wrap: break-word;
+    white-space: normal; /* Ensures text wraps properly */
+    text-shadow: 0 0 8px white, 0 0 4px white; /* Enhanced text shadow for better visibility */
 }
 
 .phone-number {
@@ -98,6 +116,11 @@
     font-weight: 500;
     margin: 0;
     color: #666;
+    position: relative;
+    z-index: 20;
+    max-width: 100%;
+    overflow: visible;
+    text-shadow: 0 0 4px white; /* Added text shadow for better visibility */
 }
 
 .email {
@@ -106,6 +129,12 @@
     margin: 0;
     color: #666;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 20;
+    max-width: 100%;
+    overflow: visible;
+    word-wrap: break-word;
+    text-shadow: 0 0 4px white; /* Added text shadow for better visibility */
 }
 
 .main-info-container {
@@ -113,19 +142,27 @@
     justify-content: space-between;
     width: 100%;
     overflow: visible;
-    gap: 15px;
+    gap: 25px; /* Further increased gap for better separation */
+    margin-bottom: 30px;
+    margin-top: 25px; /* Increased top margin for better spacing from contact info */
+    position: relative;
+    z-index: 5; /* Ensure it's below the contact info container */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens between tablet and mobile breakpoints */
 }
 
 .personal-info-container {
     width: 38%;
     margin-top: 20px;
-    flex-shrink: none;
+    flex-shrink: 0; /* Changed from none to 0 for better cross-browser compatibility */
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     padding: 25px;
     height: fit-content;
+    overflow: visible; /* Ensures content doesn't get cut off */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    z-index: 1; /* Lower z-index than contact info */
     
     &:hover {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -135,12 +172,16 @@
 .doctor-info-container {
     width: 38%;
     margin-top: 20px;
+    flex-shrink: 0;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     padding: 25px;
     height: fit-content;
+    overflow: visible; /* Ensures content doesn't get cut off */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    z-index: 1; /* Lower z-index than contact info */
     
     &:hover {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -150,12 +191,16 @@
 .account-info-container {
     width: 24%;
     margin-top: 20px;
+    flex-shrink: 0;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     padding: 25px;
     height: fit-content;
+    overflow: visible; /* Ensures content doesn't get cut off */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    z-index: 1; /* Match z-index with other containers */
     
     &:hover {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -167,7 +212,7 @@
     font-size: 2.1rem;
     font-weight: 600;
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 12px;
     margin-bottom: 5px;
     
     &:after {
@@ -189,17 +234,21 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    position: relative;
+    z-index: 3; /* To ensure titles are always visible */
 }
 
 .field-container {
     width: 100%;
     min-height: 70px;
-    max-height: 200px;
+    max-height: none; /* Remove max height to prevent content from being cut off */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin-bottom: 15px;
+    margin-bottom: 18px; /* Increased margin for better spacing */
     padding: 0 5px;
+    overflow: visible;
+    position: relative; /* Added for potential absolute positioning of child elements */
 }
 
 .manage-buttons-container {
@@ -217,6 +266,8 @@
     margin-left: 5px;
     margin-bottom: 5px;
     color: #005A5C;
+    position: relative;
+    z-index: 3;
 }
 
 .field-input {
@@ -229,6 +280,7 @@
     font-size: 1.4rem;
     transition: all 0.2s ease;
     background-color: #f9f9f9;
+    position: relative; /* Added for proper stacking */
     
     &:focus {
         border: 1px solid #00D3D6;
@@ -244,7 +296,8 @@
 
 .field-textarea {
     width: 100%;
-    height: 120px;
+    min-height: 120px;
+    max-height: 200px;
     border-radius: 8px;
     margin-bottom: 10px;
     border: 1px solid #e0e0e0;
@@ -252,7 +305,9 @@
     font-size: 1.4rem;
     transition: all 0.2s ease;
     background-color: #f9f9f9;
-    resize: none;
+    resize: vertical; /* Allow vertical resizing */
+    overflow-y: auto; /* Enable scrolling for long content */
+    position: relative; /* Added for proper stacking */
     
     &:focus {
         border: 1px solid #00D3D6;
@@ -280,8 +335,9 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: 15px; /* Increased gap for better spacing */
     margin-bottom: 12px;
+    position: relative; /* Added for proper stacking */
 }
 
 .half-field-input {
@@ -294,6 +350,8 @@
     font-size: 1.4rem;
     transition: all 0.2s ease;
     background-color: #f9f9f9;
+    position: relative;
+    z-index: 2;
     
     &:focus {
         border: 1px solid #00D3D6;
@@ -324,6 +382,7 @@
     background-color: #f0f0f0;
     margin: 15px 0;
     border-radius: 1px;
+    position: relative;
 }
 
 /* Ẩn thẻ input file gốc */
@@ -348,7 +407,7 @@
     left: calc(10% + 160px);
     top: calc(54% + 140px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    z-index: 2;
+    z-index: 12; /* Increased z-index to ensure it's above other elements */
     
     &:hover {
         background-color: #00acaf;
@@ -370,6 +429,8 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 2; /* Ensure proper stacking */
     
     &:hover {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
@@ -393,11 +454,18 @@
     .contact-info-container {
         width: calc(100% - 200px);
         margin-left: 200px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        background-color: rgba(248, 249, 250, 0.9);
     }
     
     .user-info-container {
         width: 95%;
         max-width: 1000px;
+    }
+    
+    .user-name {
+        margin-bottom: 8px;
     }
 }
 
@@ -407,7 +475,22 @@
     .doctor-info-container,
     .account-info-container {
         width: 90%;
-        padding: 25px;
+        padding: 20px;
+    }
+    
+    .contact-info-container {
+        width: calc(100% - 180px);
+        margin-left: 180px;
+    }
+    
+    .profile-image-container {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .file-label {
+        left: calc(10% + 130px);
+        top: calc(54% + 110px);
     }
 }
 
@@ -442,27 +525,42 @@
         width: 100%;
         justify-content: center;
         text-align: center;
+        padding: 15px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-info {
+        max-width: 100%;
     }
 
     .user-name {
         display: block;
         text-align: center;
+        font-size: 2.4rem; /* Slightly smaller font for mobile */
+        margin-bottom: 10px;
     }
     
     .phone-number {
         display: block;
         text-align: center;
+        margin-bottom: 5px;
     }
     
     .email {
         display: block;
         text-align: center;
+        margin-bottom: 15px;
     }
 
     .personal-info-container,
     .doctor-info-container,
     .account-info-container {
         width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .main-info-container {
+        gap: 0; /* Remove gap on mobile as items stack vertically */
     }
     
     .info-title-container {
@@ -510,6 +608,25 @@
     
     .contact-info-container {
         margin-top: 60px;
+        padding: 12px;
+    }
+    
+    .user-name {
+        font-size: 2.2rem; /* Even smaller font for very small screens */
+    }
+    
+    .field-input, 
+    .half-field-input {
+        height: 38px; /* Slightly smaller height for mobile inputs */
+        font-size: 1.3rem;
+    }
+    
+    .field-name {
+        font-size: 1.2rem;
+    }
+    
+    .info-title {
+        font-size: 1.8rem;
     }
 }
   
