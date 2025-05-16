@@ -12,10 +12,10 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableTimes, setAvailableTimes] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");
-
   const toggleModal = () => {
     setModal(!modal);
   };
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
 
@@ -23,40 +23,107 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       (key) => dayToIndexMap[key] === date.getDay()
     );
 
-    const filteredTimes = data
-      .filter((item) => item.day === dayName)
-      .map((item) => `${item.start_time} - ${item.end_time}`);
+    // Format date as YYYY-MM-DD for comparison
+    const formattedDate = date.toLocaleDateString("en-CA");
+
+    // Kiểm tra xem có dữ liệu 'data' không và đảm bảo rằng nó là một mảng
+    if (!Array.isArray(data)) {
+      console.error('Data is not an array:', data);
+      setAvailableTimes([]);
+      return;
+    }
+
+    console.log('Full data:', data);
+    
+    // Filter based on both day of week and specific date
+    const filteredItems = data.filter((item) => {
+      // If item has a specific date, it must match exactly
+      if (item.date) {
+        return item.date === formattedDate;
+      }
+      // Otherwise fall back to day of week match
+      return item.day === dayName;
+    });
+    
+    console.log('Filtered items:', filteredItems);
+    
+    const filteredTimes = filteredItems.map((item) => `${item.start_time} - ${item.end_time}`);
     setAvailableTimes(filteredTimes);
     setSelectedTime(""); 
     
     // Log for debugging
     console.log('Selected day:', dayName);
+    console.log('Date object:', date);
+    console.log('Day of week:', date.getDay());
+    console.log('Formatted date:', formattedDate);
     console.log('Available times:', filteredTimes);
   };
-  // Get available times for a specific day
-  const getAvailableTimesForDay = (dayName) => {
+  
+  // Get available times for a specific day and date
+  const getAvailableTimesForDay = (dayName, dateStr) => {
     if (!Array.isArray(data)) return [];
     
     return data
-      .filter((item) => item.day === dayName)
+      .filter((item) => {
+        // If item has a specific date, it must match exactly
+        if (item.date) {
+          return item.date === dateStr;
+        }
+        // Otherwise fall back to day of week match
+        return item.day === dayName;
+      })
       .map((item) => `${item.start_time} - ${item.end_time} (Giới hạn: ${item.appointment_limit || 'N/A'})`);
-  };  // Custom day content to display available times
+  };
+  
+  // Custom day content to display available times
   const dayContent = ({date, view}) => {
     if (view === 'month') {
       const dayName = Object.keys(dayToIndexMap).find(
         (key) => dayToIndexMap[key] === date.getDay()
       );
       
-      const times = getAvailableTimesForDay(dayName);
-      const rawTimes = data
-        .filter((item) => item.day === dayName)
-        .map((item) => `${item.start_time} - ${item.end_time}`);
+      // Log để debug
+      console.log("Rendering content for day:", dayName, "Date:", date);
+      
+      // Đảm bảo rằng data là một mảng hợp lệ
+      if (!Array.isArray(data)) {
+        console.error("Invalid data format:", data);
+        return (
+          <div className={cx("calendar-day-content")}>
+            <span className={cx("day-number")}>{date.getDate()}</span>
+            <div className={cx("day-available-times")}>
+              <span className={cx("no-time")}>Lỗi dữ liệu</span>
+            </div>
+          </div>
+        );
+      }
+        // Format date for comparison with specific dates in data
+      const formattedDate = date.toLocaleDateString("en-CA"); // YYYY-MM-DD format
+      
+      // Get times for this day, considering both day of week and specific dates
+      const filteredItems = data.filter((item) => {
+        // If item has a specific date, it must match exactly
+        if (item.date) {
+          return item.date === formattedDate;
+        }
+        // Otherwise fall back to day of week match
+        return item.day === dayName;
+      });
+      
+      console.log("Filtered items for day:", filteredItems, "Date:", formattedDate);
+      
+      // Generate display strings and raw time values
+      const times = filteredItems.map(item => 
+        `${item.start_time} - ${item.end_time} (Giới hạn: ${item.appointment_limit || 'N/A'})`
+      );
+      const rawTimes = filteredItems.map((item) => `${item.start_time} - ${item.end_time}`);
       
       // Click handler for time slots
       const handleTimeClick = (e, timeIndex) => {
         e.stopPropagation(); // Prevent calendar date selection
         setSelectedDate(date);
         setSelectedTime(rawTimes[timeIndex]);
+        console.log("Selected time slot:", rawTimes[timeIndex], "for date:", date);
       };
       
       // Always return structured content for consistent layout
@@ -83,7 +150,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
     }
     return null;
   };
-
+  
   const handleSubmitActiveHour = async () => {
     const formattedDate = selectedDate.toLocaleDateString("en-CA"); 
     const dayIndex = selectedDate.getDay();
@@ -96,10 +163,40 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       return;
     }
 
+    // Find if there's a specific active hour that matches this date and time
+    const matchingActiveHours = Array.isArray(data) ? data.filter(item => {
+      const [startTime, endTime] = selectedTime.split(' - ');
+      // Check if this is a specific date-based active hour
+      if (item.date === formattedDate && 
+          item.start_time === startTime && 
+          item.end_time === endTime) {
+        return true;
+      }
+      // Check if this is a day of week active hour with no specific date
+      else if (!item.date && 
+               item.day === dayName && 
+               item.start_time === startTime && 
+               item.end_time === endTime) {
+        return true;
+      }
+      return false;
+    }) : [];
+
+    // Log data for debugging
+    console.log("Submitting appointment data:", {
+      formattedDate,
+      dayName,
+      selectedTime,
+      fullDate: selectedDate,
+      matchingActiveHours
+    });
+
     onSubmit({
       formattedDate,
       dayName,
       selectedTime,
+      fullDate: selectedDate,
+      specificDate: formattedDate // Include the specific date in the response
     });
 
     setModal(!modal);
@@ -114,7 +211,6 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
     Friday: 5,
     Saturday: 6,
   };
-
   const getHighlightedDates = () => {
     if (!Array.isArray(data)) return []; 
     return data
@@ -122,7 +218,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       .filter((dayIndex) => dayIndex !== undefined);
   };
   
-
+  // Sửa hàm tileClassName để hiển thị ngày đúng
   const tileClassName = ({ date }) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); 
@@ -136,18 +232,35 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       return cx("today");
     }
 
+    // Sửa để ngày có lịch khám được hiển thị đúng
     return highlightedDays.includes(date.getDay()) && date >= today
-      ? cx("highlighted-day")
-      : cx("disabled");
+      ? cx("highlighted-day")      : "";
   };
-
+  
+  // Cải thiện hàm tileDisabled để hiển thị đúng các ngày trong lịch
   const tileDisabled = ({ date }) => {
+    // Log date info for debugging
+    console.log("Checking date:", date, "day:", date.getDay());
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const highlightedDays = getHighlightedDates();
+    console.log("Highlighted days:", highlightedDays);
 
-    return !highlightedDays.includes(date.getDay()) || date < today;
+    // Chỉ disable ngày trong quá khứ
+    if (date < today) {
+      return true;
+    }
+    
+    // Nếu không có dữ liệu thì cho phép chọn tất cả ngày trong tương lai
+    if (!Array.isArray(data) || data.length === 0) {
+      return false;
+    }
+    
+    // Kiểm tra xem ngày hiện tại có nằm trong danh sách ngày có lịch khám không
+    const isDisabled = !highlightedDays.includes(date.getDay());
+    return isDisabled;
   };
 
   if (modal) {
@@ -168,7 +281,8 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
           <div className={cx("modal-content")}>
             <h1 className={cx("title")}>Chọn ngày và giờ làm việc</h1>
 
-            <div className={cx("calendar-container")}>              <Calendar
+            <div className={cx("calendar-container")}>
+              <Calendar
                 onChange={handleDateChange}
                 value={selectedDate}
                 tileClassName={tileClassName}
@@ -183,23 +297,27 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
                 defaultActiveStartDate={new Date()}
                 showFixedNumberOfWeeks={true}
               />
-            </div>            <div className={cx("field-container")}>
+            </div>
+            
+            <div className={cx("field-container")}>
               <div className={cx('selected-info')}>
                 {selectedTime && <span>Đã chọn khung giờ: {selectedTime}</span>}
               </div>
-              
-              <select
+                <select
                 id="time-select"
                 value={selectedTime}
-                className={styles.timePicker}
+                className={cx('timePicker')}
                 onChange={(e) => setSelectedTime(e.target.value)}
-              >
-                <option value="">Chọn giờ</option>
-                {availableTimes.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
-                  </option>
-                ))}
+              >                <option value="">Chọn giờ</option>
+                {availableTimes.length > 0 ? (
+                  availableTimes.map((time, index) => (
+                    <option key={index} value={time}>
+                      {time}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>Không có khung giờ khả dụng</option>
+                )}
               </select>
             </div>
 

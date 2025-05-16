@@ -149,15 +149,30 @@ const Appointment = () => {
         };
         
     }, [selectedDoctor]);  
-    
-     const handleSubmitActiveHour = (data) => {
+      const handleSubmitActiveHour = (data) => {
+         // Get start and end times from the selected time slot
          const [startTime, endTime] = data.selectedTime.split(' - ');
-          setAppointmentDate(`${data.dayName} ${data.formattedDate} ${data.selectedTime}`);
-          setAppointmentDay(`${data.dayName} ${data.formattedDate}`);
+         
+         // Set the display value for the appointment date input field
+         setAppointmentDate(`${data.dayName} ${data.formattedDate} ${data.selectedTime}`);
+         
+         // Set the appointment day value that will be sent to the backend
+         setAppointmentDay(`${data.dayName} ${data.formattedDate}`);
 
-          setAppointmentTimeStart(startTime); 
-          setAppointmentTimeEnd(endTime);
-      };     const handleSubmitAppointment = async() => {
+         // Set start and end times
+         setAppointmentTimeStart(startTime); 
+         setAppointmentTimeEnd(endTime);
+         
+         // Log the selection for debugging
+         console.log("Selected appointment:", {
+           day: data.dayName,
+           date: data.formattedDate,
+           specificDate: data.specificDate, // This will be used for finding the exact active hour
+           timeSlot: data.selectedTime,
+           startTime,
+           endTime
+         });
+      };const handleSubmitAppointment = async() => {
         if (!healthIssues || !selectedDoctor || !appointmentDate)
         {
             alert("Bạn chưa chọn đủ trường!");

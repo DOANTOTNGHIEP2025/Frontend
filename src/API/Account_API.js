@@ -251,7 +251,7 @@ const get_Doctor_Active_List = async (id) => {
     }
 };
 
-const add_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, appointment_limit) => {
+const add_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, appointment_limit, date) => {
     try {
         const res = await client.post(`/doc/add-active-hour/${id}`,{
             day: day,
@@ -259,6 +259,7 @@ const add_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, 
             end_time: end_time,
             hour_type: hour_type,
             appointment_limit: Number(appointment_limit),
+            date: date, // Include specific date
         });
         console.log(res.data);
         return res.data;
@@ -274,13 +275,14 @@ const add_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, 
     }
 };
 
-const delete_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type) => {
+const delete_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, date) => {
     try {
         const res = await client.post(`/doc/delete-active-hour/${id}`,{
             day: day,
             start_time: start_time,
             end_time: end_time,
             hour_type: hour_type,
+            date: date, // Include specific date
         });
         console.log(res.data);
         return res.data;
@@ -296,7 +298,7 @@ const delete_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_typ
     }
 };
 
-const update_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, appointment_limit, old_day, old_start_time, old_end_time, old_hour_type) => {
+const update_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_type, appointment_limit, old_day, old_start_time, old_end_time, old_hour_type, date, old_date) => {
     try {
         const res = await client.post(`/doc/update-active-hour/${id}`,{
             day: day,
@@ -308,6 +310,8 @@ const update_Doctor_Active_Hour = async (id, day, start_time, end_time, hour_typ
             old_start_time: old_start_time,
             old_end_time: old_end_time,
             old_hour_type: old_hour_type,
+            date: date, // Include specific date
+            old_date: old_date, // Include old specific date
         });
         return res.data;
     } catch (error) {

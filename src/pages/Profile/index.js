@@ -195,28 +195,28 @@ function Profile() {
 
         file.preview = URL.createObjectURL(file);
         setImage(file);
-    };
-
-    const handleActiveHourUpdate = async(newActiveHour, oldActiveHour) => {
+    };    const handleActiveHourUpdate = async(newActiveHour, oldActiveHour) => {
         setDoctorActiveHours((prev) => {
             const updated = prev.filter(
               (hour) =>
-                hour?.day !== oldActiveHour?.day &&
-                hour?.start_time !== oldActiveHour?.start_time &&
-                hour?.end_time !== oldActiveHour?.end_time
+                hour?.day !== oldActiveHour?.day ||
+                hour?.start_time !== oldActiveHour?.start_time ||
+                hour?.end_time !== oldActiveHour?.end_time ||
+                // Also check dates - if either has a date, they should be different
+                (hour?.date !== oldActiveHour?.date && (hour?.date || oldActiveHour?.date))
             );
             return [...updated, newActiveHour];
           });
     
+        // Include date info in display if available
+        const dateInfo = newActiveHour?.date ? ` Date: ${newActiveHour.date}` : '';
         setSelectedHour(
-          `${newActiveHour?.day} ${newActiveHour?.start_time} ${newActiveHour?.end_time} Limit: ${newActiveHour?.appointment_limit}`
+          `${newActiveHour?.day} ${newActiveHour?.start_time} ${newActiveHour?.end_time} Limit: ${newActiveHour?.appointment_limit}${dateInfo}`
         );
 
         const allAppointment = await getAllAppointmentByDoctor(userInfo?._id);
         setAppointmentInfo(allAppointment);
-      };
-
-    function parseSchedule(inputString) {
+      };    function parseSchedule(inputString) {
         const parts = inputString.split(' ');
     
         const day = parts[0];
@@ -224,13 +224,23 @@ function Profile() {
         const end_time = parts[2];
         const appointment_limit = parts[4];
         const hour_type = parts[5];
+        
+        // Check if there's a specific date included (format would be "Date: YYYY-MM-DD")
+        let date = null;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (parts[i] === "Date:" && parts[i+1]) {
+                date = parts[i+1];
+                break;
+            }
+        }
     
         return {
             day,
             start_time,
             end_time,
             appointment_limit,
-            hour_type
+            hour_type,
+            date  // Include the date if available
         };
     }
 
@@ -241,19 +251,38 @@ function Profile() {
         }
 
         const userConfirmed = window.confirm("Bạn có chắc chắn muốn xóa giờ làm việc này không?");
-        if (userConfirmed) {
-            const hourValue = parseSchedule(selectedHour);
-            const deletedActiveHour = await deleteDoctorActiveHour(userInfo?._id, hourValue?.day, hourValue?.start_time, hourValue?.end_time, hourValue?.hour_type);
+        if (userConfirmed) {            const hourValue = parseSchedule(selectedHour);
+            const deletedActiveHour = await deleteDoctorActiveHour(
+              userInfo?._id, 
+              hourValue?.day, 
+              hourValue?.start_time, 
+              hourValue?.end_time, 
+              hourValue?.hour_type,
+              hourValue?.date  // Add the date parameter
+            );
 
             if (deletedActiveHour && typeof deletedActiveHour === 'object') {
                 alert("Xóa giờ làm việc thành công!");
-                const hourValue = parseSchedule(selectedHour);
-                setDoctorActiveHours((prev) => {
-                    return prev.filter(hour =>
-                        hour?.day !== hourValue?.day &&
-                        hour?.start_time !== hourValue?.start_time &&
-                        hour?.end_time !== hourValue?.end_time
-                    );
+                const hourValue = parseSchedule(selectedHour);                setDoctorActiveHours((prev) => {
+                    return prev.filter(hour => {
+                        // Check if this is the specific hour we want to delete
+                        const hourMatchesDay = hour?.day === hourValue?.day;
+                        const hourMatchesTime = hour?.start_time === hourValue?.start_time && 
+                                               hour?.end_time === hourValue?.end_time;
+                        
+                        // If we have date info, use it for comparison
+                        if (hourValue?.date || hour?.date) {
+                            // Both have date info - compare exact dates
+                            if (hourValue?.date && hour?.date) {
+                                return !(hourMatchesDay && hourMatchesTime && hourValue?.date === hour?.date);
+                            }
+                            // Only one has date info - if times match but date doesn't, keep it
+                            return !(hourMatchesDay && hourMatchesTime && !hourValue?.date === !hour?.date);
+                        }
+                        
+                        // Neither has date info - just use time and day
+                        return !(hourMatchesDay && hourMatchesTime);
+                    });
                 });
                 setSelectedHour("");
                 const allAppointment = await getAllAppointmentByDoctor(userInfo?._id);
@@ -317,9 +346,21 @@ function Profile() {
         window.location.reload();
     };
     
-    
-    const handleAddActiveHour = (newActiveHour) => {
-        setDoctorActiveHours(newActiveHour);
+      const handleAddActiveHour = (newActiveHour) => {
+        // Format each active hour to include date in the display name if available
+        const formattedActiveHours = Array.isArray(newActiveHour) ? 
+            newActiveHour.map(hour => {
+                if (hour.date) {
+                    // Add a display property for UI rendering that shows the date
+                    return {
+                        ...hour,
+                        displayName: `${hour.day} (${hour.date}) ${hour.start_time}-${hour.end_time}`
+                    };
+                }
+                return hour;
+            }) : newActiveHour;
+            
+        setDoctorActiveHours(formattedActiveHours);
     };
 
     const handleDeleteAccount = async() => {

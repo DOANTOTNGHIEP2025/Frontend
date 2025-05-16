@@ -227,15 +227,18 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     }
   },[appointmentLimit]);
 
-  const generateActiveHourObject = (day, startTime, endTime, appointmentLimit) => {
-      return {
-        day : day,
-        start_time: startTime,
-        end_time: endTime,
-        appointment_limit: appointmentLimit
-      }
-  }
-  
+  // Helper function to create active hour object
+  const generateActiveHourObject = (day, startTime, endTime, appointmentLimit, date = null) => {
+    return {
+      day,
+      start_time: startTime,
+      end_time: endTime,
+      appointment_limit: appointmentLimit,
+      hour_type: "appointment",
+      date: date
+    };
+  };
+
   const handleStartTimeChange = (newDateTime) => {
      setStartTimeValue(newDateTime);
      if (newDateTime) {
@@ -254,7 +257,6 @@ export default function DateModal({children , disabled = false, data = [], onAdd
      setEndTime(formattedTime); 
     }
   }
-
   const handleSubmitActiveHour = async () => {
 
   if (!selectedDate) {
@@ -284,17 +286,39 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     return;
   }
 
+  // Get specific date for this active hour (in YYYY-MM-DD format)
+  const specificDate = calendarValue ? calendarValue.toLocaleDateString('en-CA') : null;
+  
+  // Ask user if they want to create a schedule for just this specific date
+  const useSpecificDate = window.confirm(
+    "Bạn muốn tạo lịch làm việc cho ngày cụ thể này không?\n\n" +
+    "- Chọn OK để tạo lịch cho riêng ngày " + (specificDate || "đã chọn") + "\n" +
+    "- Chọn Cancel để tạo lịch cho tất cả các ngày " + selectedDate
+  );
+  
   const newActiveHour = await addDoctorActiveHour(
     data?._id,
     selectedDate,
     startTime,
     endTime,
     "appointment",
-    appointmentLimit
+    appointmentLimit,
+    useSpecificDate ? specificDate : null // Include specific date only if user confirmed
   );
-
   if (newActiveHour && typeof newActiveHour === 'object') {
-    onAddActiveHour(newActiveHour);
+    // Create local object with additional date info for display
+    const activeHourWithDisplay = newActiveHour.map(hour => {
+      if (hour.date) {
+        // Format to display specific date info
+        return {
+          ...hour,
+          displayName: `${hour.day} (${hour.date}) ${hour.start_time}-${hour.end_time}`
+        };
+      }
+      return hour;
+    });
+    
+    onAddActiveHour(activeHourWithDisplay);
     setModal(!modal);
     setStartTime('');
     setEndTime('');
@@ -309,7 +333,6 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     alert("Có lỗi xảy ra, vui lòng thử lại sau!");
   }
 }
-
   const handleUpdateActiveHour = async() => {
     if (!selectedDate) {
       alert("Vui lòng chọn thứ!");
@@ -338,6 +361,9 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       return;
     }
     
+    // Get specific date for the active hour (in YYYY-MM-DD format)
+    const specificDate = calendarValue ? calendarValue.toLocaleDateString('en-CA') : null;
+    
     const userConfirmed = window.confirm("Bạn có chắc chắn muốn chỉnh sửa giờ làm việc này không?");
     if (userConfirmed) {
       const editedActiveHour = await updateDoctorActiveHour(
@@ -350,7 +376,9 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         originalDate, 
         originalStartTime, 
         originalEndTime, 
-        hourType);
+        hourType,
+        specificDate,  // Add the specific date
+        null);
   
       if (editedActiveHour && typeof editedActiveHour === 'object') {
         alert("Cập nhật giờ làm việc thành công!");
