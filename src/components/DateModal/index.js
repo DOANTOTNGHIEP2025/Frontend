@@ -7,6 +7,8 @@ import DatePicker from "react-multi-date-picker";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faPen } from '@fortawesome/free-solid-svg-icons';
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const cx = classNames.bind(styles);
 
@@ -46,12 +48,109 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   const [originalDate, setOriginalDate] = useState('');
   const [originalAppointmentLimit, setOriginalAppointmentLimit] = useState('');
   const [hourType, setHourType] = useState('appointment');
+  const [calendarValue, setCalendarValue] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(true);
+  const [activeHours, setActiveHours] = useState([]);
+
+  // Map weekday names to numbers
+  const dayToIndexMap = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  };
 
   const toggleModal = () => {
     if (disabled) return;
     setModal(!modal);
+
+    // If opening modal, fetch active hours
+    if (!modal) {
+      if (data && data.active_hours) {
+        setActiveHours(data.active_hours);
+      }
+    }
+  };
+  // Get active hours for a specific day
+  const getActiveHoursForDay = (dayName) => {
+    if (!data || !Array.isArray(data.active_hours)) return [];
+    
+    return data.active_hours
+      .filter(hour => hour.day === dayName)
+      .map(hour => ({
+        startTime: hour.start_time,
+        endTime: hour.end_time,
+        limit: hour.appointment_limit
+      }));
   };
 
+  // Handle calendar date change
+  const handleCalendarChange = (date) => {
+    setCalendarValue(date);
+    
+    const dayName = Object.keys(dayToIndexMap).find(
+      key => dayToIndexMap[key] === date.getDay()
+    );
+    
+    setSelectedDate(dayName);
+  };  // Custom tile content to display active hours
+  const dayContent = ({date, view}) => {
+    if (view === 'month') {
+      const dayName = Object.keys(dayToIndexMap).find(
+        key => dayToIndexMap[key] === date.getDay()
+      );
+      
+      const hours = getActiveHoursForDay(dayName);
+      
+      // Click handler for selecting a time slot directly
+      const handleHourClick = (e, hour) => {
+        e.stopPropagation(); // Prevent calendar date selection
+        setSelectedDate(dayName);
+        setStartTime(hour.startTime);
+        setEndTime(hour.endTime);
+        setAppointmentLimit(hour.limit);
+        
+        // Create time objects for display
+        const startTimeObj = new Date();
+        const [startHours, startMinutes] = hour.startTime.split(":").map(Number);
+        startTimeObj.setHours(startHours, startMinutes, 0);
+        setStartTimeValue(startTimeObj);
+  
+        const endTimeObj = new Date();
+        const [endHours, endMinutes] = hour.endTime.split(":").map(Number);
+        endTimeObj.setHours(endHours, endMinutes, 0);
+        setEndTimeValue(endTimeObj);
+      };
+      
+      // Always return structured content for consistent layout
+      return (
+        <div className={cx("calendar-day-content")}>
+          <span className={cx("day-number")}>{date.getDate()}</span>
+          <div className={cx("day-available-times")}>
+            {hours.length > 0 ? (
+              hours.map((hour, index) => (
+                <span 
+                  key={index} 
+                  className={cx("day-time", { 'selected-time': selectedDate === dayName && startTime === hour.startTime && endTime === hour.endTime })}
+                  onClick={(e) => handleHourClick(e, hour)}
+                >
+                  {hour.startTime} - {hour.endTime} (Giới hạn: {hour.limit})
+                </span>
+              ))
+            ) : (
+              <span className={cx("no-time")}>Không có giờ khám</span>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Existing code for handling date modal functionality
   useEffect(() => {
     if (type === "update" && hourData) {
       const parts = hourData.split(" ");
@@ -154,10 +253,9 @@ export default function DateModal({children , disabled = false, data = [], onAdd
      const formattedTime = newDateTime.format("HH:mm"); 
      setEndTime(formattedTime); 
     }
-    
- }
+  }
 
- const handleSubmitActiveHour = async () => {
+  const handleSubmitActiveHour = async () => {
 
   if (!selectedDate) {
     alert("Vui lòng chọn thứ!");
@@ -283,21 +381,16 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   } else {
     document.body.classList.remove('active-modal')
   }
+  const toggleCalendarView = () => {
+    // Always show calendar by default (make it true)
+    setShowCalendar(true);
+  };
 
   return (
     <>
-      {
-        type === "add" ? (
-          <Button type="button" disabled={disabled} primary onClick={toggleModal} leftIcon={<FontAwesomeIcon icon={faCirclePlus} />}>
-            {children}
-          </Button>
-        ) : (
-          <Button type="button" disabled={disabled} primary onClick={toggleModal} leftIcon={<FontAwesomeIcon icon={faPen} />}>
-            {children}
-          </Button>
-        )
-      }
-      
+      <Button type={type === "add" ? "submit" : "update"} disabled={disabled} leftIcon={type === "add" ? <FontAwesomeIcon icon={faCirclePlus} /> : <FontAwesomeIcon icon={faPen} /> } onClick={toggleModal}>
+        {children}
+      </Button>
 
       {modal && (
         <div className={cx('modal')}>
@@ -308,16 +401,43 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                     <div className={cx('field-name')}>
                         <span>Chọn thứ</span>
                     </div>
-                    <select className={cx('field-input')} value={selectedDate} onChange={(e)=>{setSelectedDate(e.target.value)}}>
-                      <option value=''>Chọn thứ</option>
-                      <option value='Monday'>Monday</option>
-                      <option value='Tuesday'>Tuesday</option>
-                      <option value='Wednesday'>Wednesday</option>
-                      <option value='Thursday'>Thursday</option>
-                      <option value='Friday'>Friday</option>
-                      <option value='Saturday'>Saturday</option>
-                      <option value='Sunday'>Sunday</option>
-                    </select>
+                      <div className={cx('date-selection-container')}>
+                      <select 
+                        className={cx('field-input', { 'hidden': showCalendar })} 
+                        value={selectedDate} 
+                        onChange={(e)=>{setSelectedDate(e.target.value)}}
+                      >
+                        <option value=''>Chọn thứ</option>
+                        <option value='Monday'>Monday</option>
+                        <option value='Tuesday'>Tuesday</option>
+                        <option value='Wednesday'>Wednesday</option>
+                        <option value='Thursday'>Thursday</option>
+                        <option value='Friday'>Friday</option>
+                        <option value='Saturday'>Saturday</option>
+                        <option value='Sunday'>Sunday</option>
+                      </select>
+
+                      <div className={cx('selected-info')}>
+                        {selectedDate && <span>Đã chọn: {selectedDate} ({startTime} - {endTime})</span>}
+                      </div>
+                      
+                      {showCalendar && (
+                        <div className={cx('calendar-container')}>              <Calendar
+                onChange={handleCalendarChange}
+                value={calendarValue}
+                tileContent={dayContent}
+                showNeighboringMonth={true}
+                next2Label={null}
+                prev2Label={null}
+                maxDetail="month"
+                minDetail="month"
+                defaultView="month"
+                defaultActiveStartDate={new Date()}
+                showFixedNumberOfWeeks={true}
+              />
+                        </div>
+                      )}
+                    </div>
                 </div>
                 <div className={cx('field-container')}>
                     <div className={cx('field-name')}>

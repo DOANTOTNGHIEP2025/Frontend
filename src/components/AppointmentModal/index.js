@@ -16,7 +16,6 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
   const toggleModal = () => {
     setModal(!modal);
   };
-
   const handleDateChange = (date) => {
     setSelectedDate(date);
 
@@ -29,6 +28,60 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       .map((item) => `${item.start_time} - ${item.end_time}`);
     setAvailableTimes(filteredTimes);
     setSelectedTime(""); 
+    
+    // Log for debugging
+    console.log('Selected day:', dayName);
+    console.log('Available times:', filteredTimes);
+  };
+  // Get available times for a specific day
+  const getAvailableTimesForDay = (dayName) => {
+    if (!Array.isArray(data)) return [];
+    
+    return data
+      .filter((item) => item.day === dayName)
+      .map((item) => `${item.start_time} - ${item.end_time} (Giới hạn: ${item.appointment_limit || 'N/A'})`);
+  };  // Custom day content to display available times
+  const dayContent = ({date, view}) => {
+    if (view === 'month') {
+      const dayName = Object.keys(dayToIndexMap).find(
+        (key) => dayToIndexMap[key] === date.getDay()
+      );
+      
+      const times = getAvailableTimesForDay(dayName);
+      const rawTimes = data
+        .filter((item) => item.day === dayName)
+        .map((item) => `${item.start_time} - ${item.end_time}`);
+      
+      // Click handler for time slots
+      const handleTimeClick = (e, timeIndex) => {
+        e.stopPropagation(); // Prevent calendar date selection
+        setSelectedDate(date);
+        setSelectedTime(rawTimes[timeIndex]);
+      };
+      
+      // Always return structured content for consistent layout
+      return (
+        <div className={cx("calendar-day-content")}>
+          <span className={cx("day-number")}>{date.getDate()}</span>
+          <div className={cx("day-available-times")}>
+            {times.length > 0 ? (
+              times.map((time, index) => (
+                <span 
+                  key={index} 
+                  className={cx("day-time", { 'selected-time': date.toDateString() === selectedDate.toDateString() && rawTimes[index] === selectedTime })}
+                  onClick={(e) => handleTimeClick(e, index)}
+                >
+                  {time}
+                </span>
+              ))
+            ) : (
+              <span className={cx("no-time")}>Không có giờ khám</span>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return null;
   };
 
   const handleSubmitActiveHour = async () => {
@@ -115,18 +168,26 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
           <div className={cx("modal-content")}>
             <h1 className={cx("title")}>Chọn ngày và giờ làm việc</h1>
 
-            <div className={cx("calendar-container")}>
-              <Calendar
+            <div className={cx("calendar-container")}>              <Calendar
                 onChange={handleDateChange}
                 value={selectedDate}
                 tileClassName={tileClassName}
                 tileDisabled={tileDisabled}
+                tileContent={dayContent}
+                showNeighboringMonth={true}
+                next2Label={null}
+                prev2Label={null}
+                maxDetail="month"
+                minDetail="month"
+                defaultView="month"
+                defaultActiveStartDate={new Date()}
+                showFixedNumberOfWeeks={true}
               />
-            </div>
-
-
-            <div className={cx("field-container")}>
-            
+            </div>            <div className={cx("field-container")}>
+              <div className={cx('selected-info')}>
+                {selectedTime && <span>Đã chọn khung giờ: {selectedTime}</span>}
+              </div>
+              
               <select
                 id="time-select"
                 value={selectedTime}

@@ -46,9 +46,9 @@ body.active-modal {
     transform: translate(-50%, -50%);
     line-height: 1.4;
     padding: 20px 30px;
-    max-width: 600px;
+    max-width: 800px;
     min-width: 300px;
-    height: 600px;
+    height: 700px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -209,6 +209,221 @@ body.active-modal {
     padding: 10px;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    :global {
+        .react-calendar {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            width: 100%;
+            max-width: 100%;
+            background-color: #fff;
+            font-family: 'Roboto', sans-serif;
+
+            // Make the calendar view larger
+            &__viewContainer {
+                padding: 0;
+            }            // Enlarge the calendar tiles to match DateModal
+            &__month-view {
+                &__days {
+                    &__day {
+                        height: 120px !important;
+                        padding: 8px !important;
+                        
+                        abbr {
+                            display: none;
+                        }
+                    }
+                }
+
+                &__weekdays {
+                    &__weekday {
+                        padding: 10px 0;
+                        font-weight: bold;
+                        text-decoration: none;
+                        font-size: 0.9rem;
+                        abbr {
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            color: #0C507C;
+                        }
+                    }
+                }
+            }
+
+            &__tile {
+                position: relative;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+                
+                &:enabled:hover {
+                    background: #e1f5f5;
+                }
+            }
+
+            &__navigation {
+                height: 50px;
+                margin-bottom: 10px;
+
+                button {
+                    min-width: 44px;
+                    background: none;
+                    font-size: 1.5rem;
+                    color: #0C507C;
+                    border-radius: 8px;
+                    transition: all 0.2s ease;
+
+                    &:enabled:hover {
+                        background: rgba(0, 211, 214, 0.1);
+                    }
+                }
+                
+                &__label {
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    color: #0C507C;
+                }
+            }
+        }
+    }
+}
+
+// Style for individual day cell content
+.calendar-day-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 2px;
+    overflow: hidden;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    text-align: right;
+    display: block;
+}
+
+.day-available-times {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    text-align: center;
+    overflow-y: auto;
+    max-height: 85px;
+    
+    // Scrollbar styling for webkit browsers
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(12, 80, 124, 0.3);
+        border-radius: 4px;
+    }
+}
+
+.day-time {
+    background-color: rgba(0, 211, 214, 0.2);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #0C507C;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+        background-color: rgba(0, 211, 214, 0.4);
+        transform: translateY(-1px);
+    }
+
+    &.selected-time {
+        background-color: rgba(0, 211, 214, 0.6);
+        font-weight: bold;
+        color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+}
+
+.no-time {
+    font-size: 0.75rem;
+    color: #999;
+    font-style: italic;
+    padding: 2px;
+}
+
+// Custom styling for highlighted and selected days
+.highlighted-day {
+    background-color: rgba(0, 211, 214, 0.1);
+    border: 1px solid rgba(0, 211, 214, 0.5);
+
+    .day-number {
+        color: #0C507C;
+    }
+
+    &:hover {
+        background-color: rgba(0, 211, 214, 0.2);
+    }
+}
+
+.today {
+    border: 2px solid #0C507C;
+    font-weight: bold;
+    
+    .day-number {
+        color: #0C507C;
+    }
+}
+
+.selected-day {
+    background-color: rgba(0, 211, 214, 0.3) !important;
+    border: 2px solid #00D3D6 !important;
+    
+    .day-number {
+        color: #0C507C;
+    }
+}
+
+.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    background-color: #f0f0f0;
+}
+
+// Time picker styles
+.timePicker {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 211, 214, 0.3);
+    background-color: #fff;
+    font-size: 1rem;
+    color: #0C507C;
+    margin-top: 10px;
+    
+    &:focus {
+        border-color: #00D3D6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 211, 214, 0.2);
+    }
+    
+    option {
+        padding: 8px;
+    }
 }
 
 .modal-button{
@@ -220,6 +435,30 @@ body.active-modal {
     width: 20px !important;
     height: 20px !important;
     background-color: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0C507C, #00D3D6);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 }
 
 .react-calendar {
@@ -342,4 +581,14 @@ body.active-modal {
 .kCAYfl {
     color: #000 !important;
 }
-  
+
+.selected-info {
+    margin: 10px 0;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+}

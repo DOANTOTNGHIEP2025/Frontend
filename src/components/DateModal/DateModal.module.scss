@@ -23,21 +23,25 @@ body.active-modal {
 .overlay {
     background: rgba(49,49,49,0.8);
 }
+
 .modal-content {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     line-height: 1.4;
-    padding: 14px 28px;
+    padding: 20px 30px;
     border-radius: 3px;
-    max-width: 600px;
+    max-width: 800px;
     min-width: 300px;
     display: flex;
     justify-content: center;
     background-image: linear-gradient(180deg, #00A6A9, #0c507c);
     border-radius: 20px;
     z-index: 2001;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 .close-modal {
@@ -50,16 +54,18 @@ body.active-modal {
 .field-container{
     width: 100%;
     min-height: 80px;
-    max-height: 200px;
+    max-height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-bottom: 15px;
 }
 
 .field-name{
     font-size: 1.4rem;
     font-weight: 500;
     color: #fff;
+    margin-bottom: 8px;
 }
 
 .field-input{
@@ -68,20 +74,204 @@ body.active-modal {
     border-radius: 10px;
     margin-bottom: 10px;
     border: 0px;
+    padding: 0 10px;
     &:focus {
         border: none;
         outline: none;
     }
+
+    &.hidden {
+        display: none;
+    }
 }
 
 .modal-field-container{
-    width: 300px;
-    height: 400px;
+    width: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     align-content: space-between;
+    padding: 20px 0;
 }
 
-  
+// Calendar styles
+.date-selection-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar-container {
+    margin: 15px 0;
+    width: 100%;    :global {
+        .react-calendar {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 100%;
+            max-width: 100%;
+            background-color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+
+            // Make the calendar view larger
+            &__viewContainer {
+                padding: 0;
+            }
+
+            // Enlarge the calendar tiles significantly
+            &__month-view {
+                &__days {
+                    &__day {
+                        height: 120px !important;
+                        padding: 8px !important;
+                        
+                        abbr {
+                            display: none;
+                        }
+                    }
+                }
+
+                &__weekdays {
+                    &__weekday {
+                        padding: 10px 0;
+                        font-weight: bold;
+                        text-decoration: none;
+                        font-size: 0.9rem;
+                        abbr {
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            color: #0C507C;
+                        }
+                    }
+                }
+            }
+
+            &__tile {
+                position: relative;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+                
+                &:enabled:hover {
+                    background: #e1f5f5;
+                }
+            }
+
+            &__navigation {
+                height: 50px;
+                margin-bottom: 10px;
+
+                button {
+                    min-width: 44px;
+                    background: none;
+                    font-size: 1.5rem;
+                    color: #0C507C;
+                    border-radius: 8px;
+                    transition: all 0.2s ease;
+
+                    &:enabled:hover {
+                        background: rgba(0, 211, 214, 0.1);
+                    }
+                }
+                
+                &__label {
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    color: #0C507C;
+                }
+            }
+        }
+    }
+}
+
+// Day cell content
+.calendar-day-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 2px;
+    overflow: hidden;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    text-align: right;
+    display: block;
+}
+
+.day-available-times {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8rem;
+    text-align: center;
+    overflow-y: auto;
+    max-height: 85px;
+    
+    // Scrollbar styling for webkit browsers
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(12, 80, 124, 0.3);
+        border-radius: 4px;
+    }
+}
+
+.day-time {
+    background-color: rgba(0, 211, 214, 0.2);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #0C507C;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+        background-color: rgba(0, 211, 214, 0.4);
+        transform: translateY(-1px);
+    }
+
+    &.selected-time {
+        background-color: rgba(0, 211, 214, 0.6);
+        font-weight: bold;
+        color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+}
+
+.no-time {
+    font-size: 0.75rem;
+    color: #999;
+    font-style: italic;
+    padding: 2px;
+}
+
+.selected-info {
+    margin: 10px 0;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+}
+
