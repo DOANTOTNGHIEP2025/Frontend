@@ -72,7 +72,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
         // Otherwise fall back to day of week match
         return item.day === dayName;
       })
-      .map((item) => `${item.start_time} - ${item.end_time} (Giới hạn: ${item.appointment_limit || 'N/A'})`);
+      .map((item) => `${item.start_time} - ${item.end_time}`);
   };
   
   // Custom day content to display available times
@@ -167,64 +167,98 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       );
     }
     return null;
-  };
-  
-  const handleSubmitActiveHour = async () => {
-    const formattedDate = selectedDate.toLocaleDateString("en-CA"); 
-    const dayIndex = selectedDate.getDay();
-    const dayName = Object.keys(dayToIndexMap).find(
-      (key) => dayToIndexMap[key] === dayIndex
-    );
+  };  const handleSubmitActiveHour = async () => {
+    try {
+      // Kiểm tra ngày và khung giờ
+      if (!selectedDate) {
+        alert("Vui lòng chọn ngày!");
+        return;
+      }
 
-    if (!formattedDate || !dayName || !selectedTime) {
-      alert("Bạn chưa chọn đủ trường!");
-      return;
+      const formattedDate = selectedDate.toLocaleDateString("en-CA"); 
+      const dayIndex = selectedDate.getDay();
+      const dayName = Object.keys(dayToIndexMap).find(
+        (key) => dayToIndexMap[key] === dayIndex
+      );
+
+      // Kiểm tra đã chọn khung giờ hay chưa
+      if (!selectedTime || typeof selectedTime !== 'string') {
+        alert("Vui lòng chọn khung giờ!");
+        return;
+      }
+        
+      // Phân tích khung giờ an toàn
+      let startTime, endTime;
+      
+      try {
+        // Chia chuỗi thời gian theo định dạng "HH:MM - HH:MM"
+        const timeParts = selectedTime.split(" - ");
+        
+        // Đảm bảo định dạng hợp lệ
+        if (timeParts.length !== 2) {
+          throw new Error("Định dạng thời gian không hợp lệ");
+        }
+        
+        [startTime, endTime] = timeParts;
+        
+        // Kiểm tra giá trị rỗng
+        if (!startTime || !endTime) {
+          throw new Error("Thời gian không hợp lệ");
+        }
+      } catch (error) {
+        console.error("Lỗi phân tích thời gian:", error, "selectedTime:", selectedTime);
+        alert("Lỗi: " + (error.message || "Định dạng thời gian không hợp lệ!"));
+        return;
+      }
+      
+      // Tìm khung giờ hoạt động phù hợp
+      const matchingActiveHours = Array.isArray(data) ? data.filter(item => {
+        // Kiểm tra khung giờ cụ thể cho ngày
+        if (item.date === formattedDate && 
+            item.start_time === startTime && 
+            item.end_time === endTime) {
+          return true;
+        }
+        // Kiểm tra khung giờ theo lịch hàng tuần
+        else if (!item.date && 
+                 item.day === dayName && 
+                 item.start_time === startTime && 
+                 item.end_time === endTime) {
+          return true;
+        }
+        return false;
+      }) : [];      // Log dữ liệu để kiểm tra lỗi
+      console.log("Dữ liệu lịch hẹn đã chọn:", {
+        formattedDate,
+        dayName,
+        selectedTime,
+        startTime,
+        endTime,
+        fullDate: selectedDate,
+        matchingActiveHours
+      });
+      
+      // Kiểm tra xem có phải là lịch khám ngày cụ thể
+      const hasSpecificDateSchedule = matchingActiveHours.some(hour => hour.date === formattedDate);
+      
+      // Tạo định dạng ngày đúng chuẩn cho frontend hiển thị
+      // Format: "Monday 2024-05-20" với 2024-05-20 là ngày cụ thể (hoặc chỉ "Monday" nếu là lịch định kỳ)
+      const appointmentDay = hasSpecificDateSchedule 
+        ? `${dayName} ${formattedDate}` // Nếu có lịch ngày cụ thể, đánh dấu là lịch cụ thể
+        : dayName; // Nếu không, là lịch định kỳ hàng tuần
+        
+      console.log("Ngày lịch hẹn được gửi:", appointmentDay, "Định dạng lịch:", hasSpecificDateSchedule ? "Ngày cụ thể" : "Hàng tuần");
+      
+      // Gọi hàm callback với đúng định dạng ngày
+      onSubmit(appointmentDay, startTime, endTime);
+
+      // Đóng modal sau khi hoàn tất
+      setModal(!modal);
+    } catch (error) {
+      // Xử lý lỗi tổng thể
+      console.error("Lỗi trong handleSubmitActiveHour:", error);
+      alert("Có lỗi xảy ra: " + (error.message || "Không thể tạo lịch hẹn"));
     }
-
-    // Find if there's a specific active hour that matches this date and time
-    const matchingActiveHours = Array.isArray(data) ? data.filter(item => {
-      const [startTime, endTime] = selectedTime.split(' - ');
-      // Check if this is a specific date-based active hour
-      if (item.date === formattedDate && 
-          item.start_time === startTime && 
-          item.end_time === endTime) {
-        return true;
-      }
-      // Check if this is a day of week active hour with no specific date
-      else if (!item.date && 
-               item.day === dayName && 
-               item.start_time === startTime && 
-               item.end_time === endTime) {
-        return true;
-      }
-      return false;
-    }) : [];
-
-    // Log data for debugging
-    console.log("Submitting appointment data:", {
-      formattedDate,
-      dayName,
-      selectedTime,
-      fullDate: selectedDate,
-      matchingActiveHours
-    });    // Kiểm tra xem có phải là lịch khám ngày cụ thể
-    const hasSpecificDateSchedule = matchingActiveHours.some(hour => hour.date === formattedDate);
-    
-    // Tạo định dạng ngày đúng chuẩn cho frontend hiển thị
-    // Format: "Monday 2024-05-20" với 2024-05-20 là ngày cụ thể (hoặc chỉ "Monday" nếu là lịch định kỳ)
-    const appointmentDay = hasSpecificDateSchedule 
-      ? `${dayName} ${formattedDate}` // Nếu có lịch ngày cụ thể, đánh dấu là lịch cụ thể
-      : dayName; // Nếu không, là lịch định kỳ hàng tuần
-      
-    console.log("appointmentDay được gửi:", appointmentDay, "Định dạng lịch:", hasSpecificDateSchedule ? "Ngày cụ thể" : "Hàng tuần");
-      
-    // Parse the selected time
-    const [startTime, endTime] = selectedTime.split(" - ");
-    
-    // Gọi hàm callback với đúng định dạng ngày
-    onSubmit(appointmentDay, startTime, endTime);
-
-    setModal(!modal);
   };
 
   const dayToIndexMap = {

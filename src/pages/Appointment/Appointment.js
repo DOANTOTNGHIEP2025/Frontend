@@ -147,31 +147,37 @@ const Appointment = () => {
         return () => {
             clearInterval(intervalId);
         };
-        
-    }, [selectedDoctor]);  
-      const handleSubmitActiveHour = (data) => {
-         // Get start and end times from the selected time slot
-         const [startTime, endTime] = data.selectedTime.split(' - ');
-         
-         // Set the display value for the appointment date input field
-         setAppointmentDate(`${data.dayName} ${data.formattedDate} ${data.selectedTime}`);
-         
-         // Set the appointment day value that will be sent to the backend
-         setAppointmentDay(`${data.dayName} ${data.formattedDate}`);
-
-         // Set start and end times
-         setAppointmentTimeStart(startTime); 
-         setAppointmentTimeEnd(endTime);
-         
-         // Log the selection for debugging
-         console.log("Selected appointment:", {
-           day: data.dayName,
-           date: data.formattedDate,
-           specificDate: data.specificDate, // This will be used for finding the exact active hour
-           timeSlot: data.selectedTime,
-           startTime,
-           endTime
-         });
+          }, [selectedDoctor]);      
+    
+    // Hàm xử lý khi chọn khung giờ từ AppointmentModal
+    const handleSubmitActiveHour = (appointmentDay, startTime, endTime) => {
+         try {
+           console.log("Received appointment data:", { appointmentDay, startTime, endTime });
+           
+           // Kiểm tra xem có đủ dữ liệu không
+           if (!appointmentDay || !startTime || !endTime) {
+             console.error("Dữ liệu thời gian không hợp lệ:", appointmentDay);
+             alert("Lỗi: Dữ liệu thời gian không hợp lệ hoặc chưa được chọn!");
+             return;
+           }
+           
+           // Set the display value for the appointment date input field
+           setAppointmentDate(`${appointmentDay} ${startTime} - ${endTime}`);
+             // Set the appointment day value that will be sent to the backend
+           setAppointmentDay(appointmentDay);
+             // Set start and end times
+           setAppointmentTimeStart(startTime); 
+           setAppointmentTimeEnd(endTime);
+             // Log the selection for debugging
+           console.log("Selected appointment:", {
+             day: appointmentDay,
+             startTime,
+             endTime
+           });
+         } catch (error) {
+           console.error("Lỗi trong handleSubmitActiveHour:", error);
+           alert("Có lỗi xảy ra khi chọn thời gian. Vui lòng thử lại!");
+         }
       };const handleSubmitAppointment = async() => {
         if (!healthIssues || !selectedDoctor || !appointmentDate)
         {
