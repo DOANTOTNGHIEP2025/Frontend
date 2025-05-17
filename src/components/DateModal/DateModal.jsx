@@ -81,19 +81,34 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         setShowTimeInputs(true);
       }
     }
-  };
-  // Get active hours for a specific day
-  const getActiveHoursForDay = (dayName) => {
+  };  // Get active hours for a specific day
+  const getActiveHoursForDay = (dayName, specificDate = null) => {
     if (!data || !Array.isArray(data.active_hours)) return [];
     
+    // Filter based on day and possibly specific date
     return data.active_hours
-      .filter(hour => hour.day === dayName)
+      .filter(hour => {
+        // First match the day
+        if (hour.day !== dayName) return false;
+        
+        // If a specific date is provided, check if this hour is for that date or general
+        if (specificDate) {
+          // Include hours with no date (general weekday hours)
+          // OR hours that exactly match this specific date
+          return !hour.date || hour.date === specificDate;
+        }
+        
+        return true; // Include all hours for this day when no specific date is requested
+      })
       .map(hour => ({
         startTime: hour.start_time,
         endTime: hour.end_time,
-        limit: hour.appointment_limit
+        limit: hour.appointment_limit,
+        isSpecificDate: !!hour.date,
+        hasSpecificDate: !!hour.date,  // Keep for backward compatibility
+        date: hour.date
       }));
-  };  // Handle calendar date change
+  };// Handle calendar date change
   const handleCalendarChange = (date) => {
     // Lưu lại tháng hiện tại trước khi cập nhật giá trị
     const previousMonth = calendarValue ? calendarValue.getMonth() : new Date().getMonth();
@@ -132,26 +147,46 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       }
     }
     
-    // Hiển thị phần nhập thời gian sau khi chọn ngày
+  // Hiển thị phần nhập thời gian sau khi chọn ngày
     setShowTimeInputs(true);
+    
+    // Check if this date already has specific hours
+    const dateString = date.toLocaleDateString('en-CA');
+    const hasSpecificHours = data?.active_hours?.some(hour => 
+      hour.date === dateString
+    );
+    
+    // If this date has specific hours, notify the user
+    if (hasSpecificHours) {
+      // Show a subtle notification that this date has specific hours
+      setTimeout(() => {
+        alert("Lưu ý: Ngày này đã có lịch làm việc riêng được thiết lập!");
+      }, 100);
+    }
   };
-  
-  // Custom tile content to display active hours
+    // Custom tile content to display active hours
   const dayContent = ({date, view}) => {
     if (view === 'month') {
       const dayName = Object.keys(dayToIndexMap).find(
         key => dayToIndexMap[key] === date.getDay()
       );
       
-      const hours = getActiveHoursForDay(dayName);
-      
-      // Click handler for selecting a time slot directly
+      // Convert date to YYYY-MM-DD format for comparison
+      const dateString = date.toLocaleDateString('en-CA');
+      const hours = getActiveHoursForDay(dayName, dateString);
+        // Click handler for selecting a time slot directly
       const handleHourClick = (e, hour) => {
         e.stopPropagation(); // Prevent calendar date selection
         setSelectedDate(dayName);
         setStartTime(hour.startTime);
         setEndTime(hour.endTime);
         setAppointmentLimit(hour.limit);
+        
+        // If this is a specific date hour, update the calendar to that date
+        if (hour.date) {
+          const dateObj = new Date(hour.date);
+          setCalendarValue(dateObj);
+        }
         
         // Create time objects for display
         const startTimeObj = new Date();
@@ -164,22 +199,90 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         endTimeObj.setHours(endHours, endMinutes, 0);
         setEndTimeValue(endTimeObj);
       };
+        // Always return structured content for consistent layout
+      // Get hours specific to this exact date
+      const specificDateString = date.toLocaleDateString('en-CA');
       
-      // Always return structured content for consistent layout
+      // Get hours specifically for this date
+      const specificDateHours = data?.active_hours
+        ?.filter(hour => 
+          hour.day === dayName && 
+          hour.date === specificDateString
+        )
+        .map(hour => ({
+          startTime: hour.start_time,
+          endTime: hour.end_time,
+          limit: hour.appointment_limit,
+          date: hour.date,
+          isSpecificDate: true
+        }));
+        
+      // Get regular recurring hours for this day of week (exclude specific dates)
+      const regularRecurringHours = data?.active_hours
+        ?.filter(hour => 
+          hour.day === dayName && 
+          !hour.date // Only get the recurring ones with no specific date
+        )
+        .map(hour => ({
+          startTime: hour.start_time,
+          endTime: hour.end_time,
+          limit: hour.appointment_limit,
+          isSpecificDate: false
+        }));
+        // Combine both types of hours, but always show specific date hours first
+      const allHours = [...specificDateHours, ...regularRecurringHours];
+      
       return (
         <div className={cx("calendar-day-content")}>
           <span className={cx("day-number")}>{date.getDate()}</span>
           <div className={cx("day-available-times")}>
-            {hours.length > 0 ? (
-              hours.map((hour, index) => (
-                <span 
-                  key={index} 
-                  className={cx("day-time", { 'selected-time': selectedDate === dayName && startTime === hour.startTime && endTime === hour.endTime })}
-                  onClick={(e) => handleHourClick(e, hour)}
-                >
-                  {hour.startTime} - {hour.endTime} (Giới hạn: {hour.limit})
-                </span>
-              ))
+            {allHours.length > 0 ? (
+              <>
+                {/* First render specific date hours with clear indication */}
+                {specificDateHours.length > 0 && (
+                  <div className={cx("specific-date-section")}>
+                    <div className={cx("section-label")}>Lịch riêng:</div>
+                    {specificDateHours.map((hour, index) => (
+                      <span 
+                        key={`specific-${index}`} 
+                        className={cx("day-time", "specific-date-time", { 
+                          'selected-time': selectedDate === dayName && startTime === hour.startTime && endTime === hour.endTime
+                        })}
+                        onClick={(e) => handleHourClick(e, hour)}
+                      >                        <span className={cx("time-badge")}>⭐</span> 
+                        {hour.startTime} - {hour.endTime} (Giới hạn: {hour.limit})
+                        <button className={cx("delete-specific-btn")} 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (window.confirm("Bạn có chắc chắn muốn xóa lịch làm việc cho ngày cụ thể này không?")) {
+                              // Here would go the API call to delete this specific date schedule
+                              alert("Tính năng xóa lịch riêng đang được phát triển!");
+                            }
+                          }}
+                        >×</button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Then render recurring hours if they exist */}
+                {regularRecurringHours.length > 0 && (
+                  <div className={cx("recurring-section")}>
+                    {specificDateHours.length > 0 && <div className={cx("section-label")}>Lịch tuần:</div>}
+                    {regularRecurringHours.map((hour, index) => (
+                      <span 
+                        key={`recurring-${index}`} 
+                        className={cx("day-time", { 
+                          'selected-time': selectedDate === dayName && startTime === hour.startTime && endTime === hour.endTime
+                        })}
+                        onClick={(e) => handleHourClick(e, hour)}
+                      >
+                        {hour.startTime} - {hour.endTime} (Giới hạn: {hour.limit})
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
               <span className={cx("no-time")}>Không có giờ khám</span>
             )}
@@ -349,15 +452,24 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     month: 'long',
     day: 'numeric'
   }) : null;
-    
-  // Ask user if they want to create a schedule for just this specific date
+    // Format the date to display day, month, year
+  const displayDate = formattedDate || calendarValue?.toLocaleDateString('vi-VN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+  
+  // Ask user with clearer options for creating date-specific or recurring schedules
   const useSpecificDate = window.confirm(
     "🗓️ XÁC NHẬN LỊCH LÀM VIỆC\n\n" +
-    "Bạn muốn tạo lịch khám cho:\n\n" +
-    "✅ Chọn OK để tạo lịch cho riêng ngày " + (formattedDate || "đã chọn") + " (Khuyến nghị)\n\n" +
-    "❌ Chọn Cancel để tạo lịch cho tất cả các ngày " + selectedDate + " trong tương lai (Không khuyến nghị)"
+    "Vui lòng chọn loại lịch làm việc:\n\n" +
+    "✅ OK: Chỉ áp dụng cho ngày " + displayDate + "\n" +
+    "(Lịch sẽ CHỈ được tạo cho ngày cụ thể này, KHÔNG ảnh hưởng các thứ " + selectedDate + " khác)\n\n" +
+    "❌ CANCEL: Áp dụng cho TẤT CẢ các ngày thứ " + selectedDate + " từ nay trở đi\n" +
+    "(Không khuyến nghị vì sẽ tạo lịch cho tất cả các " + selectedDate + " trong tương lai)"
   );
   
+  // Ensure we always use a specific date when OK is pressed
   const newActiveHour = await addDoctorActiveHour(
     data?._id,
     selectedDate,
@@ -366,15 +478,22 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     "appointment",
     appointmentLimit,
     useSpecificDate ? specificDate : null // Include specific date only if user confirmed
-  );
-  if (newActiveHour && typeof newActiveHour === 'object') {
+  );if (newActiveHour && typeof newActiveHour === 'object') {
     // Create local object with additional date info for display
     const activeHourWithDisplay = newActiveHour.map(hour => {
       if (hour.date) {
-        // Format to display specific date info
+        // Format to display specific date info with clearer labeling
+        const dateObj = new Date(hour.date);
+        const formattedDisplayDate = dateObj.toLocaleDateString('vi-VN', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
         return {
           ...hour,
-          displayName: `${hour.day} (${hour.date}) ${hour.start_time}-${hour.end_time}`
+          displayName: `${hour.day} (${formattedDisplayDate}) ${hour.start_time}-${hour.end_time}`
         };
       }
       return hour;
@@ -388,7 +507,13 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     setStartTimeValue(null);
     setEndTimeValue(null);
     setSelectedDate('');
-    alert("Thêm giờ làm việc thành công!");
+    
+    // Show more descriptive success message based on whether a specific date was chosen
+    if (useSpecificDate) {
+      alert(`Đã thêm lịch khám cho ngày cụ thể: ${formattedDate}`);
+    } else {
+      alert(`Đã thêm lịch khám cho tất cả các ngày ${selectedDate}`);
+    }
   } else if (newActiveHour && typeof newActiveHour !== 'object') {
     alert(newActiveHour);
   } else {
@@ -432,25 +557,44 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       month: 'long',
       day: 'numeric'
     }) : null;
+      // Format the date for better display
+    const displayDate = formattedDate || calendarValue?.toLocaleDateString('vi-VN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+      // Extract original date from hourData if it exists (using Date: format)
+    let originalSpecificDate = null;
+    if (hourData) {
+      const parts = hourData.split(" ");
+      const dateIndex = parts.indexOf("Date:");
+      if (dateIndex !== -1 && dateIndex + 1 < parts.length) {
+        originalSpecificDate = parts[dateIndex + 1];
+      }
+    }
+    
+    // Check if we're updating a date-specific active hour
+    const isUpdatingSpecificDate = !!originalSpecificDate;
+    
+    // Ask if user wants to update this as a specific date schedule or recurring schedule
+    const useSpecificDate = window.confirm(
+      "🔄 XÁC NHẬN CẬP NHẬT\n\n" +
+      "Vui lòng chọn loại lịch làm việc để cập nhật:\n\n" +
+      "✅ OK: Chỉ áp dụng cho ngày " + displayDate + "\n" +
+      "(Lịch sẽ CHỈ được tạo cho ngày cụ thể này, KHÔNG ảnh hưởng các thứ " + selectedDate + " khác)\n\n" +
+      "❌ CANCEL: Áp dụng cho TẤT CẢ các ngày thứ " + selectedDate + " từ nay trở đi\n" +
+      "(Không khuyến nghị vì sẽ tạo lịch cho tất cả các " + selectedDate + " trong tương lai)"
+    );
     
     const userConfirmed = window.confirm(
       "🔄 XÁC NHẬN CẬP NHẬT\n\n" +
       "Bạn có chắc chắn muốn chỉnh sửa giờ khám này?\n\n" +
-      `Ngày: ${formattedDate || selectedDate}\n` +
+      `Ngày: ${useSpecificDate ? displayDate + " (Ngày cụ thể)" : selectedDate + " (Tất cả các tuần)"}\n` +
       `Thời gian: ${startTime} - ${endTime}\n` +
       `Giới hạn lượt khám: ${appointmentLimit}`
     );
-    if (userConfirmed) {      // Extract original date from hourData if it exists (using Date: format)
-      let originalSpecificDate = null;
-      if (hourData) {
-        const parts = hourData.split(" ");
-        const dateIndex = parts.indexOf("Date:");
-        if (dateIndex !== -1 && dateIndex + 1 < parts.length) {
-          originalSpecificDate = parts[dateIndex + 1];
-        }
-      }
-      
-      const editedActiveHour = await updateDoctorActiveHour(
+    if (userConfirmed) {
+        const editedActiveHour = await updateDoctorActiveHour(
         data?._id, 
         selectedDate, 
         startTime, 
@@ -461,13 +605,25 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         originalStartTime, 
         originalEndTime, 
         hourType,
-        specificDate,  // Add the specific date
+        useSpecificDate ? specificDate : null,  // Only use specific date if user confirmed
         originalSpecificDate);  // Add the original specific date
   
-      if (editedActiveHour && typeof editedActiveHour === 'object') {
-        alert("Cập nhật giờ làm việc thành công!");
-        const newActiveHour = generateActiveHourObject(selectedDate, startTime, endTime, appointmentLimit);
-        const oldActiveHour = generateActiveHourObject(originalDate, originalStartTime, originalEndTime, originalAppointmentLimit);
+      if (editedActiveHour && typeof editedActiveHour === 'object') {        alert("Cập nhật giờ làm việc thành công!");        // Generate proper active hour objects with specific date when needed
+        const newActiveHour = generateActiveHourObject(
+          selectedDate, 
+          startTime, 
+          endTime, 
+          appointmentLimit,
+          useSpecificDate ? specificDate : null // Only use specific date if user confirmed
+        );
+        
+        const oldActiveHour = generateActiveHourObject(
+          originalDate, 
+          originalStartTime, 
+          originalEndTime, 
+          originalAppointmentLimit,
+          originalSpecificDate // Pass the original specific date if it existed
+        );
         setOriginalDate(selectedDate);
         setOriginalStartTime(startTime);
         setOriginalEndTime(endTime);
@@ -527,8 +683,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                     <option value='Friday'>Friday</option>
                     <option value='Saturday'>Saturday</option>
                     <option value='Sunday'>Sunday</option>
-                  </select>
-                  <div className={cx('selected-info')}>
+                  </select>                  <div className={cx('selected-info')}>
                     {selectedDate && (
                       <span>
                         <strong>Đã chọn:</strong> {selectedDate} - {calendarValue?.toLocaleDateString('vi-VN', {
@@ -542,6 +697,20 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                             {startTime} - {endTime}
                           </span>
                         ) : ''}
+                        
+                        {/* Check if the currently selected date has any specific schedules */}
+                        {selectedDate && calendarValue && (
+                          <>
+                            {data?.active_hours?.some(hour => 
+                              hour.date === calendarValue.toLocaleDateString('en-CA') &&
+                              hour.day === selectedDate
+                            ) && (
+                              <span className={cx('specific-date-badge')}>
+                                Ngày riêng ⭐
+                              </span>
+                            )}
+                          </>
+                        )}
                       </span>
                     )}
                   </div>
@@ -559,8 +728,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                         minDetail="month"
                         defaultView="month"
                         defaultActiveStartDate={new Date()}
-                        showFixedNumberOfWeeks={false}
-                        tileClassName={({ date, view }) => {
+                        showFixedNumberOfWeeks={false}                        tileClassName={({ date, view }) => {
                           // Chỉ hiển thị các ngày của tháng hiện tại
                           if (view === 'month') {
                             // Lấy tháng hiện tại từ calendarValue
@@ -569,9 +737,28 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                             if (date.getMonth() !== currentMonth) {
                               return cx('hidden-date-tile');
                             }
+                            
+                            // Get the day name for this date
+                            const dayName = Object.keys(dayToIndexMap).find(
+                              key => dayToIndexMap[key] === date.getDay()
+                            );
+                            
+                            // Check if this date has specific hours
+                            const dateString = date.toLocaleDateString('en-CA');
+                            const hasSpecificHours = data?.active_hours?.some(hour => 
+                              hour.date === dateString
+                            );
+                            
                             // Nếu là ngày đang được chọn
                             if (calendarValue && date.toDateString() === calendarValue.toDateString()) {
-                              return cx('selected-date-tile');
+                              return hasSpecificHours ? 
+                                `${cx('selected-date-tile')} ${cx('has-specific-hours')}` : 
+                                cx('selected-date-tile');
+                            }
+                            
+                            // If this date has specific hours, add special class
+                            if (hasSpecificHours) {
+                              return cx('has-specific-hours');
                             }
                           }
                           return null;
