@@ -180,135 +180,127 @@ body.active-modal {
             opacity: 1;
             transform: translateY(0);
         }
-    }
-}
+    }    :global {
+        .react-calendar {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 100%;
+            max-width: 100%;
+            background-color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
 
-// Global styles for react-calendar component
-:global {
-    .react-calendar {
-        border-radius: 12px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        width: 100%;
-        max-width: 100%;
-        background-color: #fff;
-        font-family: 'Roboto', sans-serif;
-        font-size: 1.2rem;
-
-        // Make the calendar view larger
-        &__viewContainer {
-            padding: 0;
-        }
-        
-        // Enlarge the calendar tiles but make them more manageable
-        &__month-view {
-            &__days {
-                // Loại bỏ các hàng trống
-                & > div:empty {
-                    display: none !important;
-                }
-                
-                // Đảm bảo các hàng đều có chiều cao phù hợp
-                & > div {
-                    display: flex !important;
-                    min-height: 100px !important;
-                }
-
-                &__day {
-                    height: 100px !important;
-                    padding: 5px !important;
+            // Make the calendar view larger
+            &__viewContainer {
+                padding: 0;
+            }            // Enlarge the calendar tiles but make them more manageable            &__month-view {
+                &__days {
+                    // Loại bỏ các hàng trống
+                    & > div:empty {
+                        display: none !important;
+                    }
                     
-                    abbr {
-                        display: none;
+                    // Đảm bảo các hàng đều có chiều cao phù hợp
+                    & > div {
+                        display: flex !important;
+                        min-height: 100px !important;
+                    }
+
+                    &__day {
+                        height: 100px !important;
+                        padding: 5px !important;
+                        
+                        abbr {
+                            display: none;
+                        }
                     }
                 }
-            }
 
-            &__weekdays {
-                &__weekday {
-                    padding: 10px 0;
-                    font-weight: bold;
-                    text-decoration: none;
-                    font-size: 0.9rem;
-                    abbr {
+                &__weekdays {
+                    &__weekday {
+                        padding: 10px 0;
+                        font-weight: bold;
                         text-decoration: none;
-                        text-transform: uppercase;
-                        color: #0C507C;
+                        font-size: 0.9rem;
+                        abbr {
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            color: #0C507C;
+                        }
                     }
                 }
-            }
-        }
-
-        &__tile {
-            position: relative;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            
-            &:enabled:hover {
-                background: #e1f5f5;
-            }
-        }
-        
-        &__navigation {
-            height: 50px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            button {
-                min-width: 44px;
-                background: none;
-                font-size: 1.5rem;
-                color: #0C507C;
-                border-radius: 8px;
-                transition: all 0.3s ease;
+            }            &__tile {
                 position: relative;
-                overflow: hidden;
-                
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: 0;
-                    height: 0;
-                    background-color: rgba(0, 211, 214, 0.2);
-                    border-radius: 50%;
-                    transform: translate(-50%, -50%);
-                    opacity: 0;
-                    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
-                    z-index: -1;
-                }
+                border-radius: 8px;
+                transition: all 0.2s ease;
                 
                 &:enabled:hover {
-                    background: rgba(0, 211, 214, 0.1);
-                    transform: translateY(-2px);
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    
-                    &::before {
-                        width: 100px;
-                        height: 100px;
-                        opacity: 1;
-                    }
-                }
-                
-                &:active {
-                    transform: translateY(0);
+                    background: #e1f5f5;
                 }
             }
             
-            &__label {
-                font-weight: bold;
-                font-size: 1.2rem;
-                color: #0C507C;
-                transition: all 0.3s ease;
-                padding: 5px 10px;
-                border-radius: 5px;
+            &__navigation {
+                height: 50px;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                button {
+                    min-width: 44px;
+                    background: none;
+                    font-size: 1.5rem;
+                    color: #0C507C;
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    overflow: hidden;
+                    
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 0;
+                        height: 0;
+                        background-color: rgba(0, 211, 214, 0.2);
+                        border-radius: 50%;
+                        transform: translate(-50%, -50%);
+                        opacity: 0;
+                        transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+                        z-index: -1;
+                    }
+                    
+                    &:enabled:hover {
+                        background: rgba(0, 211, 214, 0.1);
+                        transform: translateY(-2px);
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                        
+                        &::before {
+                            width: 100px;
+                            height: 100px;
+                            opacity: 1;
+                        }
+                    }
+                    
+                    &:active {
+                        transform: translateY(0);
+                    }
+                }
                 
-                &:hover {
-                    background-color: rgba(0, 211, 214, 0.05);
+                &__label {
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    color: #0C507C;
+                    transition: all 0.3s ease;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    
+                    &:hover {
+                        background-color: rgba(0, 211, 214, 0.05);
+                    }
                 }
             }
         }
@@ -553,3 +545,23 @@ body.active-modal {
         }
     }
 }
+
+.time-fields-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease;
+    animation: slideDown 0.5s forwards;
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            max-height: 0;
+        }
+        to {
+            opacity: 1;
+            max-height: 500px;
+        }
+    }
+}
+

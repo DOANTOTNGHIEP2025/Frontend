@@ -48,11 +48,12 @@ body.active-modal {
     padding: 20px 30px;
     max-width: 800px;
     min-width: 300px;
-    height: 700px;
+    max-height: 90vh; /* Changed to max-height with viewport height */
+    overflow-y: auto; /* Added scroll for content that might exceed viewport */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-content: space-evenly;
+    justify-content: flex-start; /* Changed from space-between to flex-start */
+    align-items: center;
     background: linear-gradient(135deg, #00D3D6, #0C507C);
     border-radius: 20px;
     z-index: 2001;
@@ -123,12 +124,13 @@ body.active-modal {
     min-height: 60px;
     max-height: 200px;
     display: flex;
+    flex-direction: column; /* Changed to column layout */
     align-items: center;
-    justify-content: center;
-    padding: 10px;
+    justify-content: space-between;
+    padding: 15px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     transition: all 0.2s ease;
     
     &:hover {
@@ -158,15 +160,16 @@ body.active-modal {
 
 .modal-field-container{
     width: 100%;
-    height: 350px;
+    height: auto; /* Changed from fixed height to auto */
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    align-content: space-between;
+    align-content: center;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 15px;
+    margin-bottom: 10px;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -409,20 +412,28 @@ body.active-modal {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid rgba(0, 211, 214, 0.3);
+    border: 2px solid rgba(0, 211, 214, 0.5);
     background-color: #fff;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #0C507C;
-    margin-top: 10px;
+    margin-top: 15px;
+    height: 50px;
+    cursor: pointer;
+    appearance: none; /* Remove default arrow */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230C507C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
     
     &:focus {
         border-color: #00D3D6;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 211, 214, 0.2);
+        box-shadow: 0 0 0 3px rgba(0, 211, 214, 0.3);
     }
     
     option {
-        padding: 8px;
+        padding: 12px;
+        font-size: 1rem;
     }
 }
 
@@ -583,12 +594,43 @@ body.active-modal {
 }
 
 .selected-info {
-    margin: 10px 0;
-    padding: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
+    margin: 5px 0 15px 0;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.25);
     border-radius: 8px;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
     width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+    
+    span {
+        display: block;
+        font-size: 1.1rem;
+    }
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+    button {
+        min-width: 200px;
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+    }
 }

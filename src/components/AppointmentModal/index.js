@@ -298,8 +298,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
                 showFixedNumberOfWeeks={true}
               />
             </div>
-            
-            <div className={cx("field-container")}>
+              <div className={cx("field-container")}>
               <div className={cx('selected-info')}>
                 {selectedTime && <span>Đã chọn khung giờ: {selectedTime}</span>}
               </div>
@@ -308,7 +307,8 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
                 value={selectedTime}
                 className={cx('timePicker')}
                 onChange={(e) => setSelectedTime(e.target.value)}
-              >                <option value="">Chọn giờ</option>
+              >
+                <option value="">Chọn giờ</option>
                 {availableTimes.length > 0 ? (
                   availableTimes.map((time, index) => (
                     <option key={index} value={time}>
@@ -321,7 +321,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
               </select>
             </div>
 
-            <div className={cx("modal-field-container")}>
+            <div className={cx("button-container")}>
               <Button type='button' submitTwo onClick={handleSubmitActiveHour}>
                 Thêm giờ khám
               </Button>

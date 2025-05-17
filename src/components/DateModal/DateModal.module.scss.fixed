@@ -183,7 +183,7 @@ body.active-modal {
     }
 }
 
-// Global styles for react-calendar component
+// Global styles for React Calendar
 :global {
     .react-calendar {
         border-radius: 12px;
@@ -313,6 +313,52 @@ body.active-modal {
             }
         }
     }
+    
+    // Styles for selected date tile
+    .selected-date-tile {
+        background-color: rgba(0, 166, 169, 0.15) !important;
+        border: 2px solid #00A6A9 !important;
+        border-radius: 8px !important;
+        position: relative;
+        
+        &::after {
+            content: '✓';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            color: #00A6A9;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+    }
+    
+    // Hide dates from other months
+    .hidden-date-tile {
+        visibility: hidden !important;
+        pointer-events: none !important;
+        color: transparent !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        
+        * {
+            visibility: hidden !important;
+            color: transparent !important;
+            display: none !important;
+        }
+        
+        &::before, &::after {
+            content: none !important;
+            display: none !important;
+        }
+        
+        .calendar-day-content {
+            display: none !important;
+        }
+    }
 }
 
 // Day cell content
@@ -404,52 +450,6 @@ body.active-modal {
     color: #999;
     font-style: italic;
     padding: 2px;
-}
-
-:global {
-    .selected-date-tile {
-        background-color: rgba(0, 166, 169, 0.15) !important;
-        border: 2px solid #00A6A9 !important;
-        border-radius: 8px !important;
-        position: relative;
-        
-        &::after {
-            content: '✓';
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            color: #00A6A9;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-    }
-    
-    .hidden-date-tile {
-        visibility: hidden !important;
-        pointer-events: none !important;
-        color: transparent !important;
-        opacity: 0 !important;
-        width: 0 !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        
-        * {
-            visibility: hidden !important;
-            color: transparent !important;
-            display: none !important;
-        }
-        
-        &::before, &::after {
-            content: none !important;
-            display: none !important;
-        }
-        
-        .calendar-day-content {
-            display: none !important;
-        }
-    }
 }
 
 .selected-info {
@@ -550,6 +550,25 @@ body.active-modal {
             opacity: 1;
             max-height: 600px;
             transform: translateY(0);
+        }
+    }
+}
+
+.time-fields-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease;
+    animation: slideDown 0.5s forwards;
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            max-height: 0;
+        }
+        to {
+            opacity: 1;
+            max-height: 500px;
         }
     }
 }

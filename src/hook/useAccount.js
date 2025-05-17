@@ -201,11 +201,11 @@ const useAccount = () => {
             if (load) isLoadingAccount(false);
         }
     }
-
-    const addDoctorActiveHour = async (id, day, start_time, end_time, hour_type, appointment_limit) => {
+    
+    const addDoctorActiveHour = async (id, day, start_time, end_time, hour_type, appointment_limit, date = null) => {
         isLoadingAccount(true);
         try {
-            const newActiveHour = await Account_API.add_Doctor_Active_Hour(id, day, start_time, end_time, hour_type, appointment_limit);
+            const newActiveHour = await Account_API.add_Doctor_Active_Hour(id, day, start_time, end_time, hour_type, appointment_limit, date);
             return newActiveHour;
         }
         catch(error){
@@ -216,11 +216,11 @@ const useAccount = () => {
             isLoadingAccount(false);
         }
     }
-
-    const deleteDoctorActiveHour = async (id, day, start_time, end_time, hour_type) => {
+    
+    const deleteDoctorActiveHour = async (id, day, start_time, end_time, hour_type, date = null) => {
         isLoadingAccount(true);
         try {
-            const deletedActiveHour = await Account_API.delete_Doctor_Active_Hour(id, day, start_time, end_time, hour_type);
+            const deletedActiveHour = await Account_API.delete_Doctor_Active_Hour(id, day, start_time, end_time, hour_type, date);
             return deletedActiveHour;
         }
         catch(error){
@@ -231,11 +231,11 @@ const useAccount = () => {
             isLoadingAccount(false);
         }
     }
-
-    const updateDoctorActiveHour = async (id, day, start_time, end_time, hour_type, appointment_limit, old_day, old_start_time, old_end_time, old_hour_type) => {
+    
+    const updateDoctorActiveHour = async (id, day, start_time, end_time, hour_type, appointment_limit, old_day, old_start_time, old_end_time, old_hour_type, date = null, old_date = null) => {
         isLoadingAccount(true);
         try {
-            const updatedActiveHour = await Account_API.update_Doctor_Active_Hour(id, day, start_time, end_time, hour_type, appointment_limit, old_day, old_start_time, old_end_time, old_hour_type);
+            const updatedActiveHour = await Account_API.update_Doctor_Active_Hour(id, day, start_time, end_time, hour_type, appointment_limit, old_day, old_start_time, old_end_time, old_hour_type, date, old_date);
             return updatedActiveHour;
         }
         catch(error){
