@@ -85,20 +85,37 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   const getActiveHoursForDay = (dayName, specificDate = null) => {
     if (!data || !Array.isArray(data.active_hours)) return [];
     
+    console.log("Getting active hours for:", dayName, "specific date:", specificDate);
+    console.log("All active hours:", data.active_hours);
+    
     // Filter based on day and possibly specific date
     return data.active_hours
       .filter(hour => {
         // First match the day
-        if (hour.day !== dayName) return false;
-        
-        // If a specific date is provided, check if this hour is for that date or general
-        if (specificDate) {
-          // Include hours with no date (general weekday hours)
-          // OR hours that exactly match this specific date
-          return !hour.date || hour.date === specificDate;
+        if (hour.day !== dayName) {
+          return false;
         }
         
-        return true; // Include all hours for this day when no specific date is requested
+        console.log("Checking hour:", hour, "for day", dayName, "and date", specificDate);
+        
+        // If a specific date is provided, we need more careful handling
+        if (specificDate) {
+          // If this hour has a specific date, it must match exactly
+          if (hour.date) {
+            const matches = hour.date === specificDate;
+            console.log(`Hour has specific date ${hour.date}, matches requested date ${specificDate}? ${matches}`);
+            return matches;
+          }
+          
+          // For hours without a specific date (recurring weekly hours), include them
+          console.log("Hour has no specific date, including as recurring weekly schedule");
+          return true;
+        }
+        
+        // When no specific date requested, only show recurring schedules (no date)
+        const isRecurringSchedule = !hour.date;
+        console.log("No specific date requested. Is recurring schedule?", isRecurringSchedule);
+        return isRecurringSchedule;
       })
       .map(hour => ({
         startTime: hour.start_time,
@@ -169,11 +186,20 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     if (view === 'month') {
       const dayName = Object.keys(dayToIndexMap).find(
         key => dayToIndexMap[key] === date.getDay()
-      );
-      
-      // Convert date to YYYY-MM-DD format for comparison
+      );      // Convert date to YYYY-MM-DD format for comparison
       const dateString = date.toLocaleDateString('en-CA');
+      
+      // Get hours for this day
       const hours = getActiveHoursForDay(dayName, dateString);
+      
+      // Separate specific date hours from recurring hours
+      const dateSpecificHours = hours.filter(hour => hour.isSpecificDate);
+      const regularRecurringHours = hours.filter(hour => !hour.isSpecificDate);
+      
+      console.log(`Hours for ${dayName} (${dateString}):`, 
+                  `Specific date hours: ${dateSpecificHours.length}`, 
+                  `Recurring hours: ${regularRecurringHours.length}`);
+      
         // Click handler for selecting a time slot directly
       const handleHourClick = (e, hour) => {
         e.stopPropagation(); // Prevent calendar date selection
@@ -458,27 +484,118 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     month: 'long',
     year: 'numeric'
   });
+    // Use a more modern dialog with clearer options for creating schedules
+  // We'll use a custom modal for better UX
+  const scheduleTypeModalElement = document.createElement('div');
+  scheduleTypeModalElement.className = cx('schedule-type-modal');
+  scheduleTypeModalElement.innerHTML = `
+    <div class="${cx('modal-overlay')}"></div>
+    <div class="${cx('schedule-modal-content')}">
+      <h2>Xác nhận lịch làm việc</h2>
+      <p class="${cx('schedule-explanation')}">Vui lòng chọn loại lịch làm việc:</p>
+      
+      <div class="${cx('schedule-option', 'specific-date')}">
+        <h3>Lịch cho ngày cụ thể</h3>
+        <div class="${cx('date-badge')}">★ ${displayDate}</div>
+        <p>Lịch chỉ áp dụng cho ngày ${displayDate}, không ảnh hưởng các ngày thứ ${selectedDate} khác.</p>
+        <button id="specific-date-btn" class="${cx('schedule-btn')}">Chọn lịch ngày cụ thể</button>
+      </div>
+      
+      <div class="${cx('schedule-option', 'recurring')}">
+        <h3>Lịch định kỳ hàng tuần</h3>
+        <div class="${cx('date-badge', 'recurring')}">🔄 Mọi thứ ${selectedDate}</div>
+        <p class="${cx('warning')}">Cảnh báo: Lịch sẽ áp dụng cho TẤT CẢ các ngày thứ ${selectedDate} từ nay về sau.</p>
+        <button id="recurring-btn" class="${cx('schedule-btn', 'recurring-btn')}">Chọn lịch định kỳ</button>
+      </div>
+      
+      <button id="cancel-btn" class="${cx('schedule-btn', 'cancel-btn')}">Hủy</button>
+    </div>
+  `;
+  document.body.appendChild(scheduleTypeModalElement);
   
-  // Ask user with clearer options for creating date-specific or recurring schedules
-  const useSpecificDate = window.confirm(
-    "🗓️ XÁC NHẬN LỊCH LÀM VIỆC\n\n" +
-    "Vui lòng chọn loại lịch làm việc:\n\n" +
-    "✅ OK: Chỉ áp dụng cho ngày " + displayDate + "\n" +
-    "(Lịch sẽ CHỈ được tạo cho ngày cụ thể này, KHÔNG ảnh hưởng các thứ " + selectedDate + " khác)\n\n" +
-    "❌ CANCEL: Áp dụng cho TẤT CẢ các ngày thứ " + selectedDate + " từ nay trở đi\n" +
-    "(Không khuyến nghị vì sẽ tạo lịch cho tất cả các " + selectedDate + " trong tương lai)"
-  );
-  
-  // Ensure we always use a specific date when OK is pressed
-  const newActiveHour = await addDoctorActiveHour(
-    data?._id,
-    selectedDate,
-    startTime,
-    endTime,
-    "appointment",
-    appointmentLimit,
-    useSpecificDate ? specificDate : null // Include specific date only if user confirmed
-  );if (newActiveHour && typeof newActiveHour === 'object') {
+  return new Promise((resolve) => {
+    document.getElementById('specific-date-btn').addEventListener('click', async () => {
+      scheduleTypeModalElement.remove();
+      // Create specific date schedule
+      console.log(`Creating specific date schedule for ${displayDate} (${specificDate})`);
+      
+      try {
+        const newActiveHour = await addDoctorActiveHour(
+          data?._id,
+          selectedDate,
+          startTime,
+          endTime,
+          "appointment",
+          appointmentLimit,
+          specificDate // Include specific date
+        );
+        
+        if (newActiveHour) {
+          // Handle success
+          setModal(false);
+          // Call the callback
+          if (onAddActiveHour) {
+            onAddActiveHour(newActiveHour);
+          }
+          
+          resolve(true);
+        }
+      } catch (error) {
+        console.error("Error creating specific date schedule:", error);
+        alert("Có lỗi khi tạo lịch khám: " + error.message);
+        resolve(false);
+      }
+    });
+    
+    document.getElementById('recurring-btn').addEventListener('click', async () => {
+      // Double confirm for recurring schedule since it affects all future dates
+      if (confirm("XÁC NHẬN: Bạn muốn tạo lịch cho TẤT CẢ các ngày thứ " + selectedDate + " từ nay về sau?")) {
+        scheduleTypeModalElement.remove();
+        console.log(`Creating recurring schedule for all ${selectedDate}s`);
+        
+        try {
+          const newActiveHour = await addDoctorActiveHour(
+            data?._id,
+            selectedDate,
+            startTime,
+            endTime,
+            "appointment",
+            appointmentLimit,
+            null // No specific date for recurring schedule
+          );
+          
+          if (newActiveHour) {
+            // Handle success
+            setModal(false);
+            // Call the callback
+            if (onAddActiveHour) {
+              onAddActiveHour(newActiveHour);
+            }
+            
+            resolve(true);
+          }
+        } catch (error) {
+          console.error("Error creating recurring schedule:", error);
+          alert("Có lỗi khi tạo lịch khám: " + error.message);
+          resolve(false);
+        }
+      } else {
+        scheduleTypeModalElement.remove();
+        resolve(false);
+      }
+    });
+    
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+      scheduleTypeModalElement.remove();
+      resolve(false);
+    });
+    
+    document.querySelector(`.${cx('modal-overlay')}`).addEventListener('click', () => {
+      scheduleTypeModalElement.remove();
+      resolve(false);
+    });
+  });
+};if (newActiveHour && typeof newActiveHour === 'object') {
     // Create local object with additional date info for display
     const activeHourWithDisplay = newActiveHour.map(hour => {
       if (hour.date) {

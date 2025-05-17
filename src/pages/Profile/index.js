@@ -206,13 +206,11 @@ function Profile() {
                 (hour?.date !== oldActiveHour?.date && (hour?.date || oldActiveHour?.date))
             );
             return [...updated, newActiveHour];
-          });
-    
-        // Include date info in display if available
+          });        // Include date info in display if available
         const dateInfo = newActiveHour?.date ? ` Date: ${newActiveHour.date}` : '';
-        setSelectedHour(
-          `${newActiveHour?.day} ${newActiveHour?.start_time} ${newActiveHour?.end_time} Limit: ${newActiveHour?.appointment_limit}${dateInfo}`
-        );
+        const formattedHour = `${newActiveHour?.day} ${newActiveHour?.start_time} ${newActiveHour?.end_time} Limit: ${newActiveHour?.appointment_limit}${dateInfo}`;
+        console.log("Setting selected hour:", formattedHour);
+        setSelectedHour(formattedHour);
 
         const allAppointment = await getAllAppointmentByDoctor(userInfo?._id);
         setAppointmentInfo(allAppointment);
@@ -223,16 +221,30 @@ function Profile() {
         const start_time = parts[1];
         const end_time = parts[2];
         const appointment_limit = parts[4];
-        const hour_type = parts[5];
+        const hour_type = "appointment"; // Default to appointment type
         
         // Check if there's a specific date included (format would be "Date: YYYY-MM-DD")
         let date = null;
         for (let i = 0; i < parts.length - 1; i++) {
             if (parts[i] === "Date:" && parts[i+1]) {
-                date = parts[i+1];
+                // Make sure we capture the entire date value (YYYY-MM-DD)
+                if (parts[i+1].match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    date = parts[i+1];
+                } else {
+                    console.error("Invalid date format found in schedule string:", parts[i+1]);
+                }
                 break;
             }
         }
+        
+        console.log("Parsed schedule:", {
+            day, 
+            start_time, 
+            end_time, 
+            appointment_limit, 
+            hour_type, 
+            date
+        });
     
         return {
             day,
@@ -242,54 +254,64 @@ function Profile() {
             hour_type,
             date  // Include the date if available
         };
-    }
-
-    const handleDeleteActiveHour = async() => {
+    }    const handleDeleteActiveHour = async() => {
         if (!selectedHour) {
             alert("Vui lòng chọn giờ làm việc cần xóa!");
             return;
         }
 
-        const userConfirmed = window.confirm("Bạn có chắc chắn muốn xóa giờ làm việc này không?");
-        if (userConfirmed) {            const hourValue = parseSchedule(selectedHour);
+        // Extract schedule information including date if available
+        const hourValue = parseSchedule(selectedHour);
+        
+        // Create a detailed confirmation message to ensure user understands what they're deleting
+        let confirmMessage = "Bạn có chắc chắn muốn xóa giờ làm việc: ";
+        
+        if (hourValue?.date) {
+            // Format specific date nicely
+            const dateObj = new Date(hourValue.date);
+            const formattedDate = dateObj.toLocaleDateString('vi-VN', {
+                weekday: 'long',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            confirmMessage += `\n${hourValue.day} ngày ${formattedDate}`;
+        } else {
+            // Recurring schedule - warn about potential appointments
+            confirmMessage += `\nTất cả các ngày ${hourValue.day} (lịch làm việc lặp lại hàng tuần)`;
+        }
+        
+        confirmMessage += `\nThời gian: ${hourValue?.start_time} - ${hourValue?.end_time}`;
+        
+        // Confirm with the user
+        const userConfirmed = window.confirm(confirmMessage);
+        
+        if (userConfirmed) {
+            console.log("Deleting schedule with details:", hourValue);
+            
             const deletedActiveHour = await deleteDoctorActiveHour(
-              userInfo?._id, 
-              hourValue?.day, 
-              hourValue?.start_time, 
-              hourValue?.end_time, 
-              hourValue?.hour_type,
-              hourValue?.date  // Add the date parameter
+                userInfo?._id, 
+                hourValue?.day, 
+                hourValue?.start_time, 
+                hourValue?.end_time, 
+                hourValue?.hour_type,
+                hourValue?.date  // Include date parameter for specific date schedules
             );
-
+            
             if (deletedActiveHour && typeof deletedActiveHour === 'object') {
                 alert("Xóa giờ làm việc thành công!");
-                const hourValue = parseSchedule(selectedHour);                setDoctorActiveHours((prev) => {
-                    return prev.filter(hour => {
-                        // Check if this is the specific hour we want to delete
-                        const hourMatchesDay = hour?.day === hourValue?.day;
-                        const hourMatchesTime = hour?.start_time === hourValue?.start_time && 
-                                               hour?.end_time === hourValue?.end_time;
-                        
-                        // If we have date info, use it for comparison
-                        if (hourValue?.date || hour?.date) {
-                            // Both have date info - compare exact dates
-                            if (hourValue?.date && hour?.date) {
-                                return !(hourMatchesDay && hourMatchesTime && hourValue?.date === hour?.date);
-                            }
-                            // Only one has date info - if times match but date doesn't, keep it
-                            return !(hourMatchesDay && hourMatchesTime && !hourValue?.date === !hour?.date);
-                        }
-                        
-                        // Neither has date info - just use time and day
-                        return !(hourMatchesDay && hourMatchesTime);
-                    });
-                });
+                
+                // Fetch fresh data instead of manually filtering
+                const updatedActiveHourList = await getDoctorActiveList(userInfo?._id);
+                setDoctorActiveHours(updatedActiveHourList?.active_hours || []);
                 setSelectedHour("");
+                
+                // Also refresh appointments
                 const allAppointment = await getAllAppointmentByDoctor(userInfo?._id);
                 setAppointmentInfo(allAppointment);
                 return;
             }
-            else if (deletedActiveHour && typeof deletedActiveHour === 'object') {
+            else if (deletedActiveHour && typeof deletedActiveHour !== 'object') {
                 alert(deletedActiveHour);
                 return;
             }
@@ -345,22 +367,35 @@ function Profile() {
         alert("Đổi thông tin thành công!");
         window.location.reload();
     };
-    
       const handleAddActiveHour = (newActiveHour) => {
         // Format each active hour to include date in the display name if available
         const formattedActiveHours = Array.isArray(newActiveHour) ? 
             newActiveHour.map(hour => {
                 if (hour.date) {
+                    // Format the date in a more user-friendly way
+                    const dateObj = new Date(hour.date);
+                    const formattedDate = dateObj.toLocaleDateString('vi-VN', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    
                     // Add a display property for UI rendering that shows the date
                     return {
                         ...hour,
-                        displayName: `${hour.day} (${hour.date}) ${hour.start_time}-${hour.end_time}`
+                        displayName: `${hour.day} [${formattedDate}] ${hour.start_time}-${hour.end_time}`,
+                        // Add a flag to identify specific date schedules
+                        isDateSpecific: true
                     };
                 }
-                return hour;
+                return {
+                    ...hour,
+                    isDateSpecific: false
+                };
             }) : newActiveHour;
             
         setDoctorActiveHours(formattedActiveHours);
+        console.log("Updated active hours:", formattedActiveHours);
     };
 
     const handleDeleteAccount = async() => {
@@ -540,14 +575,24 @@ function Profile() {
                                 <div className={cx('field-name')}>
                                      <span>Giờ làm việc</span>
                                 </div>
-                                <div className={cx('button-content-container')}>
-                                     <select className={cx('half-field-input')} disabled={!isDoctor} value={selectedHour} onChange={(e)=>{setSelectedHour(e.target.value)}}>
+                                <div className={cx('button-content-container')}>                                     <select className={cx('half-field-input')} disabled={!isDoctor} value={selectedHour} onChange={(e)=>{setSelectedHour(e.target.value)}}>
                                      <option key="1" value="">Chọn giờ làm việc</option>
-                                     {(doctorActiveHours || []).map((item) => (
-                                            <option key={item?._id} value={`${item?.day} ${item?.start_time} ${item?.end_time} Limit: ${item?.appointment_limit} ${item?.hour_type}`}>
-                                            {`${item?.day} ${item?.start_time} - ${item?.end_time} Limit: ${item?.appointment_limit}`}
-                                            </option>
-                                        ))}
+                                     {(doctorActiveHours || []).map((item) => {
+                                            // Create a more descriptive value that includes date information if available
+                                            const dateInfo = item?.date ? `Date: ${item.date}` : '';
+                                            const scheduleValue = `${item?.day} ${item?.start_time} ${item?.end_time} Limit: ${item?.appointment_limit} ${item?.hour_type} ${dateInfo}`;
+                                            
+                                            // Create different display strings for recurring vs. specific date schedules
+                                            const displayText = item?.date 
+                                                ? `${item?.day} (${item?.date}) ${item?.start_time} - ${item?.end_time} Limit: ${item?.appointment_limit}`
+                                                : `${item?.day} ${item?.start_time} - ${item?.end_time} Limit: ${item?.appointment_limit}`;
+                                            
+                                            return (
+                                                <option key={item?._id} value={scheduleValue}>
+                                                    {displayText}
+                                                </option>
+                                            );
+                                        })}
                                     </select>
                                      
                                 </div>

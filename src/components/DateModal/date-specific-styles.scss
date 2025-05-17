@@ -1,0 +1,100 @@
+/* Additional styles for date-specific scheduling */
+
+/* Visually distinct styling for date-specific items */
+.specific-date-time {
+  background-color: #e8f5e9 !important;
+  border: 1px solid #81c784 !important;
+  color: #2e7d32 !important;
+  position: relative;
+  padding-right: 20px; /* Space for delete button */
+  
+  .time-badge {
+    color: #e67e22 !important;
+    font-weight: bold;
+    margin-right: 2px;
+    display: inline-block;
+  }
+  
+  &:hover {
+    background-color: #c8e6c9 !important;
+  }
+  
+  &.selected-time {
+    background-color: #43a047 !important;
+    color: white !important;
+    border: 1px solid #2e7d32 !important;
+  }
+}
+
+/* Styling for calendar days with specific schedules */
+.has-specific-hours {
+  position: relative;
+  
+  &::after {
+    content: '★';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 10px;
+    color: #e67e22;
+    font-weight: bold;
+  }
+}
+
+/* Sections for organizing different schedule types */
+.specific-date-section {
+  margin-bottom: 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px dashed #ddd;
+}
+
+.recurring-section {
+  margin-top: 3px;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 2px;
+  padding-left: 2px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+}
+
+/* Badge for date-specific schedules */
+.specific-date-badge {
+  background-color: #e67e22;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Delete button for specific date schedules */
+.delete-specific-btn {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.7;
+  
+  &:hover {
+    opacity: 1;
+    background-color: rgba(244, 67, 54, 0.4);
+  }
+}

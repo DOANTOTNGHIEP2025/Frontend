@@ -63,6 +63,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     Friday: 5,
     Saturday: 6,
   };
+  
   const toggleModal = () => {
     if (disabled) return;
     setModal(!modal);
@@ -82,6 +83,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       }
     }
   };
+  
   // Get active hours for a specific day
   const getActiveHoursForDay = (dayName) => {
     if (!data || !Array.isArray(data.active_hours)) return [];
@@ -93,7 +95,9 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         endTime: hour.end_time,
         limit: hour.appointment_limit
       }));
-  };  // Handle calendar date change
+  };
+  
+  // Handle calendar date change
   const handleCalendarChange = (date) => {
     // Lưu lại tháng hiện tại trước khi cập nhật giá trị
     const previousMonth = calendarValue ? calendarValue.getMonth() : new Date().getMonth();
@@ -189,6 +193,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     }
     return null;
   };
+
   // Existing code for handling date modal functionality
   useEffect(() => {
     if (type === "update" && hourData) {
@@ -280,6 +285,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       }
     }
   }, [type, hourData]);
+
   useEffect(() => {
     if (type === "update") {
       if (selectedDate === originalDate) {
@@ -289,7 +295,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         setIsDisabled(false);
       }
     }
-  },[selectedDate, originalDate, type]);
+  }, [selectedDate, originalDate, type]);
 
   useEffect(() => {
     if (type === "update") {
@@ -300,7 +306,8 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         setIsDisabled(false);
       }
     }
-  },[startTime, originalStartTime, type]);
+  }, [startTime, originalStartTime, type]);
+
   useEffect(() => {
     if (type === "update") {
       if (endTime === originalEndTime) {
@@ -310,7 +317,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         setIsDisabled(false);
       }
     }
-  },[endTime, originalEndTime, type]);
+  }, [endTime, originalEndTime, type]);
 
   useEffect(() => {
     if (type === "update") {
@@ -321,7 +328,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         setIsDisabled(false);
       }
     }
-  },[appointmentLimit, originalAppointmentLimit, type]);
+  }, [appointmentLimit, originalAppointmentLimit, type]);
 
   // Helper function to create active hour object
   const generateActiveHourObject = (day, startTime, endTime, appointmentLimit, date = null) => {
@@ -334,25 +341,26 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       date: date
     };
   };
+
   const handleStartTimeChange = (newDateTime) => {
-     setStartTimeValue(newDateTime);
-     if (newDateTime && typeof newDateTime.format === 'function') {
+    setStartTimeValue(newDateTime);
+    if (newDateTime && typeof newDateTime.format === 'function') {
       const formattedTime = newDateTime.format("HH:mm"); 
       setStartTime(formattedTime); 
-     }
-     else{
+    }
+    else {
       setStartTime('');
-     }
-  }
+    }
+  };
 
   const handleEndTimeChange = (newDateTime) => {
     setEndTimeValue(newDateTime);
     if (newDateTime && typeof newDateTime.format === 'function') {
-     const formattedTime = newDateTime.format("HH:mm"); 
-     setEndTime(formattedTime); 
+      const formattedTime = newDateTime.format("HH:mm"); 
+      setEndTime(formattedTime); 
     }
     else {
-     setEndTime('');
+      setEndTime('');
     }
   };
   
@@ -483,7 +491,8 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         alert("Thêm giờ làm việc thành công!");
       } else if (newActiveHour && typeof newActiveHour !== 'object') {
         alert(newActiveHour);
-      } else {      alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+      } else {
+        alert("Có lỗi xảy ra, vui lòng thử lại sau!");
       }
     } catch (err) {
       console.error("Error submitting active hour:", err);
@@ -600,19 +609,20 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         else {
           alert("Có lỗi xảy ra, vui lòng thử lại sau!");
           return;
-        }      }
+        }
+      }
     } catch (err) {
       console.error("Error updating active hour:", err);
       alert("Có lỗi xảy ra khi cập nhật giờ làm việc. Vui lòng thử lại.");
     }
   };
 
-
   if(modal) {
     document.body.classList.add('active-modal')
   } else {
     document.body.classList.remove('active-modal')
   }
+  
   const toggleCalendarView = () => {
     // Always show calendar by default (make it true)
     setShowCalendar(true);

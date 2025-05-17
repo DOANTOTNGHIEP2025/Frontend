@@ -99,8 +99,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       }
         // Format date for comparison with specific dates in data
       const formattedDate = date.toLocaleDateString("en-CA"); // YYYY-MM-DD format
-      
-      // Get times for this day, considering both day of week and specific dates
+        // Get times for this day, considering both day of week and specific dates
       const filteredItems = data.filter((item) => {
         // If item has a specific date, it must match exactly
         if (item.date) {
@@ -112,10 +111,25 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       
       console.log("Filtered items for day:", filteredItems, "Date:", formattedDate);
       
-      // Generate display strings and raw time values
-      const times = filteredItems.map(item => 
-        `${item.start_time} - ${item.end_time} (Giới hạn: ${item.appointment_limit || 'N/A'})`
-      );
+      // Separate specific date items from regular weekly items
+      const specificDateItems = filteredItems.filter(item => item.date);
+      const regularItems = filteredItems.filter(item => !item.date);
+      
+      console.log("Specific date items:", specificDateItems);
+      console.log("Regular weekly items:", regularItems);
+      
+      // Generate display strings and raw time values - prioritize specific date items
+      const times = [
+        // First show specific date items with a special marker
+        ...specificDateItems.map(item => 
+          `${item.start_time} - ${item.end_time} ⭐ (Giới hạn: ${item.appointment_limit || 'N/A'})`
+        ),
+        // Then show regular items
+        ...regularItems.map(item => 
+          `${item.start_time} - ${item.end_time} (Giới hạn: ${item.appointment_limit || 'N/A'})`
+        )
+      ];
+      
       const rawTimes = filteredItems.map((item) => `${item.start_time} - ${item.end_time}`);
       
       // Click handler for time slots
@@ -137,8 +151,12 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
                   key={index} 
                   className={cx("day-time", { 'selected-time': date.toDateString() === selectedDate.toDateString() && rawTimes[index] === selectedTime })}
                   onClick={(e) => handleTimeClick(e, index)}
-                >
-                  {time}
+                >                  {time.includes('⭐') ? (
+                    <>
+                      <span className={cx("specific-marker")} data-specific-date="true">★</span>
+                      {time.replace('⭐', '').trim()}
+                    </>
+                  ) : time}
                 </span>
               ))
             ) : (
@@ -189,15 +207,22 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       selectedTime,
       fullDate: selectedDate,
       matchingActiveHours
-    });
-
-    onSubmit({
-      formattedDate,
-      dayName,
-      selectedTime,
-      fullDate: selectedDate,
-      specificDate: formattedDate // Include the specific date in the response
-    });
+    });    // Kiểm tra xem có phải là lịch khám ngày cụ thể
+    const hasSpecificDateSchedule = matchingActiveHours.some(hour => hour.date === formattedDate);
+    
+    // Tạo định dạng ngày đúng chuẩn cho frontend hiển thị
+    // Format: "Monday 2024-05-20" với 2024-05-20 là ngày cụ thể (hoặc chỉ "Monday" nếu là lịch định kỳ)
+    const appointmentDay = hasSpecificDateSchedule 
+      ? `${dayName} ${formattedDate}` // Nếu có lịch ngày cụ thể, đánh dấu là lịch cụ thể
+      : dayName; // Nếu không, là lịch định kỳ hàng tuần
+      
+    console.log("appointmentDay được gửi:", appointmentDay, "Định dạng lịch:", hasSpecificDateSchedule ? "Ngày cụ thể" : "Hàng tuần");
+      
+    // Parse the selected time
+    const [startTime, endTime] = selectedTime.split(" - ");
+    
+    // Gọi hàm callback với đúng định dạng ngày
+    onSubmit(appointmentDay, startTime, endTime);
 
     setModal(!modal);
   };
@@ -217,24 +242,40 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       .map((item) => dayToIndexMap[item.day])
       .filter((dayIndex) => dayIndex !== undefined);
   };
-  
-  // Sửa hàm tileClassName để hiển thị ngày đúng
+    // Sửa hàm tileClassName để hiển thị ngày đúng
   const tileClassName = ({ date }) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); 
     const highlightedDays = getHighlightedDates();
-
+    
+    // Format date for comparison with specific dates in data
+    const formattedDate = date.toLocaleDateString("en-CA"); // YYYY-MM-DD format
+    
+    // Check if this date has specific date schedules
+    const hasSpecificDateSchedule = Array.isArray(data) && 
+      data.some(item => item.date === formattedDate);
+      
+    // Build class names array
+    const classNames = [];
+    
     if (date.toDateString() === selectedDate.toDateString()) {
-      return cx("selected-day");
+      classNames.push(cx("selected-day"));
     }
 
     if (date.toDateString() === today.toDateString()) {
-      return cx("today");
+      classNames.push(cx("today"));
     }
-
-    // Sửa để ngày có lịch khám được hiển thị đúng
-    return highlightedDays.includes(date.getDay()) && date >= today
-      ? cx("highlighted-day")      : "";
+    
+    // Special styling for dates with specific schedules
+    if (hasSpecificDateSchedule) {
+      classNames.push(cx("specific-date-day"));
+    }
+    // Regular styling for days that have recurring schedules
+    else if (highlightedDays.includes(date.getDay()) && date >= today) {
+      classNames.push(cx("highlighted-day"));
+    }
+    
+    return classNames.join(" ");
   };
   
   // Cải thiện hàm tileDisabled để hiển thị đúng các ngày trong lịch

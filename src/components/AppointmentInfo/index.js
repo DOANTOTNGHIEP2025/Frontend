@@ -105,12 +105,20 @@ function AppointmentInfo({data, onUpdateData}) {
                         <span>{data?.doctor_id?.username}</span>
                     </div>
                  </div>
-                 <div className={cx('appointment-field-wrapper')}>
-                    <div className={cx('appointment-field-title')}>
+                 <div className={cx('appointment-field-wrapper')}>                    <div className={cx('appointment-field-title')}>
                         <span>Ngày hẹn: </span>
                     </div>
                     <div className={cx('appointment-field')}>
-                        <span>{data?.appointment_day}</span>
+                        {/* Kiểm tra và hiển thị rõ hơn nếu là lịch ngày cụ thể */}
+                        {data?.appointment_day.includes('-') ? (
+                            <span>
+                                {data?.appointment_day.split(' ')[0]} <span className={cx('specific-date-marker')}>
+                                ({data?.appointment_day.split(' ')[1]})
+                                </span>
+                            </span>
+                        ) : (
+                            <span>{data?.appointment_day}</span>
+                        )}
                     </div>
                  </div>
                  <div className={cx('appointment-field-wrapper')}>

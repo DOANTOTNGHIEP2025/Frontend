@@ -187,10 +187,36 @@ const useAccount = () => {
         
     }
 
-    const getDoctorActiveList = async (id, load) => {
+    const getDoctorActiveList = async (id, load = true) => {
         if (load) isLoadingAccount(true);
         try {
             const ActiveList = await Account_API.get_Doctor_Active_List(id);
+            
+            // Format active hours to include display info for date-specific schedules
+            if (ActiveList && ActiveList.active_hours) {
+                ActiveList.active_hours = ActiveList.active_hours.map(hour => {
+                    if (hour.date) {
+                        // Format the date in a more user-friendly way
+                        const dateObj = new Date(hour.date);
+                        const formattedDate = dateObj.toLocaleDateString('vi-VN', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        
+                        return {
+                            ...hour,
+                            displayName: `${hour.day} [${formattedDate}] ${hour.start_time}-${hour.end_time}`,
+                            isDateSpecific: true
+                        };
+                    }
+                    return {
+                        ...hour,
+                        isDateSpecific: false
+                    };
+                });
+            }
+            
             return ActiveList;
         }
         catch(error){
