@@ -39,6 +39,8 @@ body.active-modal {
     background-image: linear-gradient(180deg, #00A6A9, #0c507c);
     border-radius: 20px;
     z-index: 9001;
+    max-height: 90vh;
+    overflow-y: auto;
     max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
@@ -84,6 +86,8 @@ body.active-modal {
     flex-direction: column;
     justify-content: space-between;
     margin-bottom: 15px;
+    position: relative;
+    z-index: 200;
 }
 
 .field-name{
@@ -127,6 +131,8 @@ body.active-modal {
     align-items: center;
     align-content: space-between;
     padding: 20px 0;
+    overflow-y: auto;
+    max-height: 75vh;
 }
 
 // Calendar styles
@@ -136,6 +142,8 @@ body.active-modal {
     flex-direction: column;
     align-items: center;
     margin-bottom: 15px;
+    position: relative;
+    clear: both;
 }
 
 .calendar-container {
@@ -143,6 +151,14 @@ body.active-modal {
     width: 100%;
     position: relative;
     transition: all 0.3s ease;
+    overflow: visible;
+    max-height: 400px; /* Increased height for better visibility */
+    margin-bottom: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     
     &.pulse-animation {
         animation: pulse 0.5s ease;
@@ -407,6 +423,50 @@ body.active-modal {
 }
 
 :global {
+    .react-calendar {
+        width: 100% !important;
+        max-height: 350px !important;
+        overflow: visible !important;
+        margin-bottom: 15px !important;
+        border-radius: 12px !important;
+        border: 2px solid rgba(0, 166, 169, 0.3) !important;
+        padding: 10px !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15) !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    /* Calendar navigation arrows */
+    .react-calendar__navigation {
+        margin-bottom: 10px !important;
+    }
+    
+    .react-calendar__navigation button {
+        border-radius: 8px !important;
+        background-color: rgba(0, 166, 169, 0.1) !important;
+        color: #333 !important;
+        font-weight: 600 !important;
+    }
+    
+    .react-calendar__navigation button:hover,
+    .react-calendar__navigation button:focus {
+        background-color: rgba(0, 166, 169, 0.2) !important;
+    }
+    
+    /* Calendar days */
+    .react-calendar__tile {
+        border-radius: 8px !important;
+        padding: 10px 0 !important;
+        position: relative !important;
+    }
+    
+    .react-calendar__tile:hover {
+        background-color: rgba(0, 166, 169, 0.1) !important;
+    }
+    
+    .react-calendar__tile--active {
+        background-color: rgba(0, 166, 169, 0.2) !important;
+    }
+    
     .selected-date-tile {
         background-color: rgba(0, 166, 169, 0.15) !important;
         border: 2px solid #00A6A9 !important;
@@ -452,18 +512,35 @@ body.active-modal {
     }
 }
 
-.selected-info {
-    margin: 10px 0;
+.date-selection-container {
+    width: 100%;
+    margin: 15px 0;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 12px;
-    background-color: rgba(255, 255, 255, 0.25);
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.selected-info {
+    margin: 10px 0 15px 0;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
     width: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     animation: fadeIn 0.3s ease;
+    z-index: 200;
+    position: relative;
     
     span {
         display: block;
@@ -486,15 +563,17 @@ body.active-modal {
 }
 
 .time-badge {
-    display: block;
+    display: inline-block;
     margin-top: 8px;
-    padding: 6px 12px;
-    background-color: rgba(0, 166, 169, 0.3);
+    padding: 6px 14px;
+    background-color: rgba(0, 166, 169, 0.5);
     border-radius: 20px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     text-shadow: none;
     color: #fff;
     animation: pulseLight 2s infinite;
@@ -522,23 +601,67 @@ body.active-modal {
 }
 
 .action-button {
-    margin-top: 10px;
+    margin-top: 15px;
     width: 100%;
     transition: all 0.3s ease;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    background-image: linear-gradient(135deg, #00A6A9, #0070a3);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.4s ease;
+    }
     
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        
+        &::before {
+            left: 100%;
+        }
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-image: linear-gradient(135deg, #7d7d7d, #555555);
+        transform: none;
+        box-shadow: none;
     }
 }
 
 .time-fields-container {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
+    opacity: 1;
+    max-height: 800px; /* Increased to ensure all content is visible */
     transition: all 0.5s ease-in-out;
     animation: fadeInDown 0.5s forwards;
+    margin-top: 25px;
+    padding: 22px;
+    background-color: rgba(255, 255, 255, 0.5); /* Increased opacity for better visibility */
+    border-radius: 12px;
+    border: 3px solid rgba(255, 255, 255, 0.7); /* Enhanced border */
+    z-index: 999; /* Higher z-index to ensure it appears above other elements */
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+    clear: both;
+    width: 100%;
+    display: block;
     
     @keyframes fadeInDown {
         0% {
@@ -551,5 +674,80 @@ body.active-modal {
             max-height: 600px;
             transform: translateY(0);
         }
+    }
+}
+
+/* Custom time picker styling */
+:global {
+    /* Styling for react-multi-date-picker */
+    .rmdp-container {
+        width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .rmdp-input {
+        width: 100% !important;
+        height: 45px !important;
+        padding: 8px 15px !important;
+        font-size: 1.05rem !important;
+        border-radius: 10px !important;
+        border: 2px solid rgba(255, 255, 255, 0.5) !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        font-weight: 500 !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .rmdp-input:focus {
+        border-color: #00A6A9 !important;
+        box-shadow: 0 0 0 4px rgba(0, 166, 169, 0.3) !important;
+        outline: none !important;
+        background-color: rgba(255, 255, 255, 0.4) !important;
+    }
+    
+    .rmdp-input::placeholder {
+        color: rgba(255, 255, 255, 0.8) !important;
+        opacity: 1 !important;
+    }
+    
+    .rmdp-time-picker {
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+        border: 1px solid rgba(0, 166, 169, 0.3) !important;
+    }
+    
+    /* Make time picker overlay visible */
+    .rmdp-shadow {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+        z-index: 9999 !important;
+    }
+    
+    /* Calendar styling */
+    .react-calendar {
+        width: 100% !important;
+        max-height: 350px !important;
+        border-radius: 12px !important;
+        border: none !important;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        padding: 12px !important;
+        font-family: inherit !important;
+    }
+    
+    .react-calendar__tile {
+        padding: 10px 6px !important;
+        position: relative !important;
+        border-radius: 8px !important;
+    }
+    
+    .react-calendar__tile--active,
+    .react-calendar__tile--active:enabled:hover {
+        background-color: #00A6A9 !important;
+        color: white !important;
+    }
+      .react-calendar__tile:hover {
+        background-color: rgba(0, 166, 169, 0.15) !important;
     }
 }

@@ -51,6 +51,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   const [calendarValue, setCalendarValue] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(true);
   const [activeHours, setActiveHours] = useState([]);
+  const [showTimeInputs, setShowTimeInputs] = useState(false); // State để kiểm soát hiển thị nhập thời gian
 
   // Map weekday names to numbers
   const dayToIndexMap = {
@@ -62,7 +63,6 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     Friday: 5,
     Saturday: 6,
   };
-
   const toggleModal = () => {
     if (disabled) return;
     setModal(!modal);
@@ -71,6 +71,14 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     if (!modal) {
       if (data && data.active_hours) {
         setActiveHours(data.active_hours);
+      }
+      
+      // Reset showTimeInputs khi mở modal
+      if (type === "add") {
+        setShowTimeInputs(false);
+      } else {
+        // Nếu là update, luôn hiển thị phần nhập thời gian
+        setShowTimeInputs(true);
       }
     }
   };
@@ -85,10 +93,12 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         endTime: hour.end_time,
         limit: hour.appointment_limit
       }));
-  };
-
-  // Handle calendar date change
+  };  // Handle calendar date change
   const handleCalendarChange = (date) => {
+    // Lưu lại tháng hiện tại trước khi cập nhật giá trị
+    const previousMonth = calendarValue ? calendarValue.getMonth() : new Date().getMonth();
+    const previousYear = calendarValue ? calendarValue.getFullYear() : new Date().getFullYear();
+    
     setCalendarValue(date);
     
     const dayName = Object.keys(dayToIndexMap).find(
@@ -96,7 +106,37 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     );
     
     setSelectedDate(dayName);
-  };  // Custom tile content to display active hours
+    
+    // Nếu người dùng chọn một ngày trong tháng khác với tháng hiện tại
+    // hoặc năm khác với năm hiện tại
+    if (date.getMonth() !== previousMonth || date.getFullYear() !== previousYear) {
+      // Đây là trường hợp chuyển tháng/năm
+      console.log(`Đã chuyển sang: Tháng ${date.getMonth() + 1}, Năm ${date.getFullYear()}`);
+      
+      // Thêm hiệu ứng chuyển đổi tháng
+      const calendarContainer = document.querySelector(`.${cx('calendar-container')}`);
+      if (calendarContainer) {
+        calendarContainer.classList.add(cx('month-transition'));
+        setTimeout(() => {
+          calendarContainer.classList.remove(cx('month-transition'));
+        }, 500);
+      }
+    } else {
+      // Nếu chỉ chọn ngày trong tháng hiện tại, thì áp dụng hiệu ứng pulse
+      const calendarContainer = document.querySelector(`.${cx('calendar-container')}`);
+      if (calendarContainer) {
+        calendarContainer.classList.add(cx('pulse-animation'));
+        setTimeout(() => {
+          calendarContainer.classList.remove(cx('pulse-animation'));
+        }, 500);
+      }
+    }
+    
+    // Hiển thị phần nhập thời gian sau khi chọn ngày
+    setShowTimeInputs(true);
+  };
+  
+  // Custom tile content to display active hours
   const dayContent = ({date, view}) => {
     if (view === 'month') {
       const dayName = Object.keys(dayToIndexMap).find(
@@ -150,7 +190,8 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     return null;
   };
 
-  // Existing code for handling date modal functionality  useEffect(() => {
+  // Existing code for handling date modal functionality
+    useEffect(() => {
     if (type === "update" && hourData) {
       const parts = hourData.split(" ");
         const day = parts[0];
@@ -181,11 +222,15 @@ export default function DateModal({children , disabled = false, data = [], onAdd
           setCalendarValue(new Date(specificDate));
         }
 
+        // Luôn hiển thị phần nhập thời gian khi là chế độ cập nhật
+        setShowTimeInputs(true);
   
-        const startTimeObj = new Date();
+        const startTimeObj = new Date();        
         const [startHours, startMinutes] = start_time.split(":").map(Number);
         startTimeObj.setHours(startHours, startMinutes, 0);
-        setStartTimeValue(startTimeObj);        const endTimeObj = new Date();
+        setStartTimeValue(startTimeObj);
+        
+        const endTimeObj = new Date();
         const [endHours, endMinutes] = end_time.split(":").map(Number);
         endTimeObj.setHours(endHours, endMinutes, 0);
         setEndTimeValue(endTimeObj);
@@ -294,14 +339,23 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
     return;
   }
-
   // Get specific date for this active hour (in YYYY-MM-DD format)
   const specificDate = calendarValue ? calendarValue.toLocaleDateString('en-CA') : null;
-    // Ask user if they want to create a schedule for just this specific date
+    
+  // Format the date nicely for the confirmation dialog
+  const formattedDate = calendarValue ? calendarValue.toLocaleDateString('vi-VN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }) : null;
+    
+  // Ask user if they want to create a schedule for just this specific date
   const useSpecificDate = window.confirm(
-    "Bạn muốn tạo lịch làm việc cho ngày cụ thể này không?\n\n" +
-    "- Chọn OK để tạo lịch cho riêng ngày " + (specificDate || "đã chọn") + " (Khuyến nghị)\n" +
-    "- Chọn Cancel để tạo lịch cho tất cả các ngày " + selectedDate + " trong tương lai (Không khuyến nghị)"
+    "🗓️ XÁC NHẬN LỊCH LÀM VIỆC\n\n" +
+    "Bạn muốn tạo lịch khám cho:\n\n" +
+    "✅ Chọn OK để tạo lịch cho riêng ngày " + (formattedDate || "đã chọn") + " (Khuyến nghị)\n\n" +
+    "❌ Chọn Cancel để tạo lịch cho tất cả các ngày " + selectedDate + " trong tương lai (Không khuyến nghị)"
   );
   
   const newActiveHour = await addDoctorActiveHour(
@@ -368,11 +422,24 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
       return;
     }
-    
-    // Get specific date for the active hour (in YYYY-MM-DD format)
+      // Get specific date for the active hour (in YYYY-MM-DD format)
     const specificDate = calendarValue ? calendarValue.toLocaleDateString('en-CA') : null;
     
-    const userConfirmed = window.confirm("Bạn có chắc chắn muốn chỉnh sửa giờ làm việc này không?");
+    // Format the date nicely for the confirmation dialog
+    const formattedDate = calendarValue ? calendarValue.toLocaleDateString('vi-VN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }) : null;
+    
+    const userConfirmed = window.confirm(
+      "🔄 XÁC NHẬN CẬP NHẬT\n\n" +
+      "Bạn có chắc chắn muốn chỉnh sửa giờ khám này?\n\n" +
+      `Ngày: ${formattedDate || selectedDate}\n` +
+      `Thời gian: ${startTime} - ${endTime}\n` +
+      `Giới hạn lượt khám: ${appointmentLimit}`
+    );
     if (userConfirmed) {      // Extract original date from hourData if it exists (using Date: format)
       let originalSpecificDate = null;
       if (hourData) {
@@ -461,86 +528,125 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                         <option value='Saturday'>Saturday</option>
                         <option value='Sunday'>Sunday</option>
                       </select>
-
                       <div className={cx('selected-info')}>
-                        {selectedDate && <span>Đã chọn: {selectedDate} ({startTime} - {endTime})</span>}
-                      </div>
-                      
-                      {showCalendar && (
-                        <div className={cx('calendar-container')}>              <Calendar
-                onChange={handleCalendarChange}
-                value={calendarValue}
-                tileContent={dayContent}
-                showNeighboringMonth={true}
-                next2Label={null}
-                prev2Label={null}
-                maxDetail="month"
-                minDetail="month"
-                defaultView="month"
-                defaultActiveStartDate={new Date()}
-                showFixedNumberOfWeeks={true}
-              />
+                        {selectedDate && (
+                          <span>
+                            <strong>Đã chọn:</strong> {selectedDate} - {calendarValue?.toLocaleDateString('vi-VN', {
+                              day: 'numeric', 
+                              month: 'numeric', 
+                              year: 'numeric',
+                              weekday: 'long'
+                            }).replace(/thứ /i, 'Thứ ')} 
+                            {startTime && endTime ? (
+                              <span className={cx('time-badge')}>
+                                {startTime} - {endTime}
+                              </span>
+                            ) : ''}
+                          </span>
+                        )}
+                      </div>                        {showCalendar && (
+                        <div className={cx('calendar-container')}>
+                          <Calendar
+                            onChange={handleCalendarChange}
+                            value={calendarValue}
+                            tileContent={dayContent}
+                            showNeighboringMonth={false}
+                            next2Label={null}
+                            prev2Label={null}
+                            maxDetail="month"
+                            minDetail="month"
+                            defaultView="month"
+                            defaultActiveStartDate={new Date()}
+                            showFixedNumberOfWeeks={false}
+                tileClassName={({ date, view }) => {
+                  // Chỉ hiển thị các ngày của tháng hiện tại
+                  if (view === 'month') {
+                    // Lấy tháng hiện tại từ calendarValue
+                    const currentMonth = calendarValue.getMonth();
+                    // Kiểm tra nếu ngày không thuộc tháng hiện tại
+                    if (date.getMonth() !== currentMonth) {
+                      return cx('hidden-date-tile');
+                    }
+                    // Nếu là ngày đang được chọn
+                    if (calendarValue && date.toDateString() === calendarValue.toDateString()) {
+                      return cx('selected-date-tile');
+                    }
+                  }
+                  return null;
+                }}
+                tileDisabled={({ date, view }) => {
+                  // Vô hiệu hóa các ngày không thuộc tháng hiện tại
+                  if (view === 'month') {
+                    const currentMonth = calendarValue.getMonth();
+                    return date.getMonth() !== currentMonth;
+                  }
+                  return false;
+                }}              />
                         </div>
                       )}
+                      
+                      {/* Chỉ hiển thị phần nhập thời gian khi đã chọn ngày */}
+                      {showTimeInputs && (
+                        <div className={cx('time-fields-container')}>
+                    <div className={cx('field-container')}>
+                        <div className={cx('field-name')}>
+                            <span>Nhập thời gian bắt đầu</span>
+                        </div>
+                        <DatePicker
+                          disableDayPicker
+                          value={startTimeValue}
+                          onChange={handleStartTimeChange}
+                          placeholder="Chọn thời gian bắt đầu"
+                          format="HH:mm"
+                          plugins={[<TimePicker position="bottom" hideSeconds={true} hideAMPM={true} />]}
+                          style={{
+                            width: '100%',
+                            height: '36px',
+                            borderRadius: '10px',
+                            marginBottom: '10px',
+                          }}
+                        >
+                        </DatePicker>
                     </div>
-                </div>
-                <div className={cx('field-container')}>
-                    <div className={cx('field-name')}>
-                        <span>Nhập thời gian bắt đầu</span>
+                    <div className={cx('field-container')}>
+                        <div className={cx('field-name')}>
+                            <span>Nhập thời gian kết thúc</span>
+                        </div>
+                        <DatePicker
+                          disableDayPicker
+                          value={endTimeValue}
+                          onChange={handleEndTimeChange}
+                          placeholder="Chọn thời gian kết thúc"
+                          format="HH:mm"
+                          plugins={[<TimePicker position="bottom" hideSeconds={true} hideAMPM={true} />]}
+                          style={{
+                            width: '100%',
+                            height: '36px',
+                            borderRadius: '10px',
+                            marginBottom: '10px',
+                          }}
+                        >
+                        </DatePicker>
                     </div>
-                    <DatePicker
-                      disableDayPicker
-                      value={startTimeValue}
-                      onChange={handleStartTimeChange}
-                      placeholder="Chọn thời gian bắt đầu"
-                      format="HH:mm"
-                      plugins={[<TimePicker position="bottom" hideSeconds={true} hideAMPM={true} />]}
-                      style={{
-                        width: '100%',
-                        height: '36px',
-                        borderRadius: '10px',
-                        marginBottom: '10px',
-                      }}
-                    >
-                    </DatePicker>
-                </div>
-                <div className={cx('field-container')}>
-                    <div className={cx('field-name')}>
-                        <span>Nhập thời gian kết thúc</span>
+                    <div className={cx('field-container')}>
+                        <div className={cx('field-name')}>
+                            <span>Nhập giới hạn số lượng</span>
+                        </div>
+                        <input type="number" placeholder="Nhập giới hạn số lượng" className={cx('field-input')} value={appointmentLimit} onChange={(e)=>{setAppointmentLimit(e.target.value)}}></input>
                     </div>
-                    <DatePicker
-                      disableDayPicker
-                      value={endTimeValue}
-                      onChange={handleEndTimeChange}
-                      placeholder="Chọn thời gian kết thúc"
-                      format="HH:mm"
-                      plugins={[<TimePicker position="bottom" hideSeconds={true} hideAMPM={true} />]}
-                      style={{
-                        width: '100%',
-                        height: '36px',
-                        borderRadius: '10px',
-                        marginBottom: '10px',
-                      }}
-                    >
-                    </DatePicker>
-                </div>
-                <div className={cx('field-container')}>
-                    <div className={cx('field-name')}>
-                        <span>Nhập giới hạn số lượng</span>
-                    </div>
-                    <input type="number" placeholder="Nhập giới hạn số lượng" className={cx('field-input')} value={appointmentLimit} onChange={(e)=>{setAppointmentLimit(e.target.value)}}></input>
-                </div>
-                {
-                  type === "add" ? (
-                    <Button submitTwo onClick={handleSubmitActiveHour}>
-                      Thêm giờ khám
-                    </Button>
-                  ) : (
-                    <Button submitTwo onClick={handleUpdateActiveHour} disabled={isDisabled}>
-                      Sửa giờ khám
-                    </Button>
-                  )
-                }
+                    {
+                      type === "add" ? (
+                        <Button submitTwo onClick={handleSubmitActiveHour} className={cx('action-button')}>
+                          {startTime && endTime ? `Thêm giờ khám (${startTime} - ${endTime})` : 'Thêm giờ khám'}
+                        </Button>
+                      ) : (
+                        <Button submitTwo onClick={handleUpdateActiveHour} disabled={isDisabled} className={cx('action-button')}>
+                          {startTime && endTime ? `Sửa giờ khám (${startTime} - ${endTime})` : 'Sửa giờ khám'}
+                        </Button>
+                      )
+                    }
+                  </div>
+                )}
                 
             </div>
           </div>
