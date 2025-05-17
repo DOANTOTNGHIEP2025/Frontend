@@ -1,0 +1,1010 @@
+// filepath: c:\coder 2025\PBL7\frontend\src\components\DateModal\DateModal.module.scss
+body.active-modal {
+    overflow-y: hidden;
+}
+
+.btn-modal {
+    padding: 10px 20px;
+    display: block;
+    margin: 100px auto 0;
+    font-size: 18px;
+}
+
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 9000;
+}
+
+.overlay {
+    background: rgba(20, 30, 40, 0.85);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    padding: 25px 30px;
+    max-width: 700px;
+    width: 90%;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(160deg, #00A6A9, #0c507c);
+    border-radius: 20px;
+    z-index: 9001;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    animation: fadeInUp 0.4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 10%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 9002;
+    
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+}
+
+.field-container{
+    width: 100%;
+    min-height: 80px;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 200;
+    padding: 0 3px;
+    
+    &:last-of-type {
+        margin-bottom: 10px;
+    }
+}
+
+.field-name{
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 18px;
+        background-color: rgba(0, 166, 169, 0.8);
+        border-radius: 2px;
+    }
+}
+
+.field-input{
+    width: 100%;
+    height: 42px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    padding: 0 15px;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    
+    &:focus {
+        border: 2px solid rgba(0, 166, 169, 0.6);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(0, 166, 169, 0.15);
+        background-color: rgba(255, 255, 255, 0.35);
+    }
+    
+    &:hover {
+        border-color: rgba(0, 166, 169, 0.4);
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+    }
+
+    &.hidden {
+        display: none;
+    }
+    
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+/* Number input specific styling */
+input[type="number"].field-input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    &:focus {
+        color: #fff;
+        font-weight: 600;
+    }
+}
+
+.modal-field-container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-between;
+    padding: 20px 5px;
+    overflow-y: auto;
+    max-height: 75vh;
+    
+    /* Improved scrollbar styling */
+    &::-webkit-scrollbar {
+        width: 6px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 8px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+// Calendar styles
+.date-selection-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+    clear: both;
+}
+
+.calendar-container {
+    margin: 15px 0;
+    width: 100%;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: visible;
+    max-height: 450px; /* Increased height for better visibility */
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    
+    &.pulse-animation {
+        animation: pulse 0.6s ease;
+    }
+    
+    &.month-transition {
+        animation: monthTransition 0.5s ease-in-out;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        50% {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(0, 166, 169, 0.4);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    }
+    
+    @keyframes monthTransition {
+        0% {
+            opacity: 0.5;
+            transform: translateY(8px);
+        }
+        50% {
+            opacity: 0.8;
+            transform: translateY(-3px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+// Global styles for react-calendar component
+:global {
+    .react-calendar {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        padding: 18px;
+        width: 100%;
+        max-width: 100%;
+        background-color: #fff;
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.15rem;
+        overflow: hidden;
+
+        // Make the calendar view larger
+        &__viewContainer {
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        // Calendar month view improvements
+        &__month-view {
+            &__days {
+                // Remove empty rows
+                & > div:empty {
+                    display: none !important;
+                }
+                
+                // Consistent row height
+                & > div {
+                    display: flex !important;
+                    min-height: 80px !important;
+                    max-height: 90px !important;
+                    gap: 4px !important;
+                }
+
+                &__day {
+                    height: 80px !important; 
+                    padding: 5px !important;
+                    position: relative !important;
+                    flex: 1 !important;
+                    min-width: 0 !important;
+                    
+                    abbr {
+                        display: none;
+                    }
+                }
+            }
+
+            &__weekdays {
+                margin-bottom: 10px !important;
+                background-color: rgba(0, 166, 169, 0.05);
+                border-radius: 8px;
+                padding: 5px 0;
+                
+                &__weekday {
+                    padding: 10px 0;
+                    font-weight: bold;
+                    text-decoration: none;
+                    font-size: 0.9rem;
+                    abbr {
+                        text-decoration: none;
+                        text-transform: uppercase;
+                        color: #0C507C;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+
+        &__tile {
+            position: relative;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            
+            &:enabled:hover {
+                background: #e1f5f5;
+            }
+        }
+        
+        &__navigation {
+            height: 50px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            button {
+                min-width: 44px;
+                background: none;
+                font-size: 1.5rem;
+                color: #0C507C;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+                
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 0;
+                    height: 0;
+                    background-color: rgba(0, 211, 214, 0.2);
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0;
+                    transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+                    z-index: -1;
+                }
+                
+                &:enabled:hover {
+                    background: rgba(0, 211, 214, 0.1);
+                    transform: translateY(-2px);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    
+                    &::before {
+                        width: 100px;
+                        height: 100px;
+                        opacity: 1;
+                    }
+                }
+                
+                &:active {
+                    transform: translateY(0);
+                }
+            }
+            
+            &__label {
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #0C507C;
+                transition: all 0.3s ease;
+                padding: 5px 10px;
+                border-radius: 5px;
+                
+                &:hover {
+                    background-color: rgba(0, 211, 214, 0.05);
+                }
+            }
+        }
+    }
+}
+
+// Day cell content
+.calendar-day-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: right;
+    display: block;
+    transition: all 0.2s ease;
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    color: #333;
+    
+    .react-calendar__tile:hover & {
+        color: #00A6A9;
+        transform: scale(1.1);
+    }
+    
+    .selected-date-tile & {
+        color: #00A6A9;
+        font-weight: 800;
+    }
+}
+
+.day-available-times {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.75rem;
+    text-align: center;
+    overflow-y: auto;
+    max-height: 65px;
+    margin-top: 22px;
+    padding: 2px;
+    width: 100%;
+    
+    // Scrollbar styling for webkit browsers
+    &::-webkit-scrollbar {
+        width: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: rgba(12, 80, 124, 0.3);
+        border-radius: 4px;
+    }
+}
+
+.day-time {
+    background: linear-gradient(to right, rgba(0, 166, 169, 0.15), rgba(0, 166, 169, 0.25));
+    border-radius: 4px;
+    padding: 3px 4px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #0C507C;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-size: 0.7rem;
+    transition: all 0.25s ease;
+    border: 1px solid rgba(0, 166, 169, 0.3);
+    
+    &:hover {
+        background: linear-gradient(to right, rgba(0, 166, 169, 0.25), rgba(0, 166, 169, 0.35));
+        transform: translateY(-1px);
+        cursor: pointer;
+        border-color: rgba(0, 166, 169, 0.5);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &.selected-time {
+        background: linear-gradient(to right, rgba(0, 166, 169, 0.5), rgba(0, 166, 169, 0.7));
+        font-weight: bold;
+        color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+        border-color: rgba(0, 166, 169, 0.8);
+    }
+}
+
+.no-time {
+    font-size: 0.7rem;
+    color: #888;
+    font-style: italic;
+    padding: 3px;
+    text-align: center;
+}
+
+:global {
+    .react-calendar {
+        width: 100% !important;
+        max-height: 350px !important;
+        overflow: visible !important;
+        margin-bottom: 15px !important;
+        border-radius: 12px !important;
+        border: 2px solid rgba(0, 166, 169, 0.3) !important;
+        padding: 10px !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15) !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+    }
+    
+    /* Calendar navigation arrows */
+    .react-calendar__navigation {
+        margin-bottom: 10px !important;
+    }
+    
+    .react-calendar__navigation button {
+        border-radius: 8px !important;
+        background-color: rgba(0, 166, 169, 0.1) !important;
+        color: #333 !important;
+        font-weight: 600 !important;
+    }
+    
+    .react-calendar__navigation button:hover,
+    .react-calendar__navigation button:focus {
+        background-color: rgba(0, 166, 169, 0.2) !important;
+    }
+    
+    /* Calendar days */
+    .react-calendar__tile {
+        border-radius: 8px !important;
+        padding: 10px 0 !important;
+        position: relative !important;
+    }
+    
+    .react-calendar__tile:hover {
+        background-color: rgba(0, 166, 169, 0.1) !important;
+    }
+    
+    .react-calendar__tile--active {
+        background-color: rgba(0, 166, 169, 0.2) !important;
+    }
+    
+    .selected-date-tile {
+        background: linear-gradient(135deg, rgba(0, 166, 169, 0.2), rgba(0, 166, 169, 0.1)) !important;
+        border: 2px solid #00A6A9 !important;
+        border-radius: 10px !important;
+        position: relative;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 166, 169, 0.2) !important;
+        
+        &::after {
+            content: '✓';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            color: #00A6A9;
+            font-weight: bold;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.8);
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+    }
+    
+    .hidden-date-tile {
+        opacity: 0.2 !important;
+        pointer-events: none !important;
+        background-color: transparent !important;
+        border: none !important;
+        
+        * {
+            opacity: 0.15 !important; 
+            pointer-events: none !important;
+        }
+        
+        &::before, &::after {
+            content: none !important;
+            display: none !important;
+        }
+        
+        .calendar-day-content {
+            display: none !important;
+        }
+    }
+}
+
+.date-selection-container {
+    width: 100%;
+    margin: 15px 0;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background: linear-gradient(170deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.selected-info {
+    margin: 5px 0 15px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.2));
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    animation: fadeIn 0.4s ease;
+    z-index: 200;
+    position: relative;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, rgba(0,166,169,0.2), transparent);
+        border-radius: 10px;
+        z-index: -1;
+    }
+    
+    span {
+        display: block;
+        padding: 6px;
+        font-size: 1.15rem;
+        text-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+        
+        &:empty {
+            display: none;
+        }
+        
+        strong {
+            color: #fff;
+            position: relative;
+            padding: 0 2px;
+            
+            &::after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                bottom: -2px;
+                left: 0;
+                background-color: rgba(0, 166, 169, 0.7);
+                border-radius: 2px;
+            }
+        }
+    }
+}
+
+.time-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(0, 166, 169, 0.7), rgba(0, 128, 155, 0.7));
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    animation: pulseLight 2.5s infinite;
+    letter-spacing: 0.5px;
+    position: relative;
+    
+    &::before {
+        content: "⏰";
+        margin-right: 6px;
+        font-size: 0.9rem;
+    }
+    
+    @keyframes pulseLight {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 166, 169, 0.6);
+        }
+        70% {
+            box-shadow: 0 0 0 8px rgba(0, 166, 169, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(0, 166, 169, 0);
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.action-button {
+    margin-top: 20px;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 14px 20px;
+    background-image: linear-gradient(135deg, #00A6A9, #0070a3);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.5s ease;
+    }
+    
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        
+        &::before {
+            left: 100%;
+        }
+    }
+    
+    &:active {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-image: linear-gradient(135deg, #7d7d7d, #555555);
+        transform: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.time-fields-container {
+    opacity: 1;
+    max-height: 800px; /* Increased to ensure all content is visible */
+    transition: all 0.5s ease-in-out;
+    animation: fadeInDown 0.6s forwards;
+    margin-top: 15px;
+    padding: 25px;
+    background-color: rgba(255, 255, 255, 0.25); /* Changed for better visibility */
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Enhanced border */
+    z-index: 999; /* Higher z-index to ensure it appears above other elements */
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    clear: both;
+    width: 100%;
+    display: block;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, rgba(0,166,169,0.5), transparent, rgba(12,80,124,0.5));
+        border-radius: 18px;
+        z-index: -1;
+        opacity: 0.5;
+    }
+    
+    @keyframes fadeInDown {
+        0% {
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(-25px);
+        }
+        100% {
+            opacity: 1;
+            max-height: 600px;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Custom time picker styling */
+:global {
+    /* Styling for react-multi-date-picker */
+    .rmdp-container {
+        width: 100% !important;
+        margin-bottom: 18px !important;
+        position: relative !important;
+        z-index: 1000 !important;
+    }
+    
+    .rmdp-input {
+        width: 100% !important;
+        height: 48px !important;
+        padding: 10px 16px !important;
+        font-size: 1.05rem !important;
+        border-radius: 12px !important;
+        border: 2px solid rgba(255, 255, 255, 0.6) !important;
+        background-color: rgba(255, 255, 255, 0.25) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s ease !important;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) !important;
+        letter-spacing: 0.5px !important;
+        animation: gentle-glow 3s infinite alternate !important;
+    }
+    
+    @keyframes gentle-glow {
+        from {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1) !important;
+        }
+        to {
+            box-shadow: 0 6px 15px rgba(0, 166, 169, 0.25) !important;
+        }
+    }
+    
+    .rmdp-input:focus {
+        border-color: #00A6A9 !important;
+        box-shadow: 0 0 0 4px rgba(0, 166, 169, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+        outline: none !important;
+        background-color: rgba(255, 255, 255, 0.35) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    .rmdp-input:hover {
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    .rmdp-input::placeholder {
+        color: rgba(255, 255, 255, 0.8) !important;
+        opacity: 1 !important;
+    }
+    
+    .rmdp-time-picker {
+        background-color: rgba(255, 255, 255, 0.98) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid rgba(0, 166, 169, 0.3) !important;
+        padding: 8px !important;
+    }
+    
+    .rmdp-time-picker div input {
+        border: 1px solid rgba(0, 166, 169, 0.3) !important;
+        border-radius: 6px !important;
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #0c507c !important;
+    }
+    
+    /* Make time picker overlay visible */
+    .rmdp-shadow {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35) !important;
+        z-index: 9999 !important;
+    }
+    
+    /* Time picker container */
+    .rmdp-container .rmdp-wrapper {
+        width: 100% !important;
+        margin-top: 5px !important;
+    }
+    
+    /* Time picker header styles */
+    .rmdp-header {
+        border-bottom: 1px solid rgba(0, 166, 169, 0.2) !important;
+        padding-bottom: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    /* Time picker values */
+    .rmdp-time-picker div.rmdp-time-picker-container .rmdp-am span, 
+    .rmdp-time-picker div.rmdp-time-picker-container .rmdp-pm span {
+        background-color: rgba(0, 166, 169, 0.1) !important;
+        color: #0c507c !important;
+    }
+    
+    .rmdp-time-picker div.rmdp-time-picker-container .rmdp-am span.selected, 
+    .rmdp-time-picker div.rmdp-time-picker-container .rmdp-pm span.selected {
+        background-color: #00A6A9 !important;
+        color: white !important;
+    }
+    
+    /* Calendar styling */
+    .react-calendar {
+        width: 100% !important;
+        max-height: 400px !important;
+        border-radius: 16px !important;
+        border: none !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        padding: 15px !important;
+        font-family: inherit !important;
+        overflow: visible !important;
+    }
+    
+    .react-calendar__month-view__days {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        grid-template-rows: auto !important;
+        gap: 4px !important;
+    }
+    
+    .react-calendar__month-view__days__day {
+        aspect-ratio: 1 !important;
+        height: auto !important;
+        max-height: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 8px 4px !important;
+    }
+    
+    .react-calendar__tile {
+        padding: 8px 6px !important;
+        position: relative !important;
+        border-radius: 10px !important;
+        transition: all 0.3s ease !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        height: auto !important;
+        aspect-ratio: 1 !important;
+    }
+    
+    .react-calendar__tile--now {
+        background-color: rgba(0, 166, 169, 0.1) !important;
+        border: 1px dashed rgba(0, 166, 169, 0.5) !important;
+    }
+    
+    .react-calendar__tile--active,
+    .react-calendar__tile--active:enabled:hover {
+        background-color: rgba(0, 166, 169, 0.2) !important;
+        color: #333 !important;
+        border: 2px solid #00A6A9 !important;
+    }
+    
+    .react-calendar__tile:hover {
+        background-color: rgba(0, 166, 169, 0.15) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .react-calendar__navigation {
+        margin-bottom: 15px !important;
+    }
+    
+    .react-calendar__navigation button {
+        border-radius: 8px !important;
+        padding: 8px !important;
+        margin: 0 2px !important;
+        color: #0c507c !important;
+        font-weight: bold !important;
+    }
+}
+
+/* Add smooth transition for all form inputs */
+input, select, textarea {
+    transition: all 0.3s ease-in-out;
+    
+    &:hover {
+        transform: translateY(-2px);
+    }
+    
+    &:focus {
+        transform: translateY(-2px);
+    }
+}
