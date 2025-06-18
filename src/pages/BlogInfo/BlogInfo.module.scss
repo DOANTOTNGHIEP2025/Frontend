@@ -1,201 +1,156 @@
 .wrapper {
     width: 100%;
-    display: block;
-    overflow: auto;
-    padding-bottom: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #222;
+  }
+  
+  .blog-content-wrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 40px;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .blog-wrapper {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    width: 100%;
+  }
+  
+  .blog-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1e1e1e;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+  
+  .blog-info-wrapper {
     display: flex;
-    flex-direction: column;
+    gap: 20px;
+    flex-wrap: wrap;
     align-items: center;
-}
-
-.blog-content-wrapper {
-    width: 80%;
-    display: block;
-    overflow: auto;
+    margin-bottom: 0px;
+  }
+  
+  .info-wrapper {
     display: flex;
-    justify-content: space-between;
-}
-
-.blog-wrapper {
-    width: 59%;
-    height: 100%;
-    display: block;
-}
-
-.list-blog-wrapper {
-    width: 39%;
-    height: 100%;
-    display: block;
-    overflow: auto;
-}
-
-.list-blog-title {
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    color: #444;
+    line-height: 1.4;
+  }
+  
+  .blog-owner, .blog-post-date {
+    margin: 0;
     font-weight: 500;
-    font-size: 3rem;
-    margin: 0px;
-    margin-top: 10px;
-}
-
-.list-blog-separator {
+  }
+  
+  .blog-image {
+    width: 50%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    margin: 20px auto;
+  }
+  
+  .blog-content-container {
+    margin-top: 20px;
+  }
+  
+  .blog-content {
+    font-size: 1.6rem;
+    line-height: 1.9;
+    color: #333;
+    margin-bottom: 16px;
+    word-spacing: 0.5px;
+    letter-spacing: 0.2px;
+  }
+  
+  .list-blog-wrapper {
+    background-color: #fafafa;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  
+  .list-blog-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #005a5c;
+  }
+  
+  .list-blog-separator {
     border: none;
     height: 2px;
-    background-color: #333;
-    width: 100%; /* Chiều rộng 80% của container */
-}
-
-.blog-title {
-    width: 100%;
-    font-weight: 500;
-    font-size: 3rem;
-    margin: 0px;
-    margin-top: 10px;
-    color: #005a5c;
-}
-
-.blog-info-wrapper {
-    width: 100%;
+    background-color: #ccc;
+    margin-bottom: 16px;
+  }
+  
+  /* Điều chỉnh giao diện nút "Xem câu trả lời" nếu nằm trong ForumItem */
+  .see-answer-button {
+    font-size: 1.8rem;
+    padding: 10px 14px;
+    margin-top: 5px;
+    line-height: 1.4;
+    white-space: nowrap;
     overflow: visible;
-    display: block;
+    text-overflow: initial;
+  }
+  
+  @media (max-width: 768px) {
+    .blog-content-wrapper {
+      grid-template-columns: 1fr;
+    }
+  
+    .blog-wrapper,
+    .list-blog-wrapper {
+      padding: 16px;
+    }
+  
+    .blog-title {
+      font-size: 2.2rem;
+    }
+  
+    .blog-content {
+      font-size: 1.4rem;
+    }
+  
+    .list-blog-title {
+      font-size: 1.8rem;
+    }
+  
+    .info-wrapper {
+      gap: 6px;
+      font-size: 1.3rem;
+    }
+  }
+  .info-wrapper {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.blog-owner {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #2197e3;
-    margin-left: 2px;
-}
-
-.blog-post-date {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-left: 2px;
-}
-
-.blog-info-user-icon {
-    font-size: 1.4rem;
-    width: 24px;
-}
-
-.blog-info-calendar-icon {
-    font-size: 1.4rem;
-    width: 24px;
-    margin-left: 100px;
-}
-
-.blog-content-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.blog-description {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 5px 0px;
-    color: #757575;
-    width: 100%;
-}
-
-.blog-content {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 2px 0px;
-    color: #757575;
-    width: 100%;
-}
-
-.blog-image {
-    width: 100%;
-    height: 400px;
-    margin: 10px 0px;
-}
-
-.comment-title-wrapper {
-    width: 100%;
-    height: 40px;
-    display: flex;
-}
-
-.comment-title {
-    font-weight: 700;
-    font-size: 2rem;
-    margin: 0px;
-    margin-top: 10px;
-}
-
-.comment-section {
-    width: 100%;
-    height: 150px;
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.user-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-}
-
-.comment {
-    width: 480px;
-    height: 100%;
-    border-radius: 10px;
-    font-size: 1.4rem;
-    border: 0px;
-    &:focus {
-        border: none;
-        outline: none;
-    }
-}
-
-.pagination {
-    margin-top: 20px;
-    width: 80%;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.info-wrapper{
-    display: flex;
-    align-items: center;
-}
-
-@media only screen and (max-width: 1024px) {
-    .blog-content-wrapper{
-        flex-direction: column;
-    }
-
-    .blog-wrapper{
-        width: 100%;
-    }
-    .list-blog-wrapper{
-        width: 100%;
-    }
-}
-
-@media only screen and (max-width: 740px) {
-    .blog-info-wrapper{
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .blog-info-calendar-icon{
-        margin-left: 0px;
-    }
-    .comment-section{
-        width: 100%;
-    }
-    .blog-image {
-        height: 300px;
-    }
-}
+    align-items: center !important;   // ✅ Căn icon và text nằm giữa
+    gap: 8px;              // ✅ Khoảng cách giữa icon và text
+  }
+  
+  .blog-info-calendar-icon {
+    font-size: 1rem;
+    color: #007bff;
+  }
+  
+  .blog-post-date {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    margin: 0;             // ✅ Tránh margin đẩy lệch hàng
+    padding: 0;
+  }
+  

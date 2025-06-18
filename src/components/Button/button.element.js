@@ -17,6 +17,7 @@ export const Wrapper = styled.button`
     transition: all ${transitions.medium};
     color: ${colors.black};
     box-shadow: ${shadows.small};
+    z-index: 0 !important;
     
     &:hover {
         transform: translateY(-2px);
@@ -172,9 +173,9 @@ export const Outline = styled(Wrapper)`
     background-color: transparent;
     border: 2px solid ${colors.primary};
     position: relative;
-    z-index: 1;
     overflow: hidden;
-    
+    z-index: 0 !important;
+
     &::before {
         content: '';
         position: absolute;
@@ -183,7 +184,6 @@ export const Outline = styled(Wrapper)`
         right: 100%;
         bottom: 0;
         background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary});
-        z-index: -1;
         transition: right ${transitions.medium};
     }
 

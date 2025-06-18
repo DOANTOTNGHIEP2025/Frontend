@@ -25,6 +25,7 @@ export default function ListModal({ children, disabled = false, data: initialDat
   };
 
   const filterAppointments = (filterType) => {
+    console.log("Data",data);
     const today = new Date();
     let filtered = Array.isArray(data) ? data.filter((appointment) => {
       const appointmentDate = new Date(appointment.appointment_day.split(" ")[1]);
@@ -32,8 +33,8 @@ export default function ListModal({ children, disabled = false, data: initialDat
         return appointmentDate < today && appointment.is_deleted === false;
       } else if (filterType === "incoming") {
         return appointmentDate >= today && appointment.is_deleted === false;
-      } else if (filterType === "canceled") {
-        return appointment.is_deleted === true;
+      // } else if (filterType === "canceled") {
+      //   return appointment.is_deleted === true;
       }
       return false;
     }) : [];
@@ -113,6 +114,12 @@ export default function ListModal({ children, disabled = false, data: initialDat
               >
                 Incoming
               </button>
+              {/* <button
+                className={cx('status-button', { selected: selectedButton === "canceled" })}
+                onClick={() => filterAppointments("canceled")}
+              >
+                Canceled
+              </button> */}
               
             </div>
             <div className={cx('modal-field-container')}>

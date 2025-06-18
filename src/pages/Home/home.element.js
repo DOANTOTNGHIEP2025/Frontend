@@ -63,7 +63,8 @@ export const HeroButton = styled.button`
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     
     &:first-child {
-        background: linear-gradient(to right, #0C507C, #00A6A9);
+        /* background: linear-gradient(to right, #0C507C, #00A6A9); */
+        background-color: #0C507C;
         color: white;
         border: none;
     }
@@ -100,7 +101,6 @@ export const Info = styled.div`
     align-items: center;
     overflow: visible;
     position: relative;
-    
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -144,13 +144,14 @@ export const InfoItem = styled.div`
   width: 300px;
   height: 140px;
   background: ${colors.white};
-  border-radius: 0 0 ${borderRadius.medium} ${borderRadius.medium};
+  border-radius: 20px;
   box-shadow: ${shadows.small};
   position: absolute;
   top: 180px;
   left: 0px;
   transition: all ${transitions.medium};
   padding: ${spacing.md};
+ 
   
   p {
     color: ${colors.darkGrey};
@@ -174,7 +175,7 @@ export const InfoPic = styled.div`
   z-index: 3 !important;
   width: 300px;
   height: 200px;
-  border-radius: ${borderRadius.medium} ${borderRadius.medium} 0 0;
+  border-radius: 20px;
   background: ${colors.primary};
   overflow: hidden;
   box-shadow: ${shadows.small};
@@ -226,11 +227,12 @@ export const News = styled.div`
 
 export const NewsHeader = styled.div`
   color: ${colors.primary};
-  font-size: ${typography.xl};
+  font-size: 24px;
   font-weight: 600;
   position: relative;
   padding-bottom: ${spacing.md};
-  margin-bottom: ${spacing.lg};
+  margin-bottom: 10px;
+  margin-top: 10px;
   text-align: center;
   
   &::after {
@@ -266,7 +268,7 @@ export const NewsSection = styled.div`
     display: flex;
     align-items: stretch;
     justify-content: center;
-    gap: ${spacing.xl};
+    gap: 20px;
     width: 80%;
     max-width: 1200px;
     flex-wrap: wrap;
@@ -279,8 +281,8 @@ export const NewsSection = styled.div`
 export const NewItem1 = styled.div`
   color: ${colors.black};
   width: 49%;
-  margin-top: ${spacing.md};
-  height: 550px;
+  margin-top: 40px;
+  height: 585px;
   background: ${colors.white};
   cursor: pointer;
   border-radius: ${borderRadius.medium};
@@ -442,7 +444,7 @@ export const NewsButtonContainer = styled.div`
 
 export const NewButton = styled.button`
   color: ${colors.white};
-  background: linear-gradient(to right, ${colors.primary}, ${colors.secondary});
+  background: #0c507c;
   width: 180px;
   height: 50px;
   font-size: ${typography.md};

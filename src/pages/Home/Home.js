@@ -112,7 +112,8 @@ const Home = () => {
     )
 
     return (
-        <>            <BodyPic>
+        <> 
+                  <BodyPic >
                 <img src={HomePic} className="pic" alt="picture"/>
                 <HeroButtonsContainer>
                     <HeroButton primary onClick={() => navigate('/appointment')}>Đặt lịch khám</HeroButton>
@@ -133,7 +134,7 @@ const Home = () => {
                             </InfoItem>
                         </InfoWrapper>
 
-                        <InfoWrapper onClick={()=>{navigate('/specialities')}}>
+                        <InfoWrapper  onClick={()=>{navigate('/specialities')}}>
                             <InfoPic>
                                 <img src={assets.Pic6} alt="1" className="pic"/>
                             </InfoPic>
@@ -142,7 +143,6 @@ const Home = () => {
                                 <p>Tra cứu dịch vụ khám bệnh của từng chuyên khoa</p>
                             </InfoItem>
                         </InfoWrapper>
-
                         <InfoWrapper onClick={()=>{navigate('/doctors')}}>
                             <InfoPic>
                                 <img src={assets.Pic4} alt="1" className="pic"/>
@@ -153,7 +153,7 @@ const Home = () => {
                             </InfoItem>
                         </InfoWrapper>
 
-                        <InfoWrapper onClick={()=>{navigate('/appointment')}}>
+                        <InfoWrapper  onClick={()=>{navigate('/appointment')}}>
                             <InfoPic>
                                 <img src={assets.Pic5} alt="1" className="pic"/>
                             </InfoPic>
@@ -167,7 +167,7 @@ const Home = () => {
                 </InfoContainer>
             </Info>
 
-            <News>
+            <News style={{backgroundColor:"#f7f7f7"}}>
                 <NewsHeaderWrapper>
                     <NewsHeader>
                         CHUYÊN KHOA
@@ -187,12 +187,12 @@ const Home = () => {
 
             </News>
 
-            <News>
+            <News style={{backgroundColor:"#f7f7f7"}}>
                 <NewsHeaderWrapper>
                     <NewsHeader>
-                        BÁC SĨ
+                       <p className="title-heading">BÁC SĨ</p> 
                         <div className="lower-header">
-                            Các bác sĩ có nhiều lượt khám nhất !!
+                           <p title-heading> Các bác sĩ có nhiều lượt khám nhất !!</p>
                         </div>
                     </NewsHeader>
     
@@ -207,7 +207,7 @@ const Home = () => {
 
             </News>
 
-            <News>
+            <News style={{backgroundColor:"#f7f7f7"}}>
                 <NewsHeaderWrapper>
                     <NewsHeader>
                         TIN TỨC
@@ -247,7 +247,7 @@ const Home = () => {
                         XEM TẤT CẢ TIN TỨC
                     </NewButton>
                 </NewsButtonContainer>
-
+           
             </News>
 
         </>

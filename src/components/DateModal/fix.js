@@ -1,6 +1,9 @@
 // This is a fix for the DateModal component's handleSubmitActiveHour function
 
 // First, let's fix the time handlers
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
+
 const handleStartTimeChange = (newDateTime) => {
   setStartTimeValue(newDateTime);
   if (newDateTime && typeof newDateTime.format === 'function') {
@@ -111,33 +114,36 @@ useEffect(() => {
 // Fix the handleSubmitActiveHour function
 const handleSubmitActiveHour = async () => {
   if (!selectedDate) {
-    alert("Vui lòng chọn thứ!");
+    toast(<CustomToast message="Vui lòng chọn thứ!" type="error" />);
     return;
   }
 
   if (!startTime) {
-    alert("Vui lòng chọn thời gian bắt đầu!");
+    
+    toast(<CustomToast message="Vui lòng chọn thời gian bắt đầu!" type="error" />);
     return;
   }
 
   if (!endTime) {
-    alert("Vui lòng chọn thời gian kết thúc!");
+    toast(<CustomToast message="Vui lòng chọn thời gian kết thúc!" type="error" />);
     return;
   }
 
   if (!appointmentLimit) {
-    alert("Vui lòng nhập giới hạn số lượng!");
+    toast(<CustomToast message="Vui lòng nhập giới hạn số lượng!" type="error" />);
     return;
   }
 
   const limit = Number(appointmentLimit);
   if (isNaN(limit) || limit <= 0) {
-    alert("Giới hạn số lượng phải lớn hơn 0");
+    toast(<CustomToast message="Giới hạn số lượng phải lớn hơn 0" type="error" />);
+ 
     return;
   }
 
   if (startTimeValue && endTimeValue && startTimeValue >= endTimeValue) {
-    alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+    toast(<CustomToast message="Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc" type="error" />);
+
     return;
   }
     
@@ -150,7 +156,8 @@ const handleSubmitActiveHour = async () => {
     }
   } catch (err) {
     console.error("Error formatting date:", err);
-    alert("Có lỗi với định dạng ngày. Vui lòng thử lại.");
+    toast(<CustomToast message="Có lỗi với định dạng ngày. Vui lòng thử lại." type="error" />);
+
     return;
   }
   
@@ -161,12 +168,13 @@ const handleSubmitActiveHour = async () => {
       const dayOfWeek = daysOfWeek[calendarValue.getDay()];
       
       if (dayOfWeek !== selectedDate) {
-        alert(`Ngày bạn đã chọn (${calendarValue.toLocaleDateString()}) là ${dayOfWeek}, không phải ${selectedDate}. Vui lòng chọn lại.`);
+        toast(<CustomToast message={`Ngày bạn đã chọn (${calendarValue.toLocaleDateString()}) là ${dayOfWeek}, không phải ${selectedDate}. Vui lòng chọn lại.`} />);
         return;
       }
     } catch (err) {
       console.error("Error validating date:", err);
-      alert("Có lỗi với ngày đã chọn. Vui lòng thử lại.");
+      toast(<CustomToast message="Có lỗi với ngày đã chọn. Vui lòng thử lại" type="error" />);
+
       return;
     }
   }
@@ -209,7 +217,8 @@ const handleSubmitActiveHour = async () => {
   // Make sure we have a valid _id
   if (!data || !data._id) {
     console.error("Missing doctor ID");
-    alert("Thiếu thông tin bác sĩ. Vui lòng thử lại.");
+    toast(<CustomToast message="Thiếu thông tin bác sĩ. Vui lòng thử lại." type="error" />);
+
     return;
   }
   
@@ -245,14 +254,20 @@ const handleSubmitActiveHour = async () => {
       setStartTimeValue(null);
       setEndTimeValue(null);
       setSelectedDate('');
-      alert("Thêm giờ làm việc thành công!");
+      toast(<CustomToast message="Thêm giờ làm việc thành công!" type="error" />);
+
     } else if (newActiveHour && typeof newActiveHour !== 'object') {
-      alert(newActiveHour);
+      toast(<CustomToast message={newActiveHour} type="info" />);
+
     } else {
-      alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+     
+      toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
+
     }
   } catch (err) {
     console.error("Error submitting active hour:", err);
-    alert("Có lỗi xảy ra khi thêm giờ làm việc. Vui lòng thử lại.");
+ 
+    toast(<CustomToast message="Có lỗi xảy ra khi thêm giờ làm việc. Vui lòng thử lại." type="error" />);
+
   }
 };

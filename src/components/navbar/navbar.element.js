@@ -10,7 +10,7 @@ export const Nav = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
   position: fixed;
   width: 100%;
   top: 0;
@@ -66,7 +66,7 @@ export const NavLogo = styled.div`
   height: 60px;
   transition: all ${transitions.medium};    .logo-image {
         width: 240px;
-        height: 60px;
+        height: 160px;
         object-fit: contain;
     }
 `;
@@ -131,7 +131,7 @@ export const NavMenu = styled.ul`
   }
 
   .user-email{
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: ${colors.black};
     margin-right: ${spacing.sm};
@@ -139,8 +139,8 @@ export const NavMenu = styled.ul`
   }
 
   .profile_image {
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
@@ -328,15 +328,14 @@ export const NavBtnLink2 = styled.div`
   padding: ${spacing.md} ${spacing.lg};
   font-weight: 600;
   transition: all ${transitions.medium};
-  background-color: ${colors.white};
+  background-color: none;
   color: ${colors.primary};
-  border: 1px solid ${colors.primary};
   border-radius: ${borderRadius.medium};
   margin-left: ${spacing.sm};
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+ 
   
   &:hover {
-    background-color: ${colors.primaryLight};
     transform: translateY(-2px);
     box-shadow: ${shadows.small};
   }
@@ -360,7 +359,7 @@ export const GroupButtonLink = styled.div`
 `
 
 export const NavLinks2 = styled(Link)`
-    color: ${colors.white};
+    color: ${colors.black};
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -371,6 +370,7 @@ export const NavLinks2 = styled(Link)`
     z-index: 1002;
     position: relative;
     transition: all ${transitions.medium};
+
     
     &::after {
         content: '';
@@ -425,7 +425,7 @@ export const NavbarContainer2 = styled(Container)`
 `;
 
 export const Nav2 = styled.nav`
-  background: linear-gradient(135deg, ${colors.secondary}, ${colors.primary});
+  background: linear-gradient(135deg, ${colors.cardBackground}, ${colors.cardBackground});
   height: 55px;
   display: flex;
   justify-content: center;

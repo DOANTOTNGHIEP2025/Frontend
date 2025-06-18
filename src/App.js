@@ -21,6 +21,10 @@ import ForgetPassword from "./pages/ForgetPassword/ForgetPassword";
 import { useEffect, useState, useRef } from "react";
 import useAxiosInterceptor from "./hook/useAxiosInterceptor";
 import useAccount from "./hook/useAccount";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CustomToast from './components/CustomToast';
+import { toast } from 'react-toastify';
 
 
 
@@ -82,8 +86,7 @@ function App() {
                 if (decodedPayload.exp < currentTime) {
                     
                     localStorage.removeItem('isLoginSuccess'); 
-                    alert('Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại.');
-                    navigate('/login');
+                    toast(<CustomToast message="Phiên đăng nhập của bạn đã hết hạn, vui lòng đăng nhập lại." type="error" />);                    navigate('/login');
                 }
             }
             else {
@@ -102,7 +105,7 @@ function App() {
                 const status = await getAccountStatus(userEmail);
             if (status && typeof status === 'object') {
                 if (status?.is_deleted) {
-                    alert("Tài khoản của bạn đã bị vô hiệu hóa, bạn sẽ được chuyển về trang đăng nhập!");
+                    toast(<CustomToast message="Tài khoản của bạn đã bị vô hiệu hóa, bạn sẽ được chuyển về trang đăng nhập!" type="error" />);
                     localStorage.removeItem('isLoginSuccess');
                     if (window.location.pathname === '/profile') {
                         navigate('/login', { replace: true });
@@ -114,7 +117,8 @@ function App() {
             }
             else if (status && typeof status !== 'object') {
                 if (status === "No user found") {
-                    alert("Có lỗi xảy ra với tài khoản của bạn, bạn sẽ được chuyển về trang đăng nhập!");
+                    toast(<CustomToast message="Có lỗi xảy ra với tài khoản của bạn, bạn sẽ được chuyển về trang đăng !" type="error" />);
+
                     localStorage.removeItem('isLoginSuccess');
                     if (window.location.pathname === '/profile') {
                         navigate('/login', { replace: true });
@@ -190,6 +194,17 @@ function App() {
 
             </Routes>
             {!isLoginPage && <Footer/>}
+            <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+    />
         </div>
     );
 }

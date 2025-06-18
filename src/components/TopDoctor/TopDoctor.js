@@ -72,7 +72,7 @@ const TopDoctor = ({data}) => {
                         <div className='total-app-wrapper'>
                             <p className='speciality-doc'>Lượt khám: </p>
                             <p className='total-app'>{data?.appointmentCount || '0'}</p>
-                            <FontAwesomeIcon className='total-app' icon={faCalendarCheck}></FontAwesomeIcon>
+                            <FontAwesomeIcon className='total-app total-app-icon' icon={faCalendarCheck}></FontAwesomeIcon>
                         </div>
                         <div className='info-custom'>
                             

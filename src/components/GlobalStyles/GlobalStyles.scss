@@ -7,12 +7,16 @@
     --white: #fff;
     --text-color: #333;
 }
-
+svg.toast-icon{
+    display: none;
+}
 textarea {
     resize: none;
     padding-left: 5px;
 }
-
+.react-calendar {
+    width: 92%;
+}
 input {
     padding-left: 5px;
 }

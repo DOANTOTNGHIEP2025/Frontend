@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faPen } from '@fortawesome/free-solid-svg-icons';
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -177,7 +179,8 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     if (hasSpecificHours) {
       // Show a subtle notification that this date has specific hours
       setTimeout(() => {
-        alert("Lưu ý: Ngày này đã có lịch làm việc riêng được thiết lập!");
+   
+        toast(<CustomToast message="Lưu ý: Ngày này đã có lịch làm việc riêng được thiết lập!" type="error" />);;
       }, 100);
     }
   };
@@ -282,7 +285,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                             e.stopPropagation();
                             if (window.confirm("Bạn có chắc chắn muốn xóa lịch làm việc cho ngày cụ thể này không?")) {
                               // Here would go the API call to delete this specific date schedule
-                              alert("Tính năng xóa lịch riêng đang được phát triển!");
+                              toast(<CustomToast message="Tính năng xóa lịch riêng đang được phát triển!" type="error" />);
                             }
                           }}
                         >×</button>
@@ -443,29 +446,30 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   const handleSubmitActiveHour = async () => {
 
   if (!selectedDate) {
-    alert("Vui lòng chọn thứ!");
+    toast(<CustomToast message="Vui lòng chọn thứ!" type="error" />);
     return;
   }
 
   if (!startTime) {
-    alert("Vui lòng chọn thời gian bắt đầu!");
+  
+    toast(<CustomToast message="Vui lòng chọn thời gian bắt đầu!" type="error" />);
     return;
   }
 
   if (!endTime) {
-    alert("Vui lòng chọn thời gian kết thúc!");
+    toast(<CustomToast message="Vui lòng chọn thời gian kết thúc!" type="error" />);
     return;
   }
 
   const limit = Number(appointmentLimit);
   if (isNaN(limit) || limit <= 0) {
-    alert("Giới hạn số lượng phải lớn hơn 0");
+    toast(<CustomToast message="Giới hạn số lượng phải lớn hơn 0" type="error" />);
     return;
   }
 
 
   if (startTimeValue >= endTimeValue) {
-    alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+    toast(<CustomToast message="Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc" type="error" />);
     return;
   }
   // Get specific date for this active hour (in YYYY-MM-DD format)
@@ -542,7 +546,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         }
       } catch (error) {
         console.error("Error creating specific date schedule:", error);
-        alert("Có lỗi khi tạo lịch khám: " + error.message);
+        toast(<CustomToast message={`Có lỗi khi tạo lịch khám: ${error?.message || "Không xác định"}`} type="error" />);
         resolve(false);
       }
     });
@@ -576,7 +580,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
           }
         } catch (error) {
           console.error("Error creating recurring schedule:", error);
-          alert("Có lỗi khi tạo lịch khám: " + error.message);
+          toast(<CustomToast message={`Có lỗi khi tạo lịch khám: ${error?.message || "Không xác định"}`} type="error" />);
           resolve(false);
         }
       } else {
@@ -627,41 +631,48 @@ export default function DateModal({children , disabled = false, data = [], onAdd
     
     // Show more descriptive success message based on whether a specific date was chosen
     if (useSpecificDate) {
-      alert(`Đã thêm lịch khám cho ngày cụ thể: ${formattedDate}`);
+      toast(<CustomToast message={`Đã thêm lịch khám cho ngày cụ thể: ${formattedDate}`} />);
     } else {
-      alert(`Đã thêm lịch khám cho tất cả các ngày ${selectedDate}`);
+      toast(<CustomToast message={`Đã thêm lịch khám cho tất cả các ngày ${selectedDate}`} />);
     }
+    
   } else if (newActiveHour && typeof newActiveHour !== 'object') {
-    alert(newActiveHour);
+    toast(<CustomToast message={newActiveHour} type="success" />);
   } else {
-    alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+
+    toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
   }
 }
   const handleUpdateActiveHour = async() => {
     if (!selectedDate) {
-      alert("Vui lòng chọn thứ!");
+      toast(<CustomToast message="Vui lòng chọn thứ" type="error" />);
       return;
     }
   
     if (!startTime) {
-      alert("Vui lòng chọn thời gian bắt đầu!");
+   
+      toast(<CustomToast message="Vui lòng chọn thời gian bắt đầu!" type="error" />);
       return;
     }
   
     if (!endTime) {
-      alert("Vui lòng chọn thời gian kết thúc!");
+    
+      toast(<CustomToast message="Vui lòng chọn thời gian kết thúc!" type="error" />);
       return;
     }
   
     const limit = Number(appointmentLimit);
     if (isNaN(limit) || limit <= 0) {
-      alert("Giới hạn số lượng phải lớn hơn 0");
+      toast(<CustomToast message="Giới hạn số lượng phải lớn hơn 0" type="error" />);
+
       return;
     }
   
   
     if (startTimeValue >= endTimeValue) {
-      alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+     
+      toast(<CustomToast message="Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc" type="error" />);
+
       return;
     }
       // Get specific date for the active hour (in YYYY-MM-DD format)
@@ -725,7 +736,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         useSpecificDate ? specificDate : null,  // Only use specific date if user confirmed
         originalSpecificDate);  // Add the original specific date
   
-      if (editedActiveHour && typeof editedActiveHour === 'object') {        alert("Cập nhật giờ làm việc thành công!");        // Generate proper active hour objects with specific date when needed
+      if (editedActiveHour && typeof editedActiveHour === 'object') { toast(<CustomToast message="Cập nhật giờ làm việc thành công!" type="error" />);        // Generate proper active hour objects with specific date when needed
         const newActiveHour = generateActiveHourObject(
           selectedDate, 
           startTime, 
@@ -750,11 +761,13 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         return;
       }
       else if (editedActiveHour && typeof editedActiveHour !== 'object') {
-        alert(editedActiveHour);
+        toast(<CustomToast message={editedActiveHour} type="info" />);
+
         return;
       }
       else {
-        alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+      
+        toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
         return;
       }
     }
@@ -835,6 +848,9 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                   {showCalendar && (
                     <div className={cx('calendar-container')}>
                       <Calendar
+                        style = {{ width: "100vw !important",
+                                  maxWidth: "100% !important",
+                                  fontSize: "1.4rem",}}
                         onChange={handleCalendarChange}
                         value={calendarValue}
                         tileContent={dayContent}
@@ -937,7 +953,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
                   </div>
                   <div className={cx('field-container')}>
                     <div className={cx('field-name')}>
-                      <span>Nhập giới hạn số lượng</span>
+                      <span></span>
                     </div>
                     <input 
                       type="number" 

@@ -54,7 +54,7 @@ const TopSpeciality = ({data : initialData}) => {
                         <div className='total-app-wrapper'>
                             <p className='speciality-doc'>Số lượng bác sĩ: </p>
                             <p className='total-app'>{data?.doctorCount || '0'}</p>
-                            <FontAwesomeIcon className='total-app' icon={faUserDoctor}></FontAwesomeIcon>
+                            <FontAwesomeIcon className='total-app total-app-icon' icon={faUserDoctor}></FontAwesomeIcon>
                         </div>
                         <div className='info-custom'>                            
                             <p className='name-doc'>{data?.speciality}</p>

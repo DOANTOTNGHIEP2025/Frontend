@@ -33,7 +33,7 @@ body.active-modal {
     right: 0;
     bottom: 0;
     position: fixed;
-    z-index: 2000;
+    z-index: 2000 !important;
 }
 
 .overlay {
@@ -54,9 +54,10 @@ body.active-modal {
     transform: translate(-50%, -50%);
     line-height: 1.5;
     padding: 24px;
-    max-width: 600px;
-    min-width: 300px;
-    width: 90%;
+    max-width: 900px;
+    min-width: 350px;
+    height: 400px;
+
     display: flex;
     flex-direction: column;
     background: #FFFFFF;
@@ -109,7 +110,7 @@ body.active-modal {
 }
 
 .field-name{
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: 500;
     color: #212121;
     margin-bottom: 8px;
@@ -151,7 +152,7 @@ body.active-modal {
     border-radius: 8px;
     border: none;
     padding: 0 16px;
-    font-size: 1rem;
+    font-size: 1.2rem;
     background-color: transparent;
     
     &::placeholder {
@@ -165,13 +166,13 @@ body.active-modal {
 
 .error-message {
     color: #F44336;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
     margin-top: 4px;
 }
 
 .modal-field-container{
     width: 300px;
-    height: 350px;
+    height: 100vw;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

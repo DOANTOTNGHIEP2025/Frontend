@@ -99,6 +99,7 @@ export const RelatedCard = styled.div`
     .info-custom{
         padding: 16px;
         background-color: #fff;
+     
     }
 
     .speciality-style {
@@ -146,6 +147,7 @@ export const RelatedCard = styled.div`
         font-size: 1.6rem; /* Small text size */
         margin-left:  16px;
         font-weight: 500;
+        margin-top: 14px;
     }
 
     .total-app {
@@ -153,14 +155,20 @@ export const RelatedCard = styled.div`
         font-size: 1.6rem; /* Small text size */
         margin-left:  8px;
         font-weight: 700;
+        margin-top: 15px;
+       
     }
-
+    .total-app-icon{
+        margin-top: -5px;
+    }
+ 
     .total-app-wrapper {
         height: 50px;
         width: 100%;
         background-color: rgb(194, 226, 248);
         display: flex;
         align-items: center;
+      
     }
 
     .button-wrapper {

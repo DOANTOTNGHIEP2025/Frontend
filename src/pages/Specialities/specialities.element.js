@@ -58,47 +58,52 @@ export const HeaderUnderline = styled.div`
 
 export const SearchBar = styled.div`
     display: flex;
+    align-items: center;
     justify-content: center;
-    position: relative;
-    margin: ${spacing.md} 0;
-    
+    margin: 0 auto !important;
+    width: 56%;
+    height: 50px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
     input {
-        height: 48px;
-        width: 40%;
+        flex: 1;
+        height: 100%;
+        border: none;
+        padding: 0 16px;
+        font-size: 1.2rem;
         color: ${colors.black};
-        border-radius: 50px;
-        font-size: 15px;
-        border: 2px solid ${colors.primary};
-        padding-left: 48px;
-        box-sizing: border-box;
-        box-shadow: ${shadows.small};
-        transition: all ${transitions.medium};
-        
+
         &:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 211, 214, 0.3);
-            border-color: ${colors.secondary};
-            width: 42%;
+            border: none;
         }
-        
+
         &::placeholder {
             color: ${colors.mediumGrey};
         }
     }
-    
+    .text_placeholder::placeholder{
+        color: black;
+        font-size: 14px;
+    }
     img {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        left: 31%;
-        top: 14px;
-        transition: all ${transitions.medium};
+        width: 30px;
+        height: 30px;
+        margin-right: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #eee;
+            border-radius: 50%;
+        }
     }
-    
-    &:hover img {
-        transform: scale(1.1);
-    }
-`
+`;
 
 export const SpecialitiesContent = styled.div`
     display: flex;

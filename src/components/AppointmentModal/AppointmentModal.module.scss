@@ -38,15 +38,16 @@ body.active-modal {
 }
 
 .modal-content {
+    width: 100vw !important;
     color: #00D3D6 !important;
-    font-size: 1.2rem !important;
+    font-size: 1.4rem !important;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     line-height: 1.4;
     padding: 20px 30px;
-    max-width: 800px;
+    max-width: 1600px;
     min-width: 300px;
     max-height: 90vh; /* Changed to max-height with viewport height */
     overflow-y: auto; /* Added scroll for content that might exceed viewport */
@@ -118,9 +119,17 @@ body.active-modal {
         transform: rotate(90deg);
     }
 }
-
+.AppointmentModal_calendar-container__22grR .react-calendar__month-view__weekdays__weekday {
+    padding: 10px 0;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.9rem !important;
+}
 .field-container{
+    margin-bottom: 50px;
+    gap: 10px;
     width: 100%;
+    padding: 10px;
     min-height: 60px;
     max-height: 200px;
     display: flex;
@@ -204,7 +213,7 @@ body.active-modal {
   
 .calendar-container {
     margin: 20px 0;
-    width: 100%;
+    width: 65vW !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -221,7 +230,7 @@ body.active-modal {
             border: none;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             padding: 10px;
-            width: 100%;
+            width: 100vw !important;
             max-width: 100%;
             background-color: #fff;
             font-family: 'Roboto', sans-serif;
@@ -247,7 +256,7 @@ body.active-modal {
                         padding: 10px 0;
                         font-weight: bold;
                         text-decoration: none;
-                        font-size: 0.9rem;
+                        font-size: 1.9rem;
                         abbr {
                             text-decoration: none;
                             text-transform: uppercase;
@@ -286,7 +295,7 @@ body.active-modal {
                 
                 &__label {
                     font-weight: bold;
-                    font-size: 1.2rem;
+                    font-size: 1.4rem;
                     color: #0C507C;
                 }
             }
@@ -298,24 +307,23 @@ body.active-modal {
 .calendar-day-content {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    width: 100%;
+
     padding: 2px;
-    overflow: hidden;
 }
 
 .day-number {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     margin-bottom: 6px;
     text-align: right;
     display: block;
+    
 }
 
 .day-available-times {
     display: flex;
     flex-direction: column;
-    font-size: 0.8rem;
+    font-size: 1.4rem;
     text-align: center;
     overflow-y: auto;
     max-height: 85px;
@@ -338,6 +346,7 @@ body.active-modal {
 
 .day-time {
     background-color: rgba(0, 211, 214, 0.2);
+    font-size: 12px !important; 
     border-radius: 4px;
     padding: 2px 4px;
     margin-bottom: 3px;
@@ -387,11 +396,13 @@ body.active-modal {
         color: #fff;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
         transform: translateY(-2px);
+        font-size: 14px !important;
+        
     }
 }
 
 .no-time {
-    font-size: 0.75rem;
+    font-size: 12px;
     color: #999;
     font-style: italic;
     padding: 2px;
@@ -442,7 +453,7 @@ body.active-modal {
     border-radius: 8px;
     border: 2px solid rgba(0, 211, 214, 0.5);
     background-color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     color: #0C507C;
     margin-top: 15px;
     height: 50px;
@@ -461,15 +472,17 @@ body.active-modal {
     
     option {
         padding: 12px;
-        font-size: 1rem;
+        font-size: 14px;
     }
 }
-
+.react-calendar__month-view__days button{
+    height: 200px !important;
+}
 .modal-button{
     border:none;
     border-radius: 5px;
     position: absolute;
-    top: 40px;
+    top: 45px;
     right: 11%;
     width: 20px !important;
     height: 20px !important;
@@ -477,7 +490,6 @@ body.active-modal {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #0C507C, #00D3D6);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -505,7 +517,7 @@ body.active-modal {
     color: #fff; /* Chữ màu trắng */
     border: none;
     border-radius: 10px;
-    width: 100%;
+    width: 100vw !important;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -537,7 +549,9 @@ body.active-modal {
         background-color: #f0f0f0 !important;
     }
 }
-
+.name_choosed{
+    font-size: 14px !important;
+}
 .react-calendar__navigation {
     display: flex;
     justify-content: space-between;
@@ -561,6 +575,7 @@ body.active-modal {
   
   .react-calendar__month-view__days {
     margin-top: 10px;
+    
   }
 
 .react-calendar__month-view__days__day {
@@ -580,7 +595,9 @@ body.active-modal {
 .react-calendar__month-view__days__day--neighboringMonth {
     color: #b5b5b5;
 }
-
+// button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--neighboringMonth {
+//     height: 200px !important;
+// }
 .react-calendar__tile {
     border-radius: 10px !important;
     background: #0c507c;
@@ -608,6 +625,7 @@ body.active-modal {
 }
 
 .react-calendar__month-view__weekdays {
+    font-size: 16px !important;
     color: var(--primary) !important; /* Chữ màu đen */
     font-weight: bold; /* Tùy chọn: Làm cho chữ đậm hơn */
 }
@@ -622,7 +640,7 @@ body.active-modal {
 }
 
 .selected-info {
-    margin: 5px 0 15px 0;
+    margin: 5px 0 10px 0;
     padding: 12px;
     background-color: rgba(255, 255, 255, 0.25);
     border-radius: 8px;
@@ -633,10 +651,12 @@ body.active-modal {
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     letter-spacing: 0.5px;
+    font-size: 16px !important;
     
     span {
         display: block;
         font-size: 1.1rem;
+        font-size: 16px !important;
     }
 }
 
@@ -645,13 +665,13 @@ body.active-modal {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 50px;
     margin-bottom: 20px;
     
     button {
         min-width: 200px;
         padding: 12px 25px;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 600;
         border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);

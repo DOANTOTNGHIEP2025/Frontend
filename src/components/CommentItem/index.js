@@ -6,6 +6,8 @@ import Image from '../Image';
 import { useState, useEffect } from 'react';
 import usePost from '../../hook/usePost';
 import { assets } from '../../assets/assets_fe/assets';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -39,18 +41,23 @@ function CommentItem({ data, owner, postID, onDeleteComment }) {
             try {
                 const deletedComment = await deleteComment(postID, data?._id);
                 if (deletedComment && typeof deletedComment === 'object') {
-                    alert("Xóa bình luận thành công!");
+
+                    toast(<CustomToast message="Xóa bình luận thành công!" type="error" />);
+                    
                     onDeleteComment(data?._id);
                     return;
                 } else if (deletedComment && typeof deletedComment !== 'object') {
-                    alert(deletedComment);
+                    
+                    toast(<CustomToast message={deletedComment} type="success" />);
+
                     return;
                 } else {
-                    alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+                    toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
                     return;
                 }
             } catch (error) {
-                alert("Có lỗi xảy ra: ", error);
+                toast(<CustomToast message={`Có lỗi xảy ra: ${error?.message || "Không xác định"}`} type="error" />);
+
                 return;
             }
         }
@@ -58,29 +65,34 @@ function CommentItem({ data, owner, postID, onDeleteComment }) {
 
     const handleUpdateComment = async() => {
         if (textareaValue === '') {
-            alert("Vui lòng nhập nội dung bình luận!");
+            toast(<CustomToast message="Vui lòng nhập nội dung bình luận!" type="error" />);
             return;
         }
         try{
             const updatedComment = await updateComment(postID, data?._id, textareaValue);
             if (updatedComment && typeof updatedComment === 'object') {
-                alert("Cập nhật bình luận thành công!");
+     
+                toast(<CustomToast message="Cập nhật bình luận thành công!" type="error" />);
                 setUpdatedComment(textareaValue);
                 setOriginalComment(textareaValue);
                 setIsCommentVisible(true);
                 return;
             }
             else if (updatedComment && typeof updatedComment !== 'object') {
-                alert(updatedComment);
+                toast(<CustomToast message={updatedComment} type="success" />);
+
                 return;
             }
             else{
-                alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+              
+                toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
                 return;
             }
         }
         catch (error){
-            alert("Có lỗi xảy ra: ", error);
+           
+            toast(<CustomToast message={`Có lỗi xảy ra: ${error?.message || "Không xác định"}`} type="error" />);
+
             return;
         }
         finally{

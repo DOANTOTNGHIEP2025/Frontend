@@ -1,3 +1,4 @@
+
 .wrapper {
     width: 100%;
     display: block;
@@ -9,7 +10,8 @@
 }
 
 .search-section {
-    background-color: #00d3d6;
+    background: linear-gradient(135deg, #0C507C, #00D3D6);     
+    
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -173,7 +175,8 @@
 .forum-form {
     width: 80%;
     overflow: visible;
-    background-color: #00d3d6;
+    background: linear-gradient(135deg, #0C507C, #00D3D6);     
+
     border-radius: 10px;
     display: flex;
     overflow: hidden;
@@ -202,7 +205,7 @@
 
 .question_option-title {
     color: #fff;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 500;
     margin: 0px;
 }
@@ -211,7 +214,7 @@
     width: 100%;
     height: 150px;
     border-radius: 10px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin-top: 5px;
     border: 0px;
     &:focus {
@@ -229,7 +232,7 @@
     width: 100%;
     height: 230px;
     border-radius: 10px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin-top: 5px;
     border: 0px;
     &:focus {
@@ -246,8 +249,11 @@
     align-items: center;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: 20px !important;
 }
-
+.submit-button{
+    font-size: 20px !important;
+}
 .pagination {
     margin-top: 20px;
     width: 80%;

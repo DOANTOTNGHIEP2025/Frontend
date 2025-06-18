@@ -11,6 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import InsuranceCheck from '../../components/InsuranceCheck';
+import { toast } from 'react-toastify';
+import CustomToast from '../../components/CustomToast'; // hoặc đúng path của bạn
+
 
 const Appointment = () => {
     const navigate = useNavigate();
@@ -126,13 +129,13 @@ const Appointment = () => {
             const status = await getAccountStatus(doctor?.email || "");
             if (status && typeof status === 'object') {
                 if (status?.is_deleted) {
-                    alert("Tài khoản bác sĩ đã bị vô hiệu hóa, vui lòng thử lại sau!");
+                    toast(<CustomToast message="Tài khoản bác sĩ đã bị vô hiệu hóa, vui lòng thử lại sau!" type="error" />);
                     window.location.reload();
                 }
             }
             else if (status && typeof status !== 'object') {
                 if (status === "No user found") {
-                    alert("Không tìm thấy tài khoản bác sĩ, vui lòng thử lại sau!");
+                    toast(<CustomToast message="Không tìm thấy tài khoản bác sĩ, vui lòng thử lại sau!" type="error" />);
                     window.location.reload();
                 }
             }
@@ -157,7 +160,8 @@ const Appointment = () => {
            // Kiểm tra xem có đủ dữ liệu không
            if (!appointmentDay || !startTime || !endTime) {
              console.error("Dữ liệu thời gian không hợp lệ:", appointmentDay);
-             alert("Lỗi: Dữ liệu thời gian không hợp lệ hoặc chưa được chọn!");
+         
+             toast(<CustomToast message="Lỗi: Dữ liệu thời gian không hợp lệ hoặc chưa được chọn!" type="error" />);
              return;
            }
            
@@ -176,19 +180,21 @@ const Appointment = () => {
            });
          } catch (error) {
            console.error("Lỗi trong handleSubmitActiveHour:", error);
-           alert("Có lỗi xảy ra khi chọn thời gian. Vui lòng thử lại!");
+           toast(<CustomToast message="Có lỗi xảy ra khi chọn thời gian. Vui lòng thử lại!" type="error" />);
          }
       };const handleSubmitAppointment = async() => {
         if (!healthIssues || !selectedDoctor || !appointmentDate)
         {
-            alert("Bạn chưa chọn đủ trường!");
+        
+            toast(<CustomToast message="Bạn chưa chọn đủ trường" type="error" />);
+
             return;
         }
         
         let item = localStorage.getItem('isLoginSuccess');
             
         if (userInfo?.__t){
-            alert("Bác sĩ không thể đặt lịch khám!");
+            toast(<CustomToast message="Bác sĩ không thể đặt lịch khám!" type="error" />);
             return;
         }
         else{
@@ -201,8 +207,8 @@ const Appointment = () => {
                     }
                     return;
                 }
-                
-                const appointment = await addAppointment(userID, selectedDoctorID, appointmentDay, appointmentTimeStart, appointmentTimeEnd, healthIssues, typeService);
+                console.log("Date", appointmentDate);
+                const appointment = await addAppointment(userID, selectedDoctorID, appointmentDate, appointmentTimeStart, appointmentTimeEnd, healthIssues, typeService);
                 if (appointment && typeof appointment === 'object') {
                     // Add insurance information from localStorage if available
                     const localStorageInsurance = localStorage.getItem('userInsurance');
@@ -222,17 +228,20 @@ const Appointment = () => {
                     
                     setAppointmentInfo(appointment);
                     if (sharedData) setSharedData(null);
-                    alert("Thêm cuộc hẹn thành công!");
+                    toast(<CustomToast message="Thêm cuộc hẹn thành công!" type="error" />);
                     window.location.reload();
                 }
                 else if (appointment && typeof appointment !== 'object'){
-                    alert(appointment);
+                    
+                    toast(<CustomToast message={appointment} type="success" />);
+
                 }
                 else {
-                    alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+                    toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
                 }
             }
-            else {                alert("Bạn cần đăng nhập để đặt lịch khám!");
+            else {     toast(<CustomToast message="Bạn cần đăng nhập để đặt lịch khám!" type="error" />);
+                ;
             }
         }
      }
@@ -255,12 +264,12 @@ const Appointment = () => {
                     </AHeader>
                     <ALeftSide>
                         <h3>LƯU Ý:</h3>
-                        <p>Lịch hẹn có hiệu lực sau khi <br/> có xác nhận chính thức từ <br/> Phòng khám Bệnh viện
+                        <p className='text-p'>Lịch hẹn có hiệu lực sau khi <br/> có xác nhận chính thức từ <br/> Phòng khám Bệnh viện
                             Đại <br/> học Y Dược 1.</p>
-                        <p>Quý khách sử dụng dịch vụ <br/> đặt hẹn trực tuyến, xin vui <br/> lòng đặt trước ít nhất là
+                        <p className='text-p'>Quý khách sử dụng dịch vụ <br/> đặt hẹn trực tuyến, xin vui <br/> lòng đặt trước ít nhất là
                             <br/> 24 giờ trước khi đến khám.</p>
 
-                        <p>
+                        <p className='text-p'>
                             Trong trường hợp khẩn cấp <br/> hoặc nghi ngờ có các triệu <br/> chứng nguy hiểm,
                             quý <br/> khách vui lòng <strong> ĐẾN
                             TRỰC <br/> TIẾP </strong> Phòng khám hoặc các <br/>trung tâm y tế gần nhất để <br/> kịp thời
@@ -269,7 +278,7 @@ const Appointment = () => {
 
                         <ARightSide>
                         <ARSItem>
-                            <p>Chọn địa điểm khám</p>
+                            <p className='title-text'>Chọn địa điểm khám</p>
                             <select 
                                 value={selectedRegion} 
                                 onChange={(e) => setSelectedRegion(e.target.value)}
@@ -284,7 +293,7 @@ const Appointment = () => {
                         </ARSItem>
 
                         <ARSItem>
-                            <p>Chọn chuyên khoa</p>
+                            <p className='title-text'>Chọn chuyên khoa</p>
                             <select 
                                 value={selectedSpeciality} 
                                 onChange={(e) => setSelectedSpeciality(e.target.value)}
@@ -300,7 +309,7 @@ const Appointment = () => {
                         </ARSItem>
 
                         <ARSItem>
-                            <p>Chọn bác sĩ</p>
+                            <p className='title-text'>Chọn bác sĩ</p>
                             <select 
                                 value={selectedDoctor} 
                                 onChange={(e) => setSelectedDoctor(e.target.value)}
@@ -316,7 +325,7 @@ const Appointment = () => {
                         </ARSItem>
 
                         <ARSItem>
-                            <p>Chọn ngày - khung giờ muốn khám</p>
+                            <p className='title-text'>Chọn ngày - khung giờ muốn khám</p>
                             <input type='text' placeholder='Chọn ngày - khung giờ muốn khám' value={appointmentDate} readOnly />
                             <AppointmentModal 
                                 data={doctorActiveHour} 
@@ -326,7 +335,7 @@ const Appointment = () => {
                                 <FontAwesomeIcon icon={faCalendar} className={`calendar-icon ${!selectedDoctor ? 'disabled' : ''}`} disabled={!selectedDoctor}></FontAwesomeIcon>
                             </AppointmentModal>
                         </ARSItem>                        <ARSItem>
-                            <p>Nhập vấn đề về sức khoẻ</p>
+                            <p className='title-text'>Nhập vấn đề về sức khoẻ</p>
                             <textarea 
                                 rows="10" 
                                 cols="50" 

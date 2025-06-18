@@ -3,6 +3,8 @@ import classNames from 'classnames/bind';
 import styles from './InsuranceInfo.module.scss';
 import Button from "../Button";
 import useAppointment from "../../hook/useAppointment";
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -78,7 +80,7 @@ const InsuranceInfo = ({ userInfo }) => {
 
   const handleAddInsurance = async () => {
     if (!insuranceName || !insuranceID || !location || !expiredDate) {
-      alert("Bạn chưa nhập đủ thông tin bảo hiểm");
+      toast(<CustomToast message="Bạn chưa nhập đủ thông tin bảo hiểm" type="error" />);
       return;
     }
 
@@ -140,10 +142,10 @@ const InsuranceInfo = ({ userInfo }) => {
           }
         } else {
           // If user doesn't have any appointments, we'll just keep the insurance in localStorage
-          alert("Thông tin bảo hiểm của bạn đã được lưu và sẽ được sử dụng cho các lần đặt lịch khám sau này.");
+          toast(<CustomToast message="Thông tin bảo hiểm của bạn đã được lưu và sẽ được sử dụng cho các lần đặt lịch khám sau này." type="error" />);
         }
       } catch (error) {
-        alert("Có lỗi xảy ra khi thêm thông tin bảo hiểm!");
+        toast(<CustomToast message="Có lỗi xảy ra khi thêm thông tin bảo hiểm!" type="error" />);
         console.error(error);
         return;
       }
@@ -161,7 +163,7 @@ const InsuranceInfo = ({ userInfo }) => {
           }
         }
       } catch (error) {
-        alert("Có lỗi xảy ra khi thêm thông tin bảo hiểm!");
+        toast(<CustomToast message="Có lỗi xảy ra khi thêm thông tin bảo hiểm!" type="error" />);
         console.error(error);
         return;
       }
@@ -174,7 +176,7 @@ const InsuranceInfo = ({ userInfo }) => {
     setExpiredDate(null);
     setEditing(false);
     
-    alert("Thêm bảo hiểm thành công!");
+    toast(<CustomToast message="Thêm bảo hiểm thành công!" type="error" />);
   };
 
   const handleSelectInsurance = (insurance) => {

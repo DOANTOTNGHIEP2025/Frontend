@@ -13,6 +13,10 @@ import useAccount from '../../hook/useAccount';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Image from '../../components/Image';
 import { assets } from '../../assets/assets_fe/assets';
+import styled from 'styled-components';
+import { colors, shadows, borderRadius, spacing, transitions, typography } from '../../globalStyles';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -68,15 +72,15 @@ function Forum() {
         if (item) {
             let obj = JSON.parse(item);
             if (!postTitle) {
-                alert("Vui lòng nhập tiêu đề câu hỏi!");
+                toast(<CustomToast message="Vui lòng nhập tiêu đề câu hỏi!" type="error" />);
                 return;
             }
             if (!postContent) {
-                alert("Vui lòng nhập nội dung câu hỏi!");
+                toast(<CustomToast message="Vui lòng nhập nội dung câu hỏi!" type="error" />);
                 return;
             }
             if (!formSelectedFaculty) {
-                alert("Vui lòng chọn chuyên khoa!");
+                toast(<CustomToast message="Vui lòng chọn chuyên khoa!" type="error" />);
                 return;
             }
             const newPost = await addPost(userInfo?.email, postTitle, postContent, formSelectedFaculty);
@@ -84,19 +88,21 @@ function Forum() {
                 setPostTitle('');
                 setPostContent('');
                 setFormSelectedFaculty(specialityHook[0] || "");
-                alert("Thêm câu hỏi thành công!");
+                toast(<CustomToast message="Thêm câu hỏi thành công!" type="error" />);
                 window.location.reload();
             }
             else if (newPost && typeof newPost !== 'object'){
-                alert(newPost);
+               
+                toast(<CustomToast message={newPost} type="success" />);
+
             }
             else {
-                alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+                toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
             }
             
         }
         else {
-            alert("Bạn cần đăng nhập để đăng câu hỏi!");
+            toast(<CustomToast message="Bạn cần đăng nhập để đăng câu hỏi!" type="error" />);
         }
     };
 
@@ -176,7 +182,6 @@ function Forum() {
     }
     return (
         <div className={cx('wrapper')}>
-            <PageTitle>CHUYÊN MỤC TƯ VẤN</PageTitle>
             <div className={cx('search-section')}>
                 <div className={cx('search-section-title-wrapper')}>
                     <h4 className={cx('search-section-title')}>
@@ -311,7 +316,7 @@ function Forum() {
                                 cols="50"
                             ></textarea>
                             <div className={cx('submit-button-container')}>
-                                <Button submitTwo onClick={handleSubmitForm} type="button">
+                                <Button className='submit-button' submitTwo onClick={handleSubmitForm} type="button">
                                     GỬI CÂU HỎI
                                 </Button>
                             </div>

@@ -83,7 +83,7 @@ export const RButton = styled.div`
     justify-content: center;
     
     button {
-        background: linear-gradient(135deg, ${colors.primary}, ${colors.secondary});
+        background: ${colors.primary};
         color: ${colors.white};
         font-size: ${typography.md};
         font-weight: 600;
@@ -116,18 +116,19 @@ export const RLink = styled.div`
     font-size: ${typography.md};
 
     p {
-        color: ${colors.darkGrey};
+        color: #0C507C;
         text-align: center;
         font-size: ${typography.md};
         margin-right: ${spacing.xs};
     }
 
     h5 {
-        color: ${colors.secondary};
+        color: #0C507C;
         text-align: center;
         font-size: ${typography.md};
         font-weight: 500;
         transition: ${transitions.fast};
+        font-size: 1.5rem;
         
         &:hover {
             color: ${colors.primary};

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CustomToast from "../components/CustomToast";
+import { toast } from 'react-toastify';
 
 const useAxiosInterceptor = () => {
     const navigate = useNavigate();
@@ -16,7 +18,7 @@ const useAxiosInterceptor = () => {
 
                 if (decodedPayload.exp < currentTime) {
                     localStorage.removeItem('isLoginSuccess');
-                    alert('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
+                    toast(<CustomToast message="Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại." type="error" />);
                     navigate('/login');
                     return Promise.reject(new Error('Token expired'));
                 }

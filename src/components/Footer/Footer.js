@@ -47,7 +47,6 @@ function Footer() {
                         <FooterContent >Chuyên khoa</FooterContent>
                         <FooterContent >Chuyên mục bảo mật</FooterContent>
                         <FooterContent >Chính sách bảo mật</FooterContent>
-                        <FooterContent >Đặc san</FooterContent>
                     </FooterContentItems>
                     <FooterContentItems>
                         <FooterContentTitle>Website cùng tập đoàn</FooterContentTitle>

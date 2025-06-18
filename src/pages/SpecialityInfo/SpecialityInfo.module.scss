@@ -26,12 +26,12 @@
 
 .rectangle {
     position: absolute;
-    width: 280px;
+    width: 290px;
     height: 280px;
     background-color: #000; 
     top: calc(100% - 130px); 
     left: 10%; 
-    z-index: 10; 
+    z-index: 1; 
     border-radius: 8px; 
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }

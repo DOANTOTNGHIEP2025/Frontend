@@ -31,11 +31,11 @@ export const RelateDisplay = styled.div`
 export const RelatedCard = styled.div`
     margin-top : 40px;
     margin-bottom: 40px;
-    border-radius: 10px; 
+    border-radius: 30px !important; 
     cursor: pointer;
     transition: all 0.5s ease-in-out;
     height: auto;
-    width: 250px;
+    width: 270px;
     position: relative;
 
     @property --angle{
@@ -146,6 +146,7 @@ export const RelatedCard = styled.div`
         font-size: 1.6rem; /* Small text size */
         margin-left:  16px;
         font-weight: 500;
+        margin-top: 14px;
     }
 
     .total-app {
@@ -153,8 +154,17 @@ export const RelatedCard = styled.div`
         font-size: 1.6rem; /* Small text size */
         margin-left:  8px;
         font-weight: 700;
+        margin-top: 14px;
     }
-
+    .total-app-icon{
+        margin-top: -5px;
+    }
+    .svg.svg-inline--fa.fa-stethoscope.speciality-icon {
+    margin-top: -12px;
+}
+    .status svg {
+    margin-top: -15px;
+    }
     .total-app-wrapper {
         height: 50px;
         width: 100%;
@@ -176,7 +186,7 @@ export const RelatedCard = styled.div`
     }
 
     .book-button{
-        background-color: #00D3D6;
+        
         color: white;
         font-weight: 500;
         font-size: 2rem;
@@ -185,6 +195,7 @@ export const RelatedCard = styled.div`
         border: none;
         cursor: pointer;
         transition: all ease 0.8s;
+        background-color: #0c507c;
 
         &:hover{
         background-color: #fff;

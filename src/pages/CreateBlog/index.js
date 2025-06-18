@@ -5,6 +5,8 @@ import Button from '../../components/Button';
 import { useState, useEffect } from 'react';
 import useArticles from '../../hook/useArticles';
 import useAccount from '../../hook/useAccount';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 function CreateBlog() {
@@ -51,15 +53,15 @@ function CreateBlog() {
         let item = localStorage.getItem('isLoginSuccess');
         if (item) {
             if (!blogTitle) {
-                alert("Vui lòng nhập tiêu đề bài báo!");
+                toast(<CustomToast message="Vui lòng nhập tiêu đề bài báo" type="error" />);
                 return;
             }
             if (!blogContent) {
-                alert("Vui lòng nhập nội dung bài báo!");
+                toast(<CustomToast message="Vui lòng nhập nội dung bài báo" type="error" />);
                 return;
             }
             if (!image) {
-                alert("Vui lòng chọn hình ảnh!");
+                toast(<CustomToast message="Vui lòng chọn hình ảnh!" type="error" />);
                 return;
             }
             let obj = JSON.parse(item);
@@ -69,22 +71,24 @@ function CreateBlog() {
                     setBlogContent('');
                     setBlogTitle('');
                     setImage(null);
-                    alert("Thêm bài báo thành công!");
+                    toast(<CustomToast message="Thêm bài báo thành công!" type="error" />);
                     window.location.reload();
                 }
                 else if (newArticle && typeof newArticle !== 'object') {
-                    alert(newArticle);
+                    toast(<CustomToast message={newArticle} type="" />);
+
                 }
                 else {
-                    alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+                    toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
                 }
             }
             else {
-                alert("Chỉ tài khoản bác sĩ mới có thể đăng bài báo!");
+               
+                toast(<CustomToast message="Chỉ tài khoản bác sĩ mới có thể đăng bài báo!" type="error" />);
             }
         }
         else {
-            alert("Bạn cần đăng nhập để đăng bài báo");
+            toast(<CustomToast message="Bạn cần đăng nhập để đăng bài báo" type="error" />);
         }
         
     };
@@ -95,7 +99,7 @@ function CreateBlog() {
                 file.preview = URL.createObjectURL(file);
                 setImage(file);
             } else {
-                alert("No file selected or invalid file type.");
+                toast(<CustomToast message="No file selected or invalid file type." type="error" />);
             }
         };
 

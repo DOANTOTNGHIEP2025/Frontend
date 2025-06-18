@@ -6,6 +6,8 @@ import { faCalendar} from '@fortawesome/free-regular-svg-icons';
 import { faXmark, faPenToSquare, faRotate} from '@fortawesome/free-solid-svg-icons';
 import useArticles from '../../hook/useArticles';
 import { useState, useEffect } from 'react';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -43,7 +45,7 @@ function EditBlog({ data : initialData, onUpdateData }) {
             file.preview = URL.createObjectURL(file);
             setImage(file);
         } else {
-            alert("No file selected or invalid file type.");
+            toast(<CustomToast message="No file selected or invalid file type." type="error" />);
         }
     };
 
@@ -86,12 +88,12 @@ function EditBlog({ data : initialData, onUpdateData }) {
 
     const handleUpdateArticle = async() => {
         if (blogTitle === ""){
-            alert("Vui lòng nhập tiêu đề bài báo");
+            toast(<CustomToast message="Vui lòng nhập tiêu đề bài báo" type="error" />);
             return;
         }
 
         if (blogContent === ""){
-            alert("Vui lòng nhập tiêu đề bài báo");
+            toast(<CustomToast message="Vui lòng nhập tiêu đề bài báo" type="error" />);
             return;
         }
 
@@ -99,7 +101,7 @@ function EditBlog({ data : initialData, onUpdateData }) {
         if (userConfirmed) {
             const message = await updateArticle(data?._id, blogTitle, blogContent, image);
             if (message && typeof message === 'object') {
-                alert("Chỉnh sửa bài báo thành công!");
+                toast(<CustomToast message="Chỉnh sửa bài báo thành công!" type="error" />);
                 setData(message);
                 setBlogTitle(message?.article_title);
                 setBlogContent(message?.article_content);
@@ -107,11 +109,12 @@ function EditBlog({ data : initialData, onUpdateData }) {
                 return;
             }
             else if (message && typeof message !== 'object') {
-                alert(message);
+                toast(<CustomToast message={message} type="success" />);
+
                 return;
             }
             else {
-                alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+                toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
                 return;
             }
         }
@@ -124,10 +127,10 @@ function EditBlog({ data : initialData, onUpdateData }) {
           if (userConfirmed) {
             const message = await permaDeleteArticle(data?._id);
             if (message && typeof message === "object") {
-              alert("Xóa bài báo vĩnh viễn thành công!");
+              toast(<CustomToast message="Xóa bài báo vĩnh viễn thành công!" type="error" />);
               onUpdateData("delete", data?._id);
             } else {
-              alert(message || "Có lỗi xảy ra, vui lòng thử lại sau!");
+                toast(<CustomToast message={message || "Có lỗi xảy ra, vui lòng thử lại sau!"} />);
             }
           }
         } else {
@@ -135,10 +138,10 @@ function EditBlog({ data : initialData, onUpdateData }) {
           if (userConfirmed) {
             const message = await softDeleteArticle(data?._id);
             if (message && typeof message === "object") {
-              alert("Xóa bài báo thành công!");
+              toast(<CustomToast message="Xóa bài báo thành công!" type="error" />);
               onUpdateData("update", { ...data, is_deleted: true });
             } else {
-              alert(message || "Có lỗi xảy ra, vui lòng thử lại sau!");
+                toast(<CustomToast message={message || "Có lỗi xảy ra, vui lòng thử lại sau!"} />);
             }
           }
         }
@@ -149,11 +152,11 @@ function EditBlog({ data : initialData, onUpdateData }) {
         if (userConfirmed) {
           const message = await restoreArticle(data?._id);
           if (message && typeof message === "object") {
-            alert("Khôi phục bài báo thành công!");
+            toast(<CustomToast message="Khôi phục bài báo thành công!" type="error" />);
             onUpdateData("update", { ...data, is_deleted: false });
           } else {
-            alert(message || "Có lỗi xảy ra, vui lòng thử lại sau!");
-          }
+            toast(<CustomToast message={message || "Có lỗi xảy ra, vui lòng thử lại sau!"} />);
+        }
         }
       };
 

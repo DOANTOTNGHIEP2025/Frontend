@@ -3,6 +3,8 @@ import classNames from 'classnames/bind';
 import styles from './InsuranceModal.module.scss';
 import Button from "../Button";
 import useAppointment from "../../hook/useAppointment";
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +42,7 @@ const InsuranceModal = forwardRef(({ children, data }, ref) => {
 
   const handleAddInsurance = async () => {
     if (!insuranceName || !insuranceID || !location || !expiredDate) {
-      alert("Bạn chưa nhập đủ trường");
+      toast(<CustomToast message="Bạn chưa nhập đủ trường" type="error" />);
     } else {
       console.log(data._id, insuranceName, insuranceID, location, expiredDate);
       await addInsurance(data._id, insuranceName, insuranceID, location, expiredDate);
@@ -48,7 +50,7 @@ const InsuranceModal = forwardRef(({ children, data }, ref) => {
       setInsuranceID('');
       setLocation('');
       setExpiredDate(null);
-      alert("Thêm bảo hiểm thành công!");
+      toast(<CustomToast message="Thêm bảo hiểm thành công!" type="error" />);
       window.location.reload();
     }
   };
@@ -122,7 +124,7 @@ const InsuranceModal = forwardRef(({ children, data }, ref) => {
                   type="button"
                   onClick={() => {
                     setModal(false);
-                    alert("Thêm cuộc hẹn thành công!");
+                    toast(<CustomToast message="Thêm cuộc hẹn thành công!" type="error" />);
                     window.location.reload();
                   }}
                 >

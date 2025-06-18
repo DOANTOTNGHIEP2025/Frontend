@@ -26,14 +26,14 @@ body.active-modal {
 }
 .modal-content {
     position: absolute;
-    top: 50%;
+    top: 61%;
     left: 50%;
     transform: translate(-50%, -50%);
     line-height: 1.4;
     padding: 14px 28px;
     border-radius: 3px;
-    max-width: 600px;
-    min-width: 300px;
+    max-width: 1400px;
+    min-width: 500px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -80,7 +80,7 @@ body.active-modal {
 }
 
 .modal-field-container {
-    width: 400px;
+    width: 1300px;
     height: 500px;
     display: flex;
     flex-direction: column;

@@ -52,7 +52,7 @@ export const LoginLogo = styled.div`
     margin-bottom: ${spacing.md};
     transform: scale(1);
     transition: transform ${transitions.medium};
-    
+    background-color: #0C507C;
     &:hover {
         transform: scale(1.05);
     }
@@ -65,10 +65,10 @@ export const LoginLogo = styled.div`
 `
 
 export const LoginHeader = styled.h1`
-    color: ${colors.primary};
+    color: black;
     margin-bottom: ${spacing.lg};
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 500;
     text-align: center;
 `
 export const LoginItemList = styled.div`
@@ -79,28 +79,29 @@ export const LoginItemList = styled.div`
 `
 
 export const LoginItem = styled.div`
-    font-size: 0.9rem;
-    color: ${colors.darkGrey};
+    font-size: 1.4rem;
+    color: black;
     width: 100%;
     
-    label {
+    label,p {
         display: block;
         margin-bottom: ${spacing.xs};
         font-weight: 500;
+        font-size: 1.4rem; // Tăng cỡ chữ cho label
     }
     
     input {
         display: block;
         width: 100%; 
-        padding: 12px 16px; 
+        padding: 14px 18px; 
         border: 1px solid ${colors.lightGrey};
         border-radius: ${borderRadius.medium};
-        font-size: 1rem;
+        font-size: 1.4rem;
         transition: all ${transitions.fast};
         background-color: ${colors.white};
         
         &::placeholder {
-            color: ${colors.mediumGrey};
+            color: black;
         }
         
         &:focus {
@@ -129,11 +130,11 @@ export const LoginItem3 = styled.div`
     input {
         display: block;
         width: 100%; 
-        padding: 12px 16px; 
+        padding: 14px 18px; 
         padding-right: 40px;
         border-radius: ${borderRadius.medium};
         border: none;
-        font-size: 1rem;
+        font-size: 1.4rem;
         background-color: transparent;
         
         &:focus {
@@ -146,20 +147,20 @@ export const LoginItem3 = styled.div`
         top: 50%;
         right: 12px;
         transform: translateY(-50%);
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         cursor: pointer;
         color: ${colors.mediumGrey};
         transition: color ${transitions.fast};
         
         &:hover {
-           color: ${colors.primary};
+           color: black;
         }
     }
 `
 
 export const LoginItem2 = styled.div`
-    font-size: 0.9rem;
-    color: ${colors.darkGrey};
+    font-size: 1.4rem;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -174,17 +175,17 @@ export const LoginItem2 = styled.div`
             width: 16px;
             height: 16px;
             margin-right: 8px;
-            accent-color: ${colors.primary};
+            accent-color: black;
         }
     }
 `
 
 export const LoginLink2 = styled.p`
-    color: ${colors.primary};
-    font-size: 0.9rem;
+    color: black;
+    font-size: 1.4rem;
     font-weight: 500;
     cursor: pointer;
-    transition: color ${transitions.fast};
+    transition: black;
 
     &:hover {
        color: ${colors.primaryDark};
@@ -195,10 +196,10 @@ export const LoginLink2 = styled.p`
 export const LoginButton = styled.button`
     width: 100%;
     padding: ${spacing.md};
-    font-weight: 600;
+    font-weight: 500;
     color: white;
     background-color: ${colors.primary};
-    font-size: 1rem;
+    font-size: 1.4rem;
     border: none;
     border-radius: ${borderRadius.medium};
     cursor: pointer;
@@ -217,7 +218,7 @@ export const LoginButton = styled.button`
     }
       &:disabled {
         background-color: ${colors.lightGrey};
-        color: ${colors.mediumGrey};
+        color: black;
         cursor: not-allowed;
         box-shadow: none;
     }
@@ -228,18 +229,18 @@ export const LoginLink = styled.div`
     text-align: center;
     
     p {
-        color: ${colors.darkGrey};
-        font-size: 0.9rem;
+        color: black;
+        font-size: 1.4rem;
         cursor: pointer;
         
         a {
-            color: ${colors.primary};
+            color: black;
             font-weight: 500;
             margin-left: ${spacing.xs};
             transition: all ${transitions.fast};
             
             &:hover {
-                color: ${colors.primaryDark};
+                color: black;
                 text-decoration: underline;
             }
         }
@@ -247,59 +248,6 @@ export const LoginLink = styled.div`
     
 `
 
-export const LoginDeco = styled.div`
-    flex: 2;
-    position: relative;
-    height: 100%; 
-    overflow: hidden;
-    display: none; /* Hide on mobile */
-    
-    @media (min-width: 992px) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    &:after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(26, 115, 232, 0.1) 0%, rgba(0, 193, 185, 0.15) 100%);
-        z-index: 1;
-    }
-`
-
-export const Deco2 = styled.div`
-    position: absolute;
-    width: 120%;
-    height: 120%;
-    background: linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%);
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    opacity: 0.8;
-    animation: morphing 15s ease-in-out infinite;
-    transform-origin: center;
-    
-    @keyframes morphing {
-        0% {
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-        }
-        25% {
-            border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
-        }
-        50% {
-            border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
-        }
-        75% {
-            border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
-        }
-        100% {
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-        }
-    }
-`
 
 export const Deco3 = styled.div`
     position: absolute;
@@ -319,48 +267,17 @@ export const Deco3 = styled.div`
     
     h2 {
         color: white;
-        font-size: 2.5rem;
-        font-weight: 700;
+        font-size: 1.4rem;
+        font-weight: 500;
         margin-bottom: ${spacing.lg};
         text-align: center;
     }
     
     p {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 1.1rem;
+        color: black;
+        font-size: 1.4rem;
         text-align: center;
         max-width: 80%;
         line-height: 1.6;
     }
-`
-// `
-
-export const LoginDeco2 = styled.div`
-    flex: 2;
-    position: relative;
-    height: 100%; 
-    overflow: hidden;
-    display: flex;
-    justify-content: flex-end;
-
-    //.code-icon i.icon {
-    //    color: white; /* Icon color */
-    //    font-size: 20px; /* Adjust the size of the icon */
-    //}
-    //
-    ///* Optionally, add some hover effect for the icon */
-    //.code-icon:hover {
-    //    background-color: #388E3C;
-    //}
-    
-`
-
-export const Deco4 = styled.div`
-    position: absolute;
-    top: -200px; 
-    right: -400px;
-    width: 850px; 
-    height: 500px; 
-    background-color: #3BA5A9; 
-    border-radius: 50%; 
 `

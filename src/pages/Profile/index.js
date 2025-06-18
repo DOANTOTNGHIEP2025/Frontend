@@ -20,7 +20,9 @@ import ArticleListModal from '../../components/ArticleListModal';
 import useArticles from '../../hook/useArticles';
 import { assets } from '../../assets/assets_fe/assets';
 import InsuranceInfo from '../../components/InsuranceInfo';
-
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
+import { borderRadius } from '../../globalStyles';
 
 const cx = classNames.bind(styles);
 
@@ -189,7 +191,7 @@ function Profile() {
 
         const validFileTypes = /image\/(jpeg|jpg|png|gif|bmp)/;
         if (!validFileTypes.test(file.type)) {
-            alert("Chỉ chấp nhận các file định dạng .jpg, .jpeg, .png, .gif, hoặc .bmp!");
+            toast(<CustomToast message="Chỉ chấp nhận các file định dạng .jpg, .jpeg, .png, .gif, hoặc .bmp!" type="error" />);
             return;
         }
 
@@ -256,7 +258,7 @@ function Profile() {
         };
     }    const handleDeleteActiveHour = async() => {
         if (!selectedHour) {
-            alert("Vui lòng chọn giờ làm việc cần xóa!");
+            toast(<CustomToast message="Vui lòng chọn giờ làm việc cần xóa!" type="error" />);
             return;
         }
 
@@ -299,7 +301,7 @@ function Profile() {
             );
             
             if (deletedActiveHour && typeof deletedActiveHour === 'object') {
-                alert("Xóa giờ làm việc thành công!");
+                toast(<CustomToast message="Xóa giờ làm việc thành công!" type="error" />);
                 
                 // Fetch fresh data instead of manually filtering
                 const updatedActiveHourList = await getDoctorActiveList(userInfo?._id);
@@ -312,11 +314,13 @@ function Profile() {
                 return;
             }
             else if (deletedActiveHour && typeof deletedActiveHour !== 'object') {
-                alert(deletedActiveHour);
+                toast(<CustomToast message={deletedActiveHour} type="success" />);
+
                 return;
             }
             else {
-                alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+              
+                toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
             }
         }
     }
@@ -364,7 +368,7 @@ function Profile() {
             await changeDoctorInfo(userInfo?._id, docFaculty, docRegion, docBio);
         }
         
-        alert("Đổi thông tin thành công!");
+        toast(<CustomToast message="Đổi thông tin thành công!" type="error" />);
         window.location.reload();
     };
       const handleAddActiveHour = (newActiveHour) => {
@@ -403,7 +407,8 @@ function Profile() {
         if (userConfirmed) {
             const deletedAccount = await softDeleteAccount(userInfo?._id);
             if (deletedAccount && typeof deletedAccount === 'object') {
-                alert("Xóa tài khoản thành công, bạn sẽ được chuyển đến trang đăng nhập!");
+               
+                toast(<CustomToast message="Xóa tài khoản thành công, bạn sẽ được chuyển đến trang đăng nhập!" type="error" />);
                 localStorage.removeItem('isLoginSuccess');
                 if (window.location.pathname === '/profile') {
                     navigate('/login', { replace: true });
@@ -412,11 +417,14 @@ function Profile() {
                 }
                 window.location.reload();
             } else if (deletedAccount && typeof deletedAccount !== 'object') {
-                alert(deletedAccount);
+                toast(<CustomToast message={deletedAccount} type="success" />);
+
+
                 return;
             }
             else {
-                alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+            
+                toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
                 return;
             }
         }
@@ -477,11 +485,11 @@ function Profile() {
                         <div className={cx('email')}>
                             <span>{userInfo?.email}</span>
                         </div>
-                        <ListModal data={{appointment_list: appointmentInfo, is_doc: userInfo?.__t ? true : false, _id: userInfo?._id}}>+ Danh sách cuộc hẹn</ListModal>
+                        <ListModal data={{appointment_list: appointmentInfo, is_doc: userInfo?.__t ? true : false, _id: userInfo?._id}}><p className='title-listmodal' style={{fontSize:"14px", marginBottom:"0"}}>+ Danh sách cuộc hẹn</p></ListModal>
                      </div>
                      <div className={cx('buttons-container')}>
-                        <Button primary onClick={handleSubmitAccountInfo} leftIcon={<FontAwesomeIcon icon={faFloppyDisk} />}>Lưu</Button>
-                        <Button primary onClick={handleDeleteAccount} leftIcon={<FontAwesomeIcon icon={faUserXmark} />}>Xóa</Button>
+                        <Button style={{height:"42px", borderRadius:"10px", marginRight:"10px"}} primary onClick={handleSubmitAccountInfo} leftIcon={<FontAwesomeIcon icon={faFloppyDisk} />}><p style={{fontSize:"14px", marginBottom:"2px"}}>Lưu</p></Button>
+                        <Button style={{height:"42px", borderRadius:"10px"}} primary onClick={handleDeleteAccount} leftIcon={<FontAwesomeIcon icon={faUserXmark} />}><p style={{fontSize:"14px", marginBottom:"-2px"}}>Xóa</p></Button>
                      </div>
                 </div>
                 <div className={cx('main-info-container')}>
@@ -541,7 +549,7 @@ function Profile() {
                                 <div className={cx('info-title')}>
                                   <span>THÔNG TIN BÁC SĨ</span>
                                 </div>
-                                <ProofModal disabled={!isDoctor} data={userInfo}>Bằng cấp</ProofModal>
+                                <ProofModal className="button_bangcap" disabled={!isDoctor} data={userInfo}>Bằng cấp</ProofModal>
                             </div>
                             <div className={cx('field-container')}>
                                 <div className={cx('field-name')}>
@@ -576,7 +584,7 @@ function Profile() {
                                      <span>Giờ làm việc</span>
                                 </div>
                                 <div className={cx('button-content-container')}>                                     <select className={cx('half-field-input')} disabled={!isDoctor} value={selectedHour} onChange={(e)=>{setSelectedHour(e.target.value)}}>
-                                     <option key="1" value="">Chọn giờ làm việc</option>
+                                     <option style={{zIndex:"0"}} key="1" value="">Chọn giờ làm việc</option>
                                      {(doctorActiveHours || []).map((item) => {
                                             // Create a more descriptive value that includes date information if available
                                             const dateInfo = item?.date ? `Date: ${item.date}` : '';
@@ -616,7 +624,7 @@ function Profile() {
                                 <div className={cx('info-title')}>
                                   <span>THÔNG TIN TÀI KHOẢN</span>
                                 </div>
-                                <Modal data={userInfo}>Đổi MK</Modal>
+                                <Modal data={userInfo}><p style={{fontSize:"14px",marginBottom:"0"}}>Đổi MK</p></Modal>
 
                             </div>
                             <div className={cx('field-container')}>

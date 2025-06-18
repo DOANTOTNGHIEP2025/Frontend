@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faPen } from '@fortawesome/free-solid-svg-icons';
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 export default function DateModal({children , disabled = false, data = [], onAddActiveHour, onUpdateActiveHour, type = "add", hourData = ""}) {
@@ -359,33 +360,33 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   const handleSubmitActiveHour = async () => {
     try {
       if (!selectedDate) {
-        alert("Vui lòng chọn thứ!");
+        toast(<CustomToast message="Vui lòng chọn thứ!" type="error" />);
         return;
       }
 
       if (!startTime) {
-        alert("Vui lòng chọn thời gian bắt đầu!");
+        toast(<CustomToast message="Vui lòng chọn thời gian bắt đầu!" type="error" />);
         return;
       }
 
       if (!endTime) {
-        alert("Vui lòng chọn thời gian kết thúc!");
+        toast(<CustomToast message="Vui lòng chọn thời gian kết thúc!" type="error" />);
         return;
       }
 
       if (!appointmentLimit) {
-        alert("Vui lòng nhập giới hạn số lượng!");
+        toast(<CustomToast message="Vui lòng nhập giới hạn số lượng!" type="error" />);
         return;
       }
 
       const limit = Number(appointmentLimit);
       if (isNaN(limit) || limit <= 0) {
-        alert("Giới hạn số lượng phải lớn hơn 0");
+        toast(<CustomToast message="Giới hạn số lượng phải lớn hơn 0" type="error" />);
         return;
       }
 
       if (startTimeValue && endTimeValue && startTimeValue >= endTimeValue) {
-        alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+        toast(<CustomToast message="Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc" type="error" />);
         return;
       }
         
@@ -401,7 +402,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         const dayOfWeek = daysOfWeek[calendarValue.getDay()];
         
         if (dayOfWeek !== selectedDate) {
-          alert(`Ngày bạn đã chọn (${calendarValue.toLocaleDateString()}) là ${dayOfWeek}, không phải ${selectedDate}. Vui lòng chọn lại.`);
+          toast(<CustomToast message={`Ngày bạn đã chọn (${calendarValue.toLocaleDateString()}) là ${dayOfWeek}, không phải ${selectedDate}. Vui lòng chọn lại.`} />);
           return;
         }
       }
@@ -441,7 +442,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       
       if (!data || !data._id) {
         console.error("Missing doctor ID", data);
-        alert("Thiếu thông tin bác sĩ. Vui lòng thử lại.");
+        toast(<CustomToast message="Thiếu thông tin bác sĩ. Vui lòng thử lại." type="error" />);
         return;
       }
       
@@ -480,42 +481,46 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         setStartTimeValue(null);
         setEndTimeValue(null);
         setSelectedDate('');
-        alert("Thêm giờ làm việc thành công!");
+        toast(<CustomToast message="Thêm giờ làm việc thành công!" type="error" />);
       } else if (newActiveHour && typeof newActiveHour !== 'object') {
-        alert(newActiveHour);
-      } else {      alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+        toast(<CustomToast message={newActiveHour} type="success" />);
+
+      } else {      toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
       }
     } catch (err) {
       console.error("Error submitting active hour:", err);
-      alert("Có lỗi xảy ra khi thêm giờ làm việc. Vui lòng thử lại.");
+      toast(<CustomToast message="Có lỗi xảy ra khi thêm giờ làm việc. Vui lòng thử lại." type="error" />);
     }
   };
   
   const handleUpdateActiveHour = async () => {
     try {
       if (!selectedDate) {
-        alert("Vui lòng chọn thứ!");
+        toast(<CustomToast message="Vui lòng chọn thứ!" type="error" />);
         return;
       }
     
       if (!startTime) {
-        alert("Vui lòng chọn thời gian bắt đầu!");
+        toast(<CustomToast message="Vui lòng chọn thời gian bắt đầu!" type="error" />);
         return;
       }
     
       if (!endTime) {
-        alert("Vui lòng chọn thời gian kết thúc!");
+       
+        toast(<CustomToast message="Vui lòng chọn thời gian kết thúc" type="error" />);
         return;
       }
     
       const limit = Number(appointmentLimit);
       if (isNaN(limit) || limit <= 0) {
-        alert("Giới hạn số lượng phải lớn hơn 0");
+     
+        toast(<CustomToast message="Giới hạn số lượng phải lớn hơn 0" type="error" />);
         return;
       }
     
       if (startTimeValue && endTimeValue && startTimeValue >= endTimeValue) {
-        alert("Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc");
+    
+        toast(<CustomToast message="Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc" type="error" />);
         return;
       }
       
@@ -557,7 +562,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         
         if (!data || !data._id) {
           console.error("Missing doctor ID", data);
-          alert("Thiếu thông tin bác sĩ. Vui lòng thử lại.");
+          toast(<CustomToast message="Thiếu thông tin bác sĩ. Vui lòng thử lại." type="error" />);
           return;
         }
         
@@ -577,7 +582,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
         );
     
         if (editedActiveHour && typeof editedActiveHour === 'object') {
-          alert("Cập nhật giờ làm việc thành công!");
+          toast(<CustomToast message="Cập nhật giờ làm việc thành công!" type="error" />);
           const newActiveHour = generateActiveHourObject(selectedDate, startTime, endTime, appointmentLimit, specificDate);
           const oldActiveHour = generateActiveHourObject(originalDate, originalStartTime, originalEndTime, originalAppointmentLimit, originalSpecificDate);
           setOriginalDate(selectedDate);
@@ -594,16 +599,17 @@ export default function DateModal({children , disabled = false, data = [], onAdd
           return;
         }
         else if (editedActiveHour && typeof editedActiveHour !== 'object') {
-          alert(editedActiveHour);
+          toast(<CustomToast message={editedActiveHour} type="success" />);
+
           return;
         }
         else {
-          alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+          toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
           return;
         }      }
     } catch (err) {
       console.error("Error updating active hour:", err);
-      alert("Có lỗi xảy ra khi cập nhật giờ làm việc. Vui lòng thử lại.");
+      toast(<CustomToast message="Có lỗi xảy ra khi cập nhật giờ làm việc. Vui lòng thử lại." type="error" />);
     }
   };
 

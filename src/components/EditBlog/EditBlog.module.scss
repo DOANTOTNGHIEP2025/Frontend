@@ -1,6 +1,6 @@
 .blog-wrapper {
     overflow: visible;
-    width: 90%;
+    width: 98%;
     display: block;
     background-color: #fff;
     margin-top: 20px;
@@ -75,6 +75,8 @@
     font-weight: 700;
     margin-left: 2px;
     color: #fff;
+    margin-top: 20px;
+    line-height: 1;
 }
 
 .blog-info-calendar-icon {
@@ -84,13 +86,12 @@
     color: #fff;
 }
 
-.posted-date-info{
-    height: 100%;
-    overflow: visible;
+.posted-date-info {
     display: flex;
-    align-items: center;
-}
-
+    align-items: center; 
+    gap: 6px;            
+    height: 100%;        
+  }
 .edit-buttons{
     height: 100%;
     overflow: visible;
@@ -142,15 +143,23 @@
 .edit-image-container {
     width: 92%;
     height: 40%;
-    background-color: #2197e3;
     border-radius: 20px;
     object-fit: cover;
+    z-index: 1000;
 }
 
 .edit-blog-image {
-    width: 100%;
+   
     height: 100%;
     border-radius: 20px;
+    
+}
+.edit-blog-image img{
+   
+   
+    border-radius: 20px;
+    object-fit: cover;
+    
 }
 
 .edit-input-file-container {
@@ -176,7 +185,7 @@
 
 .edit-blog-description {
     width: 92%;
-    height: 12%;
+    height: 20%;
     border-radius: 10px;
     border: 1px solid;
     font-size: 1.4rem;
@@ -184,7 +193,7 @@
 
 .edit-blog-content {
     width: 92%;
-    height: 12%;
+    height: 30%;
     border-radius: 10px;
     border: 1px solid;
     font-size: 1.4rem;

@@ -84,8 +84,8 @@ export const FooterContentItems = styled.div`
 `;
 
 export const FooterContentTitle = styled.h3`
-  margin-bottom: ${spacing.xs};
-  font-size: 1.2rem;
+  margin-bottom: 14px;
+  font-size: 1.8rem;
   font-weight: 600;
   position: relative;
   padding-bottom: ${spacing.xs};
@@ -107,7 +107,7 @@ export const FooterContentTitle = styled.h3`
 export const FooterContent = styled.p`
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: ${spacing.xs};
-  font-size: 1rem;
+  font-size: 1.5rem;
   transition: color ${transitions.fast};
   display: flex;
   align-items: center;
@@ -115,7 +115,7 @@ export const FooterContent = styled.p`
   
   svg {
     margin-right: ${spacing.xs};
-    font-size: 1.2rem;
+    font-size: 1.8rem;
   }
 
   &:hover {
@@ -203,7 +203,7 @@ export const SocialIconContent = styled.a`
 export const FooterContentWraperLower = styled.div`
   text-align: left;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   margin-top: ${spacing.xs};
   width: 100%;
   padding-top: 0;

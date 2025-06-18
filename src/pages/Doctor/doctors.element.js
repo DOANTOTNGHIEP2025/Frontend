@@ -254,7 +254,7 @@ export const DoctorsRight = styled.div`
         margin-right: ${spacing.xs};
         filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
     }
-    
+
     h3 {
         font-size: ${typography.md};
         font-weight: 600;
@@ -271,11 +271,14 @@ export const DoctorsRight = styled.div`
         font-size: ${typography.sm};
         color: ${colors.darkGrey};
         line-height: 1.6;
-    }
+    
         margin-right: 2px;
         color: #4B5563; 
     }
-
+    button.Doctor_search-bar-button__jx9Cg img {
+    width: 20px !important;
+    height: 20px;
+}
     .dot {
         width: 0.5rem;
         height: 0.5rem;
@@ -328,6 +331,8 @@ export const DoctorsRight = styled.div`
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
         font-weight: 500;
+        margin-top: 10px;
+
     }
 
     @media (max-width: 600px) {

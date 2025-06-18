@@ -83,13 +83,14 @@ export const DocSD = styled.div`
     .doc-experience {
         padding: 0.125rem 0.5rem; 
         border: 1px solid #000; 
-        font-size: 0.875rem; 
+        font-size: 1.2rem; 
         border-radius: 9999px; 
     }
 
 `
 export const DocBookButton = styled.button`
-    background-color: #00D3D6;
+    /* background-color: #00D3D6; */
+    background-color: #0C507C;
     color: white;
     font-weight: 500;
     font-size: 2rem;
@@ -130,7 +131,7 @@ export const DoctorInformationItem = styled.div`
     margin-top: 16px;
     //flex-basis: 30%;
     flex: 1;
-    background-color: #00D3D6;
+    background-color: #0C507C;
     border-radius: 10px;
     p{
         color: white;

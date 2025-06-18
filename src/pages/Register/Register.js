@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { assets } from '../../assets/assets_fe/assets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
 
 const Register = () => {
     const [ , signUp] = useAccount();
@@ -64,7 +65,7 @@ const Register = () => {
             const SignUpInfo = await signUp(email, password, userName, phone, role);
             if (SignUpInfo && typeof SignUpInfo === 'object') {
                 localStorage.setItem('SignUpInfo', JSON.stringify(SignUpInfo));
-                alert("Đăng ký tài khoản thành công, vui lòng kiểm tra email để kích hoạt tài khoản!")
+                toast(<CustomToast message="Đăng ký tài khoản thành công, vui lòng kiểm tra email để kích hoạt tài khoản" type="error" />);
                  navigate('/login');
                 
             }
@@ -84,7 +85,7 @@ const Register = () => {
                 <RHeader>
 
                     <Deco>
-                        <img src={assets.MobileLogo2} onClick={handleLogoClick}></img>
+                        <img src={assets.MedicalLogo} onClick={handleLogoClick}></img>
                         <p>Đăng ký tài khoản</p>
                     </Deco>
                 </RHeader>

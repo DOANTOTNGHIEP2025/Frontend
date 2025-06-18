@@ -1,5 +1,5 @@
 .search-section {
-    background-color: #00d3d6;
+    background: linear-gradient(135deg, #0C507C, #00D3D6);  
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -89,7 +89,10 @@
     justify-content: space-around;
     align-content: space-around;
 }
-
+button.Doctor_search-bar-button__jx9Cg img {
+    width: 20px !important;
+    height: 20px;
+}
 .search-bar {
     width: 100%;
     height: 50px;
@@ -155,7 +158,9 @@
     width: 100%;
     height: 100%;
 }
-
+.title-docter{
+    display: none !important;
+}
 // tablet (width>=740px) and (width<1024px)
 @media only screen and (min-width: 740px) and (max-width: 1024px){
     .blog-items{

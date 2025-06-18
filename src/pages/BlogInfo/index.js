@@ -6,14 +6,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faCalendar } from '@fortawesome/free-regular-svg-icons';
 import useArticles from '../../hook/useArticles';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Image from '../../components/Image';
 
 const cx = classNames.bind(styles);
+
 function BlogInfo() {
     const { id } = useParams();
-    
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = date.getDate().toString().padStart(2, '0');
@@ -26,25 +27,8 @@ function BlogInfo() {
     const [fiveArticles, setFiveArticles] = useState([]);
 
     const [
-        ,
-        ,
-        ,
-        loading,
-        ,
-        ,
-        getArticlesByID,
-        ,
-        ,
-        getFiveLatestArticles,
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
-        getFiveLatestArticlesList
+        , , , loading, , , getArticlesByID, , ,
+        getFiveLatestArticles, , , , , , , , , getFiveLatestArticlesList
     ] = useArticles();
 
     useEffect(() => {
@@ -77,21 +61,17 @@ function BlogInfo() {
         };
     }, []);
 
-
     const renderContent = () => {
-        if (!articleByID?.article_content) return null; 
+        if (!articleByID?.article_content) return null;
         return articleByID?.article_content.split('\n').map((line, index) => (
             <h4 className={cx('blog-content')} key={index}>
-                
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;{line.trim()}</span>
+                <span>{line.trim()}</span>
             </h4>
         ));
     };
 
     if (loading || !articleByID) {
-        return (
-            <LoadingAnimation></LoadingAnimation>
-        )
+        return <LoadingAnimation />;
     }
 
     return (
@@ -116,25 +96,22 @@ function BlogInfo() {
                             </h4>
                         </div>
                     </div>
-                    <hr className={cx('list-blog-separator')}></hr>
+                    <hr className={cx('list-blog-separator')} />
                     <div className={cx('blog-content-container')}>
-                        {
-                            articleByID?.article_image && (
-                                <Image className={cx('blog-image')} src={articleByID?.article_image} alt="Blog Image"></Image>
-                            )
-                        }
+                        {articleByID?.article_image && (
+                            <Image className={cx('blog-image')} src={articleByID?.article_image} alt="Blog Image" />
+                        )}
                         {renderContent()}
                     </div>
-                    
                 </div>
                 <div className={cx('list-blog-wrapper')}>
                     <h4 className={cx('list-blog-title')}>
                         <span>BÀI VIẾT MỚI</span>
                     </h4>
-                    <hr className={cx('list-blog-separator')}></hr>
-                    {fiveArticles.map((article) => {
-                        return <MiniBlogItem data={article}></MiniBlogItem>;
-                    })}
+                    <hr className={cx('list-blog-separator')} />
+                    {fiveArticles.map((article) => (
+                        <MiniBlogItem key={article.id} data={article} />
+                    ))}
                 </div>
             </div>
         </div>

@@ -34,12 +34,14 @@
 }
 
 .link {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 500;
     color: #2197e3;
     padding-right: 20px;
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
+    margin-bottom: 30px;
+    
 }
 
 .user-avatar-section {
@@ -98,6 +100,7 @@
     font-size: 1.6rem;
     font-weight: 500;
     color: #757575;
+    margin-top: 16px;
 }
 
 .question-info-wrapper {

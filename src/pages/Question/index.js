@@ -12,6 +12,8 @@ import useAccount from '../../hook/useAccount';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Image from '../../components/Image';
 import { assets } from '../../assets/assets_fe/assets';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 function Question() {
@@ -81,7 +83,7 @@ function Question() {
         return postByID.post_content.split('\n').map((line, index) => (
             <h4 className={cx('blog-description')} key={index}>
                 
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;{line.trim()}</span>
+                <span>{line.trim()}</span>
             </h4>
         ));
     };
@@ -91,7 +93,7 @@ function Question() {
             
         if (item) {
             if (!commentContent) {
-                alert("Vui lòng nhập nội dung bình luận!");
+                toast(<CustomToast message="Vui lòng nhập nội dung bình luận!" type="error" />);
                 return;
             }
 
@@ -101,14 +103,16 @@ function Question() {
                 window.location.reload();
             }
             else if (newComment && typeof newComment !== 'object'){
-                alert(newComment);
+              
+                toast(<CustomToast message={newComment}/>);
+
             }
             else {
-                alert("Có lỗi xảy ra, vui lòng thử lại sau");
+                toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau" type="error" />);
             }
            
         } else {
-            alert("Bạn cần đăng nhập để thêm bình luận!");
+            toast(<CustomToast message="Bạn cần đăng nhập để thêm bình luận!" type="error" />);
         }
         
     };

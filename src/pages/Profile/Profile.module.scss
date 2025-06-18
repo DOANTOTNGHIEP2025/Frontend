@@ -10,7 +10,6 @@
 }
 
 .buttons-container {
-    display: flex;
     align-items: center;
     gap: 15px;
     flex-wrap: wrap;
@@ -55,7 +54,7 @@
     top: 54%;
     background-color: #f8f9fa;
     overflow: hidden;
-    z-index: 10; /* Ensure profile image is above background but below other elements */
+    z-index: 1; /* Ensure profile image is above background but below other elements */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
@@ -78,7 +77,7 @@
     flex-wrap: wrap;
     margin-bottom: 20px;
     position: relative;
-    z-index: 15; /* Increased z-index to ensure it appears above all other elements */
+    z-index: 1; /* Increased z-index to ensure it appears above all other elements */
     background-color: rgba(248, 249, 250, 0.85); /* Semi-transparent background to prevent overlap issues */
     border-radius: 10px;
     padding: 15px;
@@ -163,7 +162,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
     z-index: 1; /* Lower z-index than contact info */
-    
     &:hover {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
@@ -173,7 +171,7 @@
     width: 48%;
     margin-top: 20px;
     flex-shrink: 0;
-    background-color: #ffffff;
+    //background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     padding: 25px;
@@ -181,8 +179,6 @@
     overflow: visible; /* Ensures content doesn't get cut off */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
-    z-index: 1; /* Lower z-index than contact info */
-    
     &:hover {
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
@@ -217,6 +213,7 @@
     position: relative;
     padding-bottom: 12px;
     margin-bottom: 5px;
+    z-index: 0 !important;
     
     &:after {
         content: '';
@@ -238,7 +235,6 @@
     align-items: center;
     margin-bottom: 15px;
     position: relative;
-    z-index: 3; /* To ensure titles are always visible */
 }
 
 .field-container {
@@ -274,7 +270,6 @@
     margin-bottom: 5px;
     color: #005A5C;
     position: relative;
-    z-index: 3;
 }
 
 .field-input {
@@ -345,8 +340,8 @@
     gap: 15px;
     margin-bottom: 20px;
     position: relative;
-    z-index: 4;
     flex-wrap: wrap;
+    z-index: 0 !important;
 }
 
 .half-field-input {
@@ -420,7 +415,9 @@
     position: relative;
     z-index: 20;
 }
-
+.button_bangcap{
+    height: 30px;
+}
 /* Make sure DateModal within edit-buttons is properly styled */
 .edit-buttons :global(.DateModal_btn-modal__yJHtn) {
     min-width: 80px;
@@ -445,7 +442,7 @@
     left: calc(10% + 160px);
     top: calc(54% + 140px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    z-index: 12; /* Increased z-index to ensure it's above other elements */
+    z-index: 2 ; /* Increased z-index to ensure it's above other elements */
     
     &:hover {
         background-color: #00acaf;
@@ -479,20 +476,7 @@
     }
 }
 
-.doctor-info-container {
-    margin-bottom: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    z-index: 3;
-    
-    &:hover {
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-}
+
 
 // Tablet (max-width: 1024px)
 @media only screen and (max-width: 1024px) {
@@ -693,4 +677,7 @@
         font-size: 1.8rem;
     }
 }
-  
+
+p.title_1{
+    font-size: 14px !important;
+}

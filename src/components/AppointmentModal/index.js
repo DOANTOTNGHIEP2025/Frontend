@@ -174,6 +174,7 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
         alert("Vui lòng chọn ngày!");
         return;
       }
+      console.log("nhim", selectedDate);
 
       const formattedDate = selectedDate.toLocaleDateString("en-CA"); 
       const dayIndex = selectedDate.getDay();
@@ -243,9 +244,15 @@ export default function AppointmentModal({ children, data = [], onSubmit, disabl
       
       // Tạo định dạng ngày đúng chuẩn cho frontend hiển thị
       // Format: "Monday 2024-05-20" với 2024-05-20 là ngày cụ thể (hoặc chỉ "Monday" nếu là lịch định kỳ)
-      const appointmentDay = hasSpecificDateSchedule 
-        ? `${dayName} ${formattedDate}` // Nếu có lịch ngày cụ thể, đánh dấu là lịch cụ thể
-        : dayName; // Nếu không, là lịch định kỳ hàng tuần
+      // const appointmentDay = hasSpecificDateSchedule 
+      //   ? `${dayName} ${formattedDate}` // Nếu có lịch ngày cụ thể, đánh dấu là lịch cụ thể
+      //   : dayName; // Nếu không, là lịch định kỳ hàng tuần
+
+        // Tạo định dạng ngày với tên ngày trong tuần
+      const appointmentDay = `${dayName} ${formattedDate}`;
+
+console.log("Ngày lịch hẹn được gửi:", appointmentDay, "Định dạng lịch:", hasSpecificDateSchedule ? "Ngày cụ thể" : "Hàng tuần");
+
         
       console.log("Ngày lịch hẹn được gửi:", appointmentDay, "Định dạng lịch:", hasSpecificDateSchedule ? "Ngày cụ thể" : "Hàng tuần");
       

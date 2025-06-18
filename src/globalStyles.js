@@ -70,7 +70,7 @@ export const typography = {
     color: ${colors.black};
   `,
   small: css`
-    font-size: 0.875rem;
+    font-size: 1.2 rem;
     line-height: 1.5;
     color: ${colors.darkGrey};
   `,
@@ -272,7 +272,7 @@ export const Heading = styled.h2`
 
 export const Text = styled.p`
   ${typography.body}
-  font-size: ${props => props.size || '1rem'};
+  font-size: ${props => props.size || '1.4rem'};
   color: ${props => props.color || colors.black};
   margin-bottom: ${props => props.marginBottom || spacing.md};
   text-align: ${props => props.textAlign || 'left'};
@@ -292,7 +292,7 @@ export const Badge = styled.span`
       default: return colors.secondary;
     }
   }};  color: ${colors.white};
-  font-size: 0.75rem;
+  font-size: 1.4rem;
   font-weight: 500;
 `;
 

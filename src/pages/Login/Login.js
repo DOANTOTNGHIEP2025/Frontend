@@ -68,13 +68,11 @@ const Login = () => {
             <ToastContainer position="top-right" autoClose={3000} />
             <LoginLayout>
                 <LoginContainer>
-                    <LoginDeco>
-                        <Deco2 />
-                    </LoginDeco>
+           
 
                     <LoginItemAndHeader>
                         <LoginLogo>
-                            <img src={assets.MobileLogo} onClick={handleLogoClick}></img>
+                            <img src={assets.MedicalLogo} onClick={handleLogoClick}></img>
                         </LoginLogo>
                         <LoginHeader>Đăng Nhập</LoginHeader>
                         <LoginItemList>
@@ -102,9 +100,7 @@ const Login = () => {
                         </LoginItemList>
                     </LoginItemAndHeader>
 
-                    <LoginDeco2>
-                        <Deco4 />
-                    </LoginDeco2>
+                  
                 </LoginContainer>
             </LoginLayout>
         </form>

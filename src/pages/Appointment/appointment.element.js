@@ -42,7 +42,7 @@ export const ASpace = styled.div`
 `
 export const AHeader = styled.div`
     p {
-        color: #2197E3;
+        color: #00d3d6;
         font-size: 2.6rem;
         font-weight: 500;
         padding: 10px 10px 0 10px;
@@ -51,7 +51,7 @@ export const AHeader = styled.div`
 `
 
 export const AUnderline = styled.div`
-    border-top: 2px solid #666666;
+    border-top: 2px solid #00d3d6;
     width: 100%;
     margin-top: 5px;
 `
@@ -71,7 +71,7 @@ export const ALeftSide = styled.div`
         margin: 20px 0 20px 0;
         max-width: 300px;
         text-align: justify;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
     }
 
     @media (min-width: 740px) and (max-width: 1024px) {
@@ -91,9 +91,11 @@ export const ARightSide = styled.div`
     height: 800px;
     top: 20px;
     position: absolute;
-    left: 218px;
+    left: 250px;
     border-radius: 0 8px 8px 0;
-
+    .title-text{
+        font-size: 15px;
+    }
     @media (max-width: 740px) {
         left: 0px;
         top: 0px;
@@ -124,13 +126,14 @@ export const ARSItem = styled.div`
     }
     input, select{
         width: 90%;
-        height: 35px;
+        height: 50px;
         border: 1px solid #000000;
         border-radius: 6px;
         display: inline-block;
         margin-top: -10px;
         font-size: 15px;
-        padding-left: 10px; 
+        padding: 15px 0 15px 10px; 
+        
 
     }
     textarea{
@@ -139,6 +142,9 @@ export const ARSItem = styled.div`
         border-radius: 6px;
         margin-top: -10px;
     }
+    button.AppointmentModal_modal-button__iPsf3 {
+    background: none !important;
+}
     button{
         background-color: #00A6A9;
         width: 90%;
@@ -155,6 +161,12 @@ export const ARSItem = styled.div`
         }
 
     }
+    button.AppointmentModal_modal-button__iPsf3 svg {
+    font-size: 26px;
+    margin-top: 3px;
+    background-color: none !important;
+    
+}
     hidden {
      display: none;
     }

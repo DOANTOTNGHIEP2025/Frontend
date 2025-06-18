@@ -3,6 +3,8 @@ import classNames from "classnames/bind";
 import styles from "./ProofModal.module.scss";
 import Button from "../Button";
 import useAccount from "../../hook/useAccount";
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +31,7 @@ export default function ProofModal({ children, disabled = false, data }) {
 
   const handleUploadProof = async () => {
     if (!file) {
-      alert("Vui lòng chọn tệp PDF để tải lên");
+      toast(<CustomToast message="Vui lòng chọn tệp PDF để tải lên" type="error" />);
       setError("Vui lòng chọn tệp PDF để tải lên.");
       return;
     }
@@ -37,18 +39,22 @@ export default function ProofModal({ children, disabled = false, data }) {
     try {
       const newProof = await uploadProof(file, data?._id);
       if (newProof && typeof newProof === 'object') {
-        alert("Upload proof success");
+        toast(<CustomToast message="Upload proof success" type="error" />);
         setModal(false);
       }
       else if (newProof && typeof newProof !== 'object') {
-        alert(newProof);
+        toast(<CustomToast message={newProof} type="success" />);
+
       }
       else {
-        alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+        toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
       }
     } catch (err) {
-      alert("Lỗi khi tải lên bằng chứng:", err);
+      toast(<CustomToast message={`Lỗi khi tải lên bằng chứng: ${err?.message || "Vui lòng thử lại sau."}`} />);
+      
+      
       setError("Có lỗi xảy ra khi tải lên.");
+
     }
   };
 

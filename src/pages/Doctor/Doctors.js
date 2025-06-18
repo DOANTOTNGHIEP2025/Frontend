@@ -113,7 +113,7 @@ const Doctors = () => {
     const firstDoctorIndex = lastDoctorIndex - docPerPage;
     const currentDoctors = (filterDoc || []).slice(firstDoctorIndex, lastDoctorIndex);    return (
         <div>
-            <PageTitle>CHUYÊN GIA - BÁC SĨ</PageTitle>
+            
             <div className={cx('search-section')}>
                 <div className={cx('search-section-title-wrapper')}>
                     <h4 className={cx('search-section-title')}>
@@ -152,7 +152,9 @@ const Doctors = () => {
                                 placeholder='Nhập tên bác sĩ'
                             ></input>
                             <button className={cx('search-bar-button')} onClick={handleSubmitSearch}>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            <img  src={assets.search_icon} alt='icon'/>
+                            {/* <FontAwesomeIcon icon={faMagnifyingGlass} /> */}
+
                             </button>
                         </div>
                     </div>

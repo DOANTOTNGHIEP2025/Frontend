@@ -6,6 +6,8 @@ import useAccount from "../../hook/useAccount";
 import bcrypt from "bcryptjs";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
 
@@ -31,42 +33,43 @@ export default function Modal({children , data}) {
 
   const handleChangePassword = async() => {
     if (currentPass === '') {
-      alert('Vui lòng nhập mật khẩu hiện tại');
+      toast(<CustomToast message="Vui lòng nhập mật khẩu hiện tại" type="error" />);
       return;
     }
     if (newPass === ''){
-      alert('Vui lòng nhập mật khẩu mới');
+      toast(<CustomToast message="Vui lòng nhập mật khẩu mới" type="error" />);
       return;
     }
     else if (rewriteNewPass === ''){
-      alert('Vui lòng nhập lại mật khẩu mới');
+      toast(<CustomToast message="Vui lòng nhập lại mật khẩu mới" type="error" />);
       return;
     }
     else if (newPass !== rewriteNewPass){
-      alert('Mật khẩu nhập lại không chính xác');
+      toast(<CustomToast message="Mật khẩu nhập lại không chính xác" type="error" />);
       return;
     }
     const isMatch = await bcrypt.compare(currentPass, data?.password);
     if (!isMatch) {
-      alert('Mật khẩu hiện tại không đúng');
+      toast(<CustomToast message="Mật khẩu hiện tại không đúng" type="error" />);
       return;
     }
 
     try {
       const changePass = await changePassword(data?.email, newPass);
       if (changePass && typeof changePass === 'object') {
-        alert('Đổi mật khẩu thành công!');
+        toast(<CustomToast message="Đổi mật khẩu thành công!" type="error" />);
         setModal(false);
       }
       else if (changePass && typeof changePass !== 'object') {
-        alert(changePass);
+        toast(<CustomToast message={changePass} type="success" />);
+
       }
       else {
-        alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+        toast(<CustomToast message="Có lỗi xảy ra, vui lòng thử lại sau!" type="error" />);
       }
       
     } catch (error) {
-      alert("Đổi mật khẩu thất bại:", error);
+      toast(<CustomToast message={`Đổi mật khẩu thất bại: ${error?.message || "Vui lòng thử lại sau."}`} />);
     }
   }
 

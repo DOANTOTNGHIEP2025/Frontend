@@ -105,8 +105,12 @@ const Specialities = () => {
                     <HeaderUnderline/>
                 </SpecialitiesHeader>
                 <SearchBar>
+          
+                    <input className='text_placeholder' type='text' placeholder='Tìm kiếm' value={searchValue} onChange={(e) => {setSearchValue(e.target.value)}}/>
                     <img src={assets.search_icon} alt='icon'/>
-                    <input type='text' placeholder='Tìm kiếm' value={searchValue} onChange={(e) => {setSearchValue(e.target.value)}}/>
+          
+
+
                 </SearchBar>
 
                 <SpecialitiesContent >
