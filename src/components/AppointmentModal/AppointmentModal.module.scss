@@ -8,7 +8,7 @@ body.active-modal {
     display: block;
     margin: 100px auto 0;
     font-size: 18px;
-    background: linear-gradient(135deg, #0C507C, #00D3D6);
+    background: linear-gradient(135deg, #fdfeff, #fafbfb);
     color: white;
     border: none;
     border-radius: 8px;
@@ -38,7 +38,7 @@ body.active-modal {
 }
 
 .modal-content {
-    width: 100vw !important;
+    width: 65vw !important;
     color: #00D3D6 !important;
     font-size: 1.4rem !important;
     position: absolute;
@@ -55,7 +55,7 @@ body.active-modal {
     flex-direction: column;
     justify-content: flex-start; /* Changed from space-between to flex-start */
     align-items: center;
-    background: linear-gradient(135deg, #00D3D6, #0C507C);
+    background: linear-gradient(135deg, #f3f5f5, #f7f8f8);
     border-radius: 20px;
     z-index: 2001;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -75,7 +75,7 @@ body.active-modal {
 }
 
 .title{
-    color: #fff !important;
+    color: #111010 !important;
     font-size: 2.2rem !important;
     font-weight: 600;
     text-align: center;
@@ -183,7 +183,7 @@ body.active-modal {
 }
 
 .highlighted-day {
-    background: #00D3D6 !important;
+    background: #cbe8e8 !important;
     color: white !important;
     font-weight: bold;
     font-size: 1.4rem;
@@ -194,7 +194,7 @@ body.active-modal {
     z-index: 2;
     
     &:hover{
-        background: #0C507C !important;
+        background: #cbe8e8 !important;
         transform: scale(1.1);
     }
     
@@ -423,16 +423,16 @@ body.active-modal {
 }
 
 .today {
-    border: 2px solid #0C507C;
+    border: 2px solid #65727a;
     font-weight: bold;
     
     .day-number {
-        color: #0C507C;
+        color: #65727a;
     }
 }
 
 .selected-day {
-    background-color: rgba(0, 211, 214, 0.3) !important;
+    background-color: #708fa3 !important;
     border: 2px solid #00D3D6 !important;
     
     .day-number {
@@ -522,13 +522,13 @@ body.active-modal {
 }
 
 .selected-day {
-    background-color: #ff5c5c !important; 
+    background-color: #708fa3 !important; 
     font-weight: bold;
-    color: #fff;
+    // color: #fff;
     font-size: 1.4rem;
     margin: 5px;
     &:hover{
-        background: #ff5c92 !important;
+        background: #708fa3 !important;
     }
   }
 
@@ -595,9 +595,10 @@ body.active-modal {
 .react-calendar__month-view__days__day--neighboringMonth {
     color: #b5b5b5;
 }
-// button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--neighboringMonth {
-//     height: 200px !important;
-// }
+button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--neighboringMonth {
+    // height: 200px !important;
+    background:#708fa3;
+}
 .react-calendar__tile {
     border-radius: 10px !important;
     background: #0c507c;

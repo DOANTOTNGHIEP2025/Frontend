@@ -65,15 +65,17 @@
   
   .blog-content-container {
     margin-top: 20px;
+    line-height: 1.0;
   }
   
   .blog-content {
     font-size: 1.6rem;
-    line-height: 1.9;
+    line-height: 1.5;
     color: #333;
-    margin-bottom: 16px;
+    margin-bottom: 4px;
     word-spacing: 0.5px;
     letter-spacing: 0.2px;
+    text-align: justify;
   }
   
   .list-blog-wrapper {

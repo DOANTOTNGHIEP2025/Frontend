@@ -14,14 +14,13 @@ const InsuranceInfo = ({ userInfo }) => {
   const [location, setLocation] = useState('');
   const [expiredDate, setExpiredDate] = useState(null);
   const [insuranceList, setInsuranceList] = useState([]);
-  const [selectedInsuranceId, setSelectedInsuranceId] = useState("");
   const [appointmentInfo, setAppointmentInfo] = useState(null);
   const [editing, setEditing] = useState(false);
-  const [ , , , getAllAppointmentByUserID, , , addInsurance] = useAppointment();
+  const [ , , , getAllAppointmentByUserID, , , addInsurance ] = useAppointment();
+  const [editingInsurance, setEditingInsurance] = useState(null);
 
   useEffect(() => {
     const fetchInsurance = async () => {
-      // First, check localStorage for insurance data
       const localStorageInsurance = localStorage.getItem('userInsurance');
       
       if (localStorageInsurance) {
@@ -36,17 +35,13 @@ const InsuranceInfo = ({ userInfo }) => {
         }
       }
       
-      // If no valid data in localStorage, fetch from appointments
       if (userInfo?._id) {
         const appointments = await getAllAppointmentByUserID(userInfo?._id);
         if (appointments && appointments.length > 0) {
-          // Get the first appointment with insurance info
           const appointment = appointments.find(app => app.insurance && app.insurance.length > 0);
           if (appointment) {
             setAppointmentInfo(appointment);
             setInsuranceList(appointment.insurance || []);
-            
-            // Also store in localStorage for future use
             localStorage.setItem('userInsurance', JSON.stringify(appointment.insurance));
           }
         }
@@ -59,59 +54,45 @@ const InsuranceInfo = ({ userInfo }) => {
   const toDateInputFormat = (date) => {
     if (!date) return '';
     try {
-      // Handle YYYY-MM-DD format
       const parts = date.split('-');
       if (parts.length === 3) {
         return date;
       }
-      // Other formats can be handled here
       return '';
     } catch (e) {
       return '';
     }
   };
 
+  
   const handleExpiredDateChange = (e) => {
     const date = new Date(e.target.value);
     if (!isNaN(date)) {
       setExpiredDate(toDateInputFormat(e.target.value));
     }
   };
-
+  
+  
   const handleAddInsurance = async () => {
     if (!insuranceName || !insuranceID || !location || !expiredDate) {
       toast(<CustomToast message="Bạn chưa nhập đủ thông tin bảo hiểm" type="error" />);
       return;
     }
 
-    // Create the insurance object
     const newInsurance = {
-      _id: editing ? selectedInsuranceId : Date.now().toString(),
+      _id: Date.now().toString(),
       name: insuranceName,
       number: insuranceID,
       location: location,
       exp_date: expiredDate
     };
 
-    // Update localStorage
     let currentInsurance = [];
     try {
       const localStorageInsurance = localStorage.getItem('userInsurance');
       if (localStorageInsurance) {
         currentInsurance = JSON.parse(localStorageInsurance);
-        
-        if (editing) {
-          // Replace the edited insurance
-          const index = currentInsurance.findIndex(ins => ins._id === selectedInsuranceId);
-          if (index !== -1) {
-            currentInsurance[index] = newInsurance;
-          } else {
-            currentInsurance.push(newInsurance);
-          }
-        } else {
-          // Add new insurance
-          currentInsurance.push(newInsurance);
-        }
+        currentInsurance.push(newInsurance);
       } else {
         currentInsurance = [newInsurance];
       }
@@ -123,17 +104,13 @@ const InsuranceInfo = ({ userInfo }) => {
     }
 
     if (!appointmentInfo) {
-      // Create a new appointment just for storing insurance info
       try {
-        // Get the first appointment or create a dummy one
         const appointments = await getAllAppointmentByUserID(userInfo?._id);
-        
         if (appointments && appointments.length > 0) {
           const appointment = appointments[0];
           setAppointmentInfo(appointment);
           await addInsurance(appointment._id, insuranceName, insuranceID, location, expiredDate);
-          
-          // Update the insurance list
+
           const updatedAppointments = await getAllAppointmentByUserID(userInfo?._id);
           if (updatedAppointments && updatedAppointments.length > 0) {
             const updatedAppointment = updatedAppointments.find(app => app.insurance && app.insurance.length > 0) || updatedAppointments[0];
@@ -141,7 +118,6 @@ const InsuranceInfo = ({ userInfo }) => {
             setAppointmentInfo(updatedAppointment);
           }
         } else {
-          // If user doesn't have any appointments, we'll just keep the insurance in localStorage
           toast(<CustomToast message="Thông tin bảo hiểm của bạn đã được lưu và sẽ được sử dụng cho các lần đặt lịch khám sau này." type="error" />);
         }
       } catch (error) {
@@ -149,43 +125,14 @@ const InsuranceInfo = ({ userInfo }) => {
         console.error(error);
         return;
       }
-    } else {
-      try {
-        await addInsurance(appointmentInfo._id, insuranceName, insuranceID, location, expiredDate);
-        
-        // Update the insurance list
-        const appointments = await getAllAppointmentByUserID(userInfo?._id);
-        if (appointments && appointments.length > 0) {
-          const appointment = appointments.find(app => app.insurance && app.insurance.length > 0);
-          if (appointment) {
-            setInsuranceList(appointment.insurance || []);
-            setAppointmentInfo(appointment);
-          }
-        }
-      } catch (error) {
-        toast(<CustomToast message="Có lỗi xảy ra khi thêm thông tin bảo hiểm!" type="error" />);
-        console.error(error);
-        return;
-      }
     }
-    
-    // Clear form
+
     setInsuranceName('');
     setInsuranceID('');
     setLocation('');
     setExpiredDate(null);
-    setEditing(false);
-    
-    toast(<CustomToast message="Thêm bảo hiểm thành công!" type="error" />);
-  };
 
-  const handleSelectInsurance = (insurance) => {
-    setSelectedInsuranceId(insurance._id);
-    setInsuranceName(insurance.name);
-    setInsuranceID(insurance.number);
-    setLocation(insurance.location);
-    setExpiredDate(insurance.exp_date);
-    setEditing(true);
+    toast(<CustomToast message="Thêm bảo hiểm thành công!" type="success" />);
   };
 
   return (
@@ -193,7 +140,6 @@ const InsuranceInfo = ({ userInfo }) => {
       <h3 className={cx('title')}>THÔNG TIN BẢO HIỂM Y TẾ</h3>
       <div className={cx('separator')}></div>
       
-      {/* Insurance List */}
       {insuranceList.length > 0 ? (
         <div className={cx('insurance-list')}>
           <h4>Thẻ bảo hiểm đã đăng ký:</h4>
@@ -205,24 +151,21 @@ const InsuranceInfo = ({ userInfo }) => {
                   <th>Mã số</th>
                   <th>Nơi cấp</th>
                   <th>Ngày hết hạn</th>
-                  <th>Thao tác</th>
                 </tr>
               </thead>
               <tbody>
                 {insuranceList.map((insurance, index) => (
-                  <tr key={insurance._id || index} className={selectedInsuranceId === insurance._id ? cx('selected-row') : ''}>
+                  <tr key={insurance._id || index}>
                     <td>{insurance.name}</td>
                     <td>{insurance.number}</td>
                     <td>{insurance.location}</td>
                     <td>{insurance.exp_date}</td>
-                    <td>
-                      <button 
-                        className={cx('action-button')} 
-                        onClick={() => handleSelectInsurance(insurance)}
-                      >
-                        Chỉnh sửa
-                      </button>
-                    </td>
+                    {/* <td>
+                      <button onClick={() => handleDeleteInsurance(insurance._id)}>Xóa</button>
+                    </td> */}
+                    {/* <td>
+                      <button onClick={() => handleEditInsurance(insurance._id)}>Chỉnh sửa</button>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -238,7 +181,7 @@ const InsuranceInfo = ({ userInfo }) => {
 
       {/* Add Insurance Form */}
       <div className={cx('insurance-form')}>
-        <h4>{editing ? 'Chỉnh sửa thông tin bảo hiểm' : 'Thêm thông tin bảo hiểm mới'}</h4>
+        <h4>Thêm thông tin bảo hiểm mới</h4>
         <div className={cx('form-content')}>
           <div className={cx('form-field')}>
             <label>Tên bảo hiểm</label>
@@ -281,21 +224,12 @@ const InsuranceInfo = ({ userInfo }) => {
           </div>
           
           <div className={cx('form-actions')}>
-            <Button primary onClick={handleAddInsurance}>
-              {editing ? 'Cập nhật' : 'Thêm mới'}
-            </Button>
-            {editing && (
-              <Button outline onClick={() => {
-                setSelectedInsuranceId("");
-                setInsuranceName('');
-                setInsuranceID('');
-                setLocation('');
-                setExpiredDate(null);
-                setEditing(false);
-              }}>
-                Hủy
-              </Button>
-            )}
+          <Button primary onClick={handleAddInsurance}>
+            Thêm mới
+          </Button>
+            {/* <Button primary onClick={handleAddInsurance}>
+              Thêm mới
+            </Button> */}
           </div>
         </div>
       </div>

@@ -39,6 +39,9 @@ const useAppointment = () => {
         }
     }
 
+
+    
+
     const getAllAppointmentByUserID = async(id, load = true) => {
         if (load) isAppointmentLoading(true);
         try {

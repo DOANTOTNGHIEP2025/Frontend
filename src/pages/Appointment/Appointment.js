@@ -361,7 +361,7 @@ const Appointment = () => {
                                 onClick={handleSubmitAppointment} 
                                 className="next-button"
                             >
-                                TIẾP THEO
+                                ĐẶT LỊCH
                             </button>
                         </ARSItem>
                         

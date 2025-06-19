@@ -41,6 +41,8 @@ const add_Insurance = async (id, name, number, location, expiredDate) => {
     }
 };
 
+
+
 const get_All_Appointment = async () => {
     try {
         const res = await client.post('/appointment/get-all-appointment', {
@@ -134,4 +136,5 @@ export default {
     add_Insurance,
     soft_Delete_Appointment,
     restore_Appointment,
+   
 };
