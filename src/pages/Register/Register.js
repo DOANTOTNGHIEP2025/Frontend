@@ -62,7 +62,9 @@ const Register = () => {
             toast.warning("Mật khẩu nhập lại không chính xác!");
         }
         else {
+            
             const SignUpInfo = await signUp(email, password, userName, phone, role);
+            console.log(SignUpInfo); 
             if (SignUpInfo && typeof SignUpInfo === 'object') {
                 localStorage.setItem('SignUpInfo', JSON.stringify(SignUpInfo));
                 toast(<CustomToast message="Đăng ký tài khoản thành công, vui lòng kiểm tra email để kích hoạt tài khoản" type="error" />);

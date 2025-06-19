@@ -40,6 +40,10 @@ const Login = () => {
             const isLoginSuccess = await checkLogin(email, password);
             if (isLoginSuccess && typeof isLoginSuccess === 'object') {
                 localStorage.setItem('isLoginSuccess', JSON.stringify(isLoginSuccess));
+                toast.success("Đăng nhập thành công!", {
+                    position: "top-right",      
+                    autoClose: 8000,            
+                });
                  navigate('/');
             }
             else if (isLoginSuccess && typeof isLoginSuccess !== 'object') {

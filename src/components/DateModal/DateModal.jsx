@@ -53,7 +53,7 @@ export default function DateModal({children , disabled = false, data = [], onAdd
   const [calendarValue, setCalendarValue] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(true);
   const [activeHours, setActiveHours] = useState([]);
-  const [showTimeInputs, setShowTimeInputs] = useState(false); // State để kiểm soát hiển thị nhập thời gian
+  const [showTimeInputs, setShowTimeInputs] = useState(false); 
 
   // Map weekday names to numbers
   const dayToIndexMap = {
@@ -197,11 +197,11 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       
       // Separate specific date hours from recurring hours
       const dateSpecificHours = hours.filter(hour => hour.isSpecificDate);
-      const regularRecurringHours = hours.filter(hour => !hour.isSpecificDate);
+      const regularRecurringHours1 = hours.filter(hour => !hour.isSpecificDate);
       
       console.log(`Hours for ${dayName} (${dateString}):`, 
                   `Specific date hours: ${dateSpecificHours.length}`, 
-                  `Recurring hours: ${regularRecurringHours.length}`);
+                  `Recurring hours: ${regularRecurringHours1.length}`);
       
         // Click handler for selecting a time slot directly
       const handleHourClick = (e, hour) => {
@@ -982,4 +982,4 @@ export default function DateModal({children , disabled = false, data = [], onAdd
       )}
     </>
   );
-}
+
