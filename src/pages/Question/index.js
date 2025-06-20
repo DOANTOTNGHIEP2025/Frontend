@@ -12,7 +12,7 @@ import useAccount from '../../hook/useAccount';
 import LoadingAnimation from '../../components/LoadingAnimation';
 import Image from '../../components/Image';
 import { assets } from '../../assets/assets_fe/assets';
-import CustomToast from '../../components/CustomToast'; // hoặc đường dẫn phù hợp
+import CustomToast from '../../components/CustomToast'; 
 import { toast } from 'react-toastify';
 
 const cx = classNames.bind(styles);
